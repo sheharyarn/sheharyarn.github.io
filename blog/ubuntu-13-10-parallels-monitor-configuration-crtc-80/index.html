@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ubuntu 13.10 in Parallels - CRTC 80 Error - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Feb 2nd, 2014 Ubuntu 13.10 in Parallels - CRTC 80 Error Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sheharyarn.github.io/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-02T16:01:16+05:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Ubuntu 13.10 in Parallels - CRTC 80 Error
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new Hobby Project of mine, <a href="http://pupil-labs.com/pupil/">Pupil</a>.</p>
+
+<p>It was a clean installation of Ubuntu 13.10 in Parallels 9 on my new Macbook. I had invested too much time installing pupil, only to find that the display drivers or GTK or something had been corrupted. This was the second time I was booting ubuntu and had been slapped in the face by this:</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Could not switch the Monitor Configuration
+</span><span class='line'>could not set the configuration for CRTC 80</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>image</strong></p>
+
+<p>I restarted it, but received the same error. The login screen was perfect, mind you; The error presented it self only after logging in. There was nothing else; No Icons, no Menu bar, no Unity. I googled for hours and tried everything I could; <a href="http://ubuntuforums.org/showthread.php?t=1835391">Using xrandr</a>, <a href="http://kb.parallels.com/en/114097">Editing xorg.conf</a>, <a href="http://www.parallels.com/support/desktop/troubleshooter-en_US">Running Parallels Troubleshooter</a> and so much more. In the end, I was somewhat able to restore my installation by reinstalling my Parallels Desktop Tools.</p>
+
+<p>These are the exact steps I followed after logging in:</p>
+
+<ol>
+<li>Press <code>Control + Alt + F1</code></li>
+<li>In the full-screen terminal, login with your credentials</li>
+<li>In the Parallels Desktop Menu, select <em>Devices > CD/DVD 1 > Connect Image</em></li>
+<li>In the new Finder dialog, browse to <em>Applications > Parallels Desktop > Contents > Resources > Tools > pri-tools-lin.iso</em></li>
+<li>Now back in your terminal screen, type the following commands:</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir /media/cdrom
+</span><span class='line'>sudo mount /dev/sr0 /media/cdrom
+</span><span class='line'><span class="nb">cd</span> /media/cdrom
+</span><span class='line'>sudo ./install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Parallels Tools&#8217; installation will begin. Go through the steps and complete the installation. After that, reboot using: <code>$ sudo reboot</code></p>
+
+<p>If everything went fine, you would at least be able to see your desktop. In my case, there was no Unity Sidebar or the top Menu Bar; But it&rsquo;s still something. Maybe installing Gnome would help.</p>
+
+<p><strong>Lesson:</strong> Make regular <em>Snapshots</em> of your OSes in Parallels</p>
+
+    </div>
+  </article>
+
+
+  <p class="meta">
+    
+
+
+  </p>
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Tinkering with Dart" href="/blog/tinkering-with-dart/">
+        ← Tinkering with Dart
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
