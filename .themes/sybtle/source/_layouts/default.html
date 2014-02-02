@@ -1,0 +1,15 @@
+{% capture root_url %}{{ site.root | strip_slash }}{% endcapture %}
+{% include head.html %}
+
+<body>
+   <section id="river">
+	  {% include header.html %}
+
+      {{ content | expand_urls: root_url }}
+
+	  {% include footer.html %}
+	  {% include after_footer.html %}
+    </section>
+</body>
+</html>
+
