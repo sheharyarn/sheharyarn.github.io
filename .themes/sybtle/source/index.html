@@ -1,0 +1,49 @@
+---
+layout: home
+---
+
+<section id="top_article">
+   <aside class="section_heading">
+      <h6>Freshly Pressed</h6>
+   </aside>
+
+     {% assign post = paginator.posts.first %}
+     <article class="post">
+        <h2 class="post_title">
+           <a href="{{ root_url }}{{ post.url }}">
+            {% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}
+           </a>
+        </h2>
+        <div class="post_content">
+           {{ post.content | excerpt }}
+           
+           <p class="continue">
+              <a class="continue_link" href="{{ root_url }}{{ post.url }}">Continue →</a>
+           </p>
+        </div>
+     </article>
+
+
+
+      <section id="more_articles">
+         <aside class="section_heading">
+            <h6>Older Posts</h6>
+         </aside>
+         <ul class="article_list">
+
+          {% for post in paginator.posts %}
+             {% if post != paginator.posts.first %}
+
+                <li><a href="{{ root_url }}{{ post.url }}">
+                  {% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}
+                   →
+                </a></li>
+
+             {% endif %}
+          {% endfor %}
+
+         </ul>
+      </section>
+
+
+</section>
