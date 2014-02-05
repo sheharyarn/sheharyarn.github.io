@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Ubuntu 13.10 in Parallels - CRTC 80 Error - Sheharyar Naseer</title>
+  <title>LibIlmImf.so.6 Missing From OpenCV Project - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Feb 2nd, 2014 Ubuntu 13.10 in Parallels - CRTC 80 Error Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God- &hellip;">
+  <meta name="description" content="Feb 5th, 2014 LibIlmImf.so.6 Missing From OpenCV Project Last time, I mentioned that I was working on a new Hobby Project, Pupil. This was my first &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://sheharyar.me//blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">
+  <link rel="canonical" href="http://sheharyar.me//blog/libilmimf-so-6-missing-from-opencv-project">
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -77,64 +77,54 @@
   
 
 
-<time datetime="2014-02-02T16:01:16+05:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
+<time datetime="2014-02-05T11:18:01+05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
     </div>
 
     
       <h2 class="post_title">
         <a href="">
-          Ubuntu 13.10 in Parallels - CRTC 80 Error
+          LibIlmImf.so.6 Missing From OpenCV Project
         </a>
       </h2>
     
 
     <div class="post_content">
-      <p>Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new Hobby Project of mine, <a href="http://pupil-labs.com/pupil/">Pupil</a>.</p>
+      <p>Last time, <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
 
-<p>It was a clean installation of Ubuntu 13.10 in Parallels 9 on my new Macbook. I had invested too much time installing pupil, only to find that the display drivers or GTK or something had been corrupted. This was the second time I was booting ubuntu and had been slapped in the face by this:</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Could not switch the Monitor Configuration
-</span><span class='line'>could not set the configuration for CRTC 80</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>image</strong></p>
-
-<p>I restarted it, but received the same error. The login screen was perfect, mind you; The error presented it self only after logging in. There was nothing else; No Icons, no Menu bar, no Unity. I googled for hours and tried everything I could; <a href="http://ubuntuforums.org/showthread.php?t=1835391">Using xrandr</a>, <a href="http://kb.parallels.com/en/114097">Editing xorg.conf</a>, <a href="http://www.parallels.com/support/desktop/troubleshooter-en_US">Running Parallels Troubleshooter</a> and so much more. In the end, I was somewhat able to restore my installation by reinstalling my Parallels Desktop Tools.</p>
-
-<p>These are the exact steps I followed after logging in:</p>
-
-<ol>
-<li>Press <code>Control + Alt + F1</code></li>
-<li>In the full-screen terminal, login with your credentials</li>
-<li>In the Parallels Desktop Menu, select <em>Devices > CD/DVD 1 > Connect Image</em></li>
-<li>In the new Finder dialog, browse to <em>Applications > Parallels Desktop > Contents > Resources > Tools > pri-tools-lin.iso</em></li>
-<li>Now back in your terminal screen, type the following commands:</li>
-</ol>
-
+<p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir /media/cdrom
-</span><span class='line'>sudo mount /dev/sr0 /media/cdrom
-</span><span class='line'><span class="nb">cd</span> /media/cdrom
-</span><span class='line'>sudo ./install
-</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ python main.py
+</span><span class='line'>Traceback (most recent call last):
+</span><span class='line'>  File "main.py", line 79, in &lt;module&gt;
+</span><span class='line'>    from eye import eye
+</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/capture/eye.py", line 20, in &lt;module&gt;
+</span><span class='line'>    from methods import *
+</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/shared_modules/methods.py", line 16, in &lt;module&gt;
+</span><span class='line'>    import cv2
+</span><span class='line'>ImportError: libIlmImf.so.6: cannot open shared object file: No such file or directory</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Parallels Tools&#8217; installation will begin. Go through the steps and complete the installation. After that, reboot using: <code>$ sudo reboot</code></p>
+<!--more-->
 
-<p>If everything went fine, you would at least be able to see your desktop. In my case, there was no Unity Sidebar or the top Menu Bar; But it&rsquo;s still something. Maybe installing Gnome would help.</p>
 
-<p><strong>Lesson:</strong> Make regular <em>Snapshots</em> of your OSes in Parallels</p>
+<p>I googled high and low, looked at the <a href="https://groups.google.com/forum/#!forum/pupil-discuss">Pupil Google Group</a>, opened up <a href="https://github.com/pupil-labs/pupil/issues/4">Github Issues</a>. I was the only one getting this error, but why? I had followed the <a href="">Installation Guide</a> closely, and on three different clean installations of Ubuntu. This was really frustrating.</p>
+
+<p>In the end, it was a friend on Facebook who told me to try working after installing <code>openexr</code>. I did, and problem solved. <code>libIlmImf.so.6</code> is a package bundled with it.</p>
+
+<p>Anyways, you can do this to make the error go away:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install openexr</span></code></pre></td></tr></table></div></figure>
+
 
     </div>
   </article>
@@ -150,15 +140,11 @@
     <div class="separator"></div>
     
     
-      <a id="previous_post" title="Previous Post: Opening Files from Finder using Keyboard" href="/blog/macosx-opening-files-from-finder-using-keyboard/">
-        ← Opening Files from Finder using Keyboard
+      <a id="previous_post" title="Previous Post: Ubuntu 13.10 in Parallels - CRTC 80 Error" href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">
+        ← Ubuntu 13.10 in Parallels - CRTC 80 Error
       </a>
     
 
-    
-      <a id="next_post" title="Next Post: LibIlmImf.so.6 missing from OpenCV Project" href="/blog/libilmimf-so-6-missing-from-opencv-project/">
-        LibIlmImf.so.6 missing from OpenCV Project →
-      </a>
     
 
   </div>

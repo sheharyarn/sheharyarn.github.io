@@ -9,7 +9,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 2nd, 2014 Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 5th, 2014 Last time, I mentioned that I was working on a new Hobby Project, Pupil. This was my first time working with &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,71 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-05T11:18:01+05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>Last time, <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
+
+<p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ python main.py
+</span><span class='line'>Traceback (most recent call last):
+</span><span class='line'>  File "main.py", line 79, in &lt;module&gt;
+</span><span class='line'>    from eye import eye
+</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/capture/eye.py", line 20, in &lt;module&gt;
+</span><span class='line'>    from methods import *
+</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/shared_modules/methods.py", line 16, in &lt;module&gt;
+</span><span class='line'>    import cv2
+</span><span class='line'>ImportError: libIlmImf.so.6: cannot open shared object file: No such file or directory</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<p>I googled high and low, looked at the <a href="https://groups.google.com/forum/#!forum/pupil-discuss">Pupil Google Group</a>, opened up <a href="https://github.com/pupil-labs/pupil/issues/4">Github Issues</a>. I was the only one getting this error, but why? I had followed the <a href="">Installation Guide</a> closely, and on three different clean installations of Ubuntu. This was really frustrating.</p>
+
+<p>In the end, it was a friend on Facebook who told me to try working after installing <code>openexr</code>. I did, and problem solved. <code>libIlmImf.so.6</code> is a package bundled with it.</p>
+
+<p>Anyways, you can do this to make the error go away:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install openexr</span></code></pre></td></tr></table></div></figure>
+
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -226,6 +291,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/libilmimf-so-6-missing-from-opencv-project/">LibIlmImf.so.6 Missing From OpenCV Project</a>
+      </li>
     
       <li class="post">
         <a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">Ubuntu 13.10 in Parallels - CRTC 80 Error</a>

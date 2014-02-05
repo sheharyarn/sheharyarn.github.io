@@ -9,7 +9,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Ubuntu 13.10 in Parallels - CRTC 80 Error Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God- &hellip;">
+  <meta name="description" content="Freshly Pressed LibIlmImf.so.6 Missing From OpenCV Project Last time, I mentioned that I was working on a new Hobby Project, Pupil. This was my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,19 +71,39 @@
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">
-            Ubuntu 13.10 in Parallels - CRTC 80 Error
+           <a href="/blog/libilmimf-so-6-missing-from-opencv-project/">
+            LibIlmImf.so.6 Missing From OpenCV Project
            </a>
         </h2>
         <div class="post_content">
-           <p>Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new Hobby Project of mine, <a href="http://pupil-labs.com/pupil/">Pupil</a>.</p>
+           <p>Last time, <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
 
-<p>It was a clean installation of Ubuntu 13.10 in Parallels 9 on my new Macbook. I had invested too much time installing pupil, only to find that the display drivers or GTK or something had been corrupted. This was the second time I was booting ubuntu and had been slapped in the face by this:</p>
+<p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ python main.py
+</span><span class='line'>Traceback (most recent call last):
+</span><span class='line'>  File "main.py", line 79, in &lt;module&gt;
+</span><span class='line'>    from eye import eye
+</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/capture/eye.py", line 20, in &lt;module&gt;
+</span><span class='line'>    from methods import *
+</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/shared_modules/methods.py", line 16, in &lt;module&gt;
+</span><span class='line'>    import cv2
+</span><span class='line'>ImportError: libIlmImf.so.6: cannot open shared object file: No such file or directory</span></code></pre></td></tr></table></div></figure>
+
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">Continue →</a>
+              <a class="continue_link" href="/blog/libilmimf-so-6-missing-from-opencv-project/">Continue →</a>
            </p>
         </div>
      </article>
@@ -97,6 +117,15 @@
          <ul class="article_list">
 
           
+             
+          
+             
+
+                <li><a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">
+                  Ubuntu 13.10 in Parallels - CRTC 80 Error
+                   →
+                </a></li>
+
              
           
              
