@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Sheharyar Naseer]]></title>
-  <link href="http://sheharyarn.github.io/atom.xml" rel="self"/>
-  <link href="http://sheharyarn.github.io/"/>
-  <updated>2014-02-05T06:05:01+05:00</updated>
-  <id>http://sheharyarn.github.io/</id>
+  <link href="http://sheharyar.me//atom.xml" rel="self"/>
+  <link href="http://sheharyar.me//"/>
+  <updated>2014-02-05T07:18:22+05:00</updated>
+  <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Ubuntu 13.10 in Parallels - CRTC 80 Error]]></title>
-    <link href="http://sheharyarn.github.io/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/"/>
+    <link href="http://sheharyar.me//blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/"/>
     <updated>2014-02-02T16:01:16+05:00</updated>
-    <id>http://sheharyarn.github.io/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80</id>
+    <id>http://sheharyar.me//blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80</id>
     <content type="html"><![CDATA[<p>Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new Hobby Project of mine, <a href="http://pupil-labs.com/pupil/">Pupil</a>.</p>
 
 <p>It was a clean installation of Ubuntu 13.10 in Parallels 9 on my new Macbook. I had invested too much time installing pupil, only to find that the display drivers or GTK or something had been corrupted. This was the second time I was booting ubuntu and had been slapped in the face by this:</p>
@@ -68,19 +68,10 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Tinkering With Dart]]></title>
-    <link href="http://sheharyarn.github.io/blog/tinkering-with-dart/"/>
-    <updated>2014-02-02T10:06:06+05:00</updated>
-    <id>http://sheharyarn.github.io/blog/tinkering-with-dart</id>
-    <content type="html"><![CDATA[<p>Recently, on a friend&rsquo;s recommendation, I checked out <a href="http://dartlang.org/">DART</a>. It&rsquo;s an interesting language backed by Google.</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Opening Files From Finder Using Keyboard]]></title>
-    <link href="http://sheharyarn.github.io/blog/macosx-opening-files-from-finder-using-keyboard/"/>
+    <link href="http://sheharyar.me//blog/macosx-opening-files-from-finder-using-keyboard/"/>
     <updated>2014-02-02T10:05:00+05:00</updated>
-    <id>http://sheharyarn.github.io/blog/macosx-opening-files-from-finder-using-keyboard</id>
+    <id>http://sheharyar.me//blog/macosx-opening-files-from-finder-using-keyboard</id>
     <content type="html"><![CDATA[<p>I&rsquo;m a recent Mac convert so it was really weird for me when I realized that hitting the Return key in Finder renames the file instead of opening it. I&rsquo;ve spent the better part of my life using Windows and Linux and as you can imagine this was really frustrating for me (and still is).</p>
 
 <p>After a bit of Googling, I found out that you can open selected files in Finder using the <code>⌘ + O</code> combination on your keyboard. I&rsquo;m still trying to find a way to modify this to the &lsquo;Return&rsquo; key to have a consistent <em>Keyboard experience</em> on all my PCs.</p>
@@ -91,9 +82,9 @@
   
   <entry>
     <title type="html"><![CDATA[Yet Another Octopress Blog]]></title>
-    <link href="http://sheharyarn.github.io/blog/yet-another-octopress-blog/"/>
+    <link href="http://sheharyar.me//blog/yet-another-octopress-blog/"/>
     <updated>2014-01-28T03:13:21+05:00</updated>
-    <id>http://sheharyarn.github.io/blog/yet-another-octopress-blog</id>
+    <id>http://sheharyar.me//blog/yet-another-octopress-blog</id>
     <content type="html"><![CDATA[<p>No. This isn&rsquo;t another rant by a new Rubyist about how Ruby is so beautiful, open and awesome &amp; how <a href="http://octopress.org">Octopress</a> has liberated yet another slave of <a href="http://wordpress.org">Wordpress</a>. I love Ruby, Rails, Octopress and other <em>Hip</em> Geeky things; but I love Wordpress too. Moving to Octopress is somthing I have been wanting to do for a long time. I wanted to have complete control over my writings. I wanted them to be as minimal as possible, both in terms of design and code.</p>
 
 <p><strong>Let me stop you right there.</strong> Octopress is not for you. You&rsquo;ll have to write in Markdown, there&rsquo;s zero community support compared to wordpress, you have to write and deploy from possibly only one system and you&rsquo;ll have to get your hands dirty. Real Dirty. Getting hard? Well, I am. My condition is something like <a href="http://billpatrianakos.me/blog/2012/10/31/the-making-of-an-octopress-theme/">Bill Patrianakos</a> tells it:</p>

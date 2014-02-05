@@ -1,39 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://sheharyarn.github.io/blog/yet-another-octopress-blog/</loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//blog/yet-another-octopress-blog/</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://sheharyarn.github.io/blog/macosx-opening-files-from-finder-using-keyboard/
-        </loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//blog/macosx-opening-files-from-finder-using-keyboard/</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
     <url>
-        <loc>http://sheharyarn.github.io/blog/tinkering-with-dart/</loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://sheharyarn.github.io/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/
-        </loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//blog/archives/</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
     <url>
-        <loc>http://sheharyarn.github.io/blog/archives/</loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//blog/</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
     <url>
-        <loc>http://sheharyarn.github.io/blog/</loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
     <url>
-        <loc>http://sheharyarn.github.io/</loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://sheharyarn.github.io/robots.txt</loc>
-        <lastmod>2014-02-05T06:04:44+05:00</lastmod>
+        <loc>http://sheharyar.me//robots.txt</loc>
+        <lastmod>2014-02-05T06:53:42+05:00</lastmod>
     </url>
 </urlset>
