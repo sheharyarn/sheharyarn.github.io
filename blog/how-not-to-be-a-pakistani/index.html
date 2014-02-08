@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>LibIlmImf.so.6 Missing From OpenCV Project - Sheharyar Naseer</title>
+  <title>How Not to Be a Pakistani - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Feb 5th, 2014 LibIlmImf.so.6 Missing From OpenCV Project Last time I mentioned that I was working on a new Hobby Project, Pupil. This was my first &hellip;">
+  <meta name="description" content="Feb 8th, 2014 How Not to Be a Pakistani I came across this blog today, called How not to be a Pakistani, and I can&rsquo;t believe how perfectly the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://sheharyar.me//blog/libilmimf-so-6-missing-from-opencv-project">
+  <link rel="canonical" href="http://sheharyar.me//blog/how-not-to-be-a-pakistani">
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -77,54 +77,23 @@
   
 
 
-<time datetime="2014-02-05T11:18:01+05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
+<time datetime="2014-02-08T18:15:27+05:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
     </div>
 
     
       <h2 class="post_title">
         <a href="">
-          LibIlmImf.so.6 Missing From OpenCV Project
+          How Not to Be a Pakistani
         </a>
       </h2>
     
 
     <div class="post_content">
-      <p>Last time <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
+      <p>I came across this blog today, called <a href="http://ogchronic.wordpress.com/">How not to be a Pakistani</a>, and I can&rsquo;t believe how perfectly the author describes some of the things of our Pakistani Culture.</p>
 
-<p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
+<p>A few posts that gave me a good laugh (and made me think) were <a href="http://ogchronic.wordpress.com/2014/01/28/how-to-be-a-social-cheetah/">How to be a Social Cheetah</a> and <a href="http://ogchronic.wordpress.com/2013/07/31/how-to-be-an-average-pakistani-chawal/">How to be an average Pakistani &lsquo;Chawal&rsquo;</a>, especially the second one. It made me doubt myself a little. This is <strong>exactly</strong> how things are here and I don&rsquo;t want to be a part of it.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ python main.py
-</span><span class='line'>Traceback (most recent call last):
-</span><span class='line'>  File "main.py", line 79, in &lt;module&gt;
-</span><span class='line'>    from eye import eye
-</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/capture/eye.py", line 20, in &lt;module&gt;
-</span><span class='line'>    from methods import *
-</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/shared_modules/methods.py", line 16, in &lt;module&gt;
-</span><span class='line'>    import cv2
-</span><span class='line'>ImportError: libIlmImf.so.6: cannot open shared object file: No such file or directory</span></code></pre></td></tr></table></div></figure>
-
-
-<!--more-->
-
-
-<p>I googled high and low, looked at the <a href="https://groups.google.com/forum/#!forum/pupil-discuss">Pupil Google Group</a>, opened up <a href="https://github.com/pupil-labs/pupil/issues/4">Github Issues</a>. I was the only one getting this error, but why? I had followed the <a href="https://github.com/pupil-labs/pupil/wiki/Dependencies-Installation-Linux">Installation Guide</a> closely, and on three different clean installations of Ubuntu. This was really frustrating.</p>
-
-<p>In the end, it was a friend on Facebook who told me to try working after installing <code>openexr</code>. I did, and problem solved. <code>libIlmImf.so.6</code> is a package bundled with it.</p>
-
-<p>Anyways, you can do this to make the error go away:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install openexr</span></code></pre></td></tr></table></div></figure>
-
+<p>I won&rsquo;t go into any more details, but you should definitely check the blog out!</p>
 
     </div>
   </article>
@@ -140,15 +109,11 @@
     <div class="separator"></div>
     
     
-      <a id="previous_post" title="Previous Post: Ubuntu 13.10 in Parallels - CRTC 80 Error" href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">
-        ← Ubuntu 13.10 in Parallels - CRTC 80 Error
+      <a id="previous_post" title="Previous Post: LibIlmImf.so.6 missing from OpenCV Project" href="/blog/libilmimf-so-6-missing-from-opencv-project/">
+        ← LibIlmImf.so.6 missing from OpenCV Project
       </a>
     
 
-    
-      <a id="next_post" title="Next Post: How not to be a Pakistani" href="/blog/how-not-to-be-a-pakistani/">
-        How not to be a Pakistani →
-      </a>
     
 
   </div>
