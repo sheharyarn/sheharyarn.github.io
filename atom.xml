@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-03-05T19:41:03+05:00</updated>
+  <updated>2014-03-05T19:48:37+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Installing TSOCKS (TorSocks) on MacOSX]]></title>
+    <title type="html"><![CDATA[Installing TSocks (TorSocks) on MacOSX]]></title>
     <link href="http://sheharyar.me//blog/installing-tsocks-on-macosx/"/>
     <updated>2014-03-03T20:28:26+05:00</updated>
     <id>http://sheharyar.me//blog/installing-tsocks-on-macosx</id>
