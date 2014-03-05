@@ -9,7 +9,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 8th, 2014 I came across this blog today, called How not to be a Pakistani, and I can&rsquo;t believe how perfectly the &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 3rd, 2014 I recently came across this nifty little terminal app called TSocks that allows you to use a Socks Proxy
+for your &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +67,75 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-03T20:28:26+05:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2014</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>I recently came across this nifty little terminal app called <a href="https://whatbox.ca/wiki/tsocks">TSocks</a> that allows you to use a Socks Proxy
+for your terminal commands. I already use <a href="http://torproject.org/">TOR</a> for all other web communications on Macbook Air, I wanted to use
+terminal over it as well. You can download and install it via <a href="http://sonnykt.tumblr.com/post/1256048245/using-terminal-commands-with-socks-proxy">MacPorts</a>,
+<a href="https://github.com/Homebrew/homebrew/issues/11870#issuecomment-12080107">Homebrew</a> or manually. Sadly, the TSocks Project is no longer
+maintained. But after a little searching, I found <a href="code.google.com/p/torsocks/">TorSocks</a>. Since TOR was the reason I wanted to use TSocks
+in the first place, TorSocks was perfect for this. I didn&rsquo;t need to customize anything, I just installed and started using it.</p>
+
+<!--more-->
+
+
+<h2>Installation</h2>
+
+<p>You can install TorSocks via <a href="http://superuser.com/a/641732/214953">MacPorts</a> but I personally like to use <a href="http://brew.sh">Homebrew</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install tor            # required depencency
+</span><span class='line'>$ brew install torsocks
+</span><span class='line'>$ brew install wget</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Usage</h2>
+
+<p>Usage is fairly simple. First start Tor using commandline or the Vidalia GUI, then use either <code>torsocks' or</code>usewithtor&#8217; commands to
+execute any other command that connects to the internet. One thing that pisses me off is that the <code>ping</code> command doesn&rsquo;t work with it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ usewithtor wget google.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll see that the file will be downloaded. Not Satisfied? You can check your IP using the following commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl ipecho.net/plain             # Your Original IP
+</span><span class='line'>$ torsocks curl ipecho.net/plain    # Your IP over Tor</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Happy (Anonymous) Surfing!</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -328,6 +398,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/installing-tsocks-on-macosx/">Installing TSOCKS (TorSocks) on MacOSX</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/how-not-to-be-a-pakistani/">How Not to Be a Pakistani</a>
       </li>
     
@@ -341,10 +415,6 @@
     
       <li class="post">
         <a href="/blog/macosx-opening-files-from-finder-using-keyboard/">Opening Files From Finder Using Keyboard</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/yet-another-octopress-blog/">Yet Another Octopress Blog</a>
       </li>
     
   </ul>

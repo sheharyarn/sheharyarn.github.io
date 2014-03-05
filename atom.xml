@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-02-08T18:31:17+05:00</updated>
+  <updated>2014-03-05T19:41:03+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Installing TSOCKS (TorSocks) on MacOSX]]></title>
+    <link href="http://sheharyar.me//blog/installing-tsocks-on-macosx/"/>
+    <updated>2014-03-03T20:28:26+05:00</updated>
+    <id>http://sheharyar.me//blog/installing-tsocks-on-macosx</id>
+    <content type="html"><![CDATA[<p>I recently came across this nifty little terminal app called <a href="https://whatbox.ca/wiki/tsocks">TSocks</a> that allows you to use a Socks Proxy
+for your terminal commands. I already use <a href="http://torproject.org/">TOR</a> for all other web communications on Macbook Air, I wanted to use
+terminal over it as well. You can download and install it via <a href="http://sonnykt.tumblr.com/post/1256048245/using-terminal-commands-with-socks-proxy">MacPorts</a>,
+<a href="https://github.com/Homebrew/homebrew/issues/11870#issuecomment-12080107">Homebrew</a> or manually. Sadly, the TSocks Project is no longer
+maintained. But after a little searching, I found <a href="code.google.com/p/torsocks/">TorSocks</a>. Since TOR was the reason I wanted to use TSocks
+in the first place, TorSocks was perfect for this. I didn&rsquo;t need to customize anything, I just installed and started using it.</p>
+
+<!--more-->
+
+
+<h2>Installation</h2>
+
+<p>You can install TorSocks via <a href="http://superuser.com/a/641732/214953">MacPorts</a> but I personally like to use <a href="http://brew.sh">Homebrew</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install tor            # required depencency
+</span><span class='line'>$ brew install torsocks
+</span><span class='line'>$ brew install wget</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Usage</h2>
+
+<p>Usage is fairly simple. First start Tor using commandline or the Vidalia GUI, then use either <code>torsocks' or</code>usewithtor&#8217; commands to
+execute any other command that connects to the internet. One thing that pisses me off is that the <code>ping</code> command doesn&rsquo;t work with it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ usewithtor wget google.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll see that the file will be downloaded. Not Satisfied? You can check your IP using the following commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl ipecho.net/plain             # Your Original IP
+</span><span class='line'>$ torsocks curl ipecho.net/plain    # Your IP over Tor</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Happy (Anonymous) Surfing!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Not to Be a Pakistani]]></title>
