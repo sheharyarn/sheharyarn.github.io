@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-03-06T03:37:32+05:00</updated>
+  <updated>2014-03-06T15:37:13+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -65,7 +65,7 @@ for your terminal commands. I already use <a href="http://torproject.org/">Tor</
 be able to use Tor for my terminal commands as well. You can download and install it via <a href="http://sonnykt.tumblr.com/post/1256048245/using-terminal-commands-with-socks-proxy">MacPorts</a> or
 <a href="https://github.com/Homebrew/homebrew/issues/11870#issuecomment-12080107">Homebrew</a> or you can build it manually. Sadly, the TSocks Project
 is no longer maintained. So I set out to find a recent fork or a modified version that would work, and after 10 minutes into my quest I found
-<a href="code.google.com/p/torsocks/">TorSocks</a>. It was a customized version of TSocks, specfically built to work with Tor out of the box and since
+<a href="http://code.google.com/p/torsocks/">TorSocks</a>. It was a customized version of TSocks, specfically built to work with Tor out of the box and since
 Tor was the real reason I wanted to use TSocks in the first place, this was perfect for me. I didn&rsquo;t need to customize anything, I just
 installed it and started using it.</p>
 
