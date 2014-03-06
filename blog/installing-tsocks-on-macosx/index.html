@@ -120,19 +120,23 @@ installed it and started using it.</p>
 
 <h2>Usage</h2>
 
-<p>Usage is fairly simple. First start Tor using the commandline or the Vidalia GUI, then use either <code>torsocks</code> or <code>usewithtor</code> commands to
+<p>Usage is fairly simple. First start Tor using the commandline or the Vidalia GUI, then use <code>torsocks</code>, <code>usewithtor</code> or <code>torify</code> commands to
 execute any other command that connects to the internet. One thing that pisses me off is that the <code>ping</code> command doesn&rsquo;t work with it.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ usewithtor wget google.com</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ torify wget google.com
+</span><span class='line'>$ torsocks wget google.com
+</span><span class='line'>$ usewithtor wget google.com</span></code></pre></td></tr></table></div></figure>
 
 
 <p>You&rsquo;ll see that the file will be downloaded. Not Satisfied? You can check your IP using the following commands:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl ipecho.net/plain             # Your Original IP
-</span><span class='line'>$ torsocks curl ipecho.net/plain    # Your IP over Tor</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl icanhazip.com               # Your Original IP
+</span><span class='line'>$ torsocks curl icanhazip.com      # Your IP over Tor</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Happy (Anonymous) Surfing!</p>
