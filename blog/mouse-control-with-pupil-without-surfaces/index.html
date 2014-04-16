@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Controlling Mouse Using Your Eye (With Pupil) - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Mar 27th, 2014 Controlling Mouse Using Your Eye (With Pupil) A while back I mentioned that I was working on a an Eye-Tracking Project
+called Pupil &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="http://sheharyar.me/logo.png"/>
+  <meta property="og:title" content="Controlling Mouse Using Your Eye (With Pupil) - Sheharyar Naseer" />
+  <meta property="og:description" content="Mar 27th, 2014 Controlling Mouse Using Your Eye (With Pupil) A while back I mentioned that I was working on a an Eye-Tracking Project
+called Pupil &hellip;" />
+
+  
+  <link rel="canonical" href="http://sheharyar.me//blog/mouse-control-with-pupil-without-surfaces">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-27T09:45:02+05:00" pubdate data-updated="true">Mar 27<span>th</span>, 2014</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Controlling Mouse Using Your Eye (With Pupil)
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>A while back <a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">I mentioned</a> that I was working on a an Eye-Tracking Project
+called <a href="https://github.com/pupil-labs/pupil">Pupil</a> with a couple of friends of mine. It&rsquo;s come a long way now and we&rsquo;ve have had
+considerable success &ndash; but that&rsquo;s for another post. Pupil is a great tool for eye-tracking and getting gaze data that can be used with
+other applications in realtime. It utilizes two HD cameras mounted on an eye-glasses frame at 180˚ from each other. One is called &lsquo;Eye
+Camera&rsquo; that records your eye movements and the other is called &lsquo;World Camera&rsquo; which is used to process exactly where the user is
+looking at. This data can be streamed to other applications over TCP in real time.</p>
+
+<p>We wanted to control the mouse using our eye gestures, but it heavily relied on the World Camera and defining virtual screens called
+surfaces within the application. This obviously resulted in greater accuracy since it moved the pointer only when you actually looked
+at the screen. But we didn&rsquo;t have a fixed World Cam and wanted to control the mouse using raw gaze data, i.e. use the data from your
+current gaze at the world (instead at the screen) and move the cursor to the appropriate coordinates on the screen w.r.t that gaze.
+So what we did was, we made small changes to the <a href="https://gist.github.com/willpatera/7908319">provided script</a>, removing any reference
+to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> data to move the cursor.</p>
+
+<!--more-->
+
+
+<h1>Required Dependencies:</h1>
+
+<p>You need to have <code>PyMouse</code> and <code>Xlib</code> installed to make the script work. You can install them by running these commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo pip install pymouse
+</span><span class='line'>$ sudo apt-get install python-xlib</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>To Control the Mouse:</h1>
+
+<ol>
+<li>Run Pupil</li>
+<li>Adjust Focus, Zoom, ROI so that your eye is perfectly tracked</li>
+<li>Do the Calibration Process in the World View (We prefer the <code>Natural Features</code> method, since we don&rsquo;t use a fixed World Cam). Make
+sure to use lots of points. You can start by pressing <code>c</code> on your keyboard.</li>
+<li>Once your gaze is also being perfectly tracked, start the <a href="">TCP Streaming Server</a> by pressing <code>s</code> on your keyboard</li>
+<li>Make sure everything&rsquo;s working fine by visiting <a href="http://0.0.0.0:5000">http://0.0.0.0:5000</a> in your browser.</li>
+<li>Now, in a new terminal, run the script: <code>$ python mouse_control.py</code></li>
+</ol>
+
+
+<h1>The Script (<a href="https://gist.github.com/sheharyarn/9754664">mouse_control.py</a>):</h1>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import zmq
+</span><span class='line'>from pymouse import PyMouse
+</span><span class='line'>
+</span><span class='line'>#mouse setup
+</span><span class='line'>m = PyMouse()
+</span><span class='line'>x_dim, y_dim = m.screen_size()
+</span><span class='line'>
+</span><span class='line'>#network setup
+</span><span class='line'>context = zmq.Context()
+</span><span class='line'>socket = context.socket(zmq.SUB)
+</span><span class='line'>socket.connect("tcp://127.0.0.1:5000")
+</span><span class='line'>#filter by messages by stating string 'STRING'. '' receives all messages
+</span><span class='line'>socket.setsockopt(zmq.SUBSCRIBE, '')
+</span><span class='line'>smooth_x, smooth_y= 0.5, 0.5
+</span><span class='line'>
+</span><span class='line'>while True:
+</span><span class='line'>    msg = socket.recv()
+</span><span class='line'>    items = msg.split("\n") 
+</span><span class='line'>    msg_type = items.pop(0)
+</span><span class='line'>    items = dict([i.split(':') for i in items[:-1] ])
+</span><span class='line'>    if msg_type == 'Pupil':
+</span><span class='line'>        try:
+</span><span class='line'>            my_gaze = items['norm_gaze']
+</span><span class='line'>            
+</span><span class='line'>            if my_gaze != "None":
+</span><span class='line'>                raw_x,raw_y = map(float,my_gaze[1:-1].split(','))
+</span><span class='line'>                
+</span><span class='line'>                # smoothing out the gaze so the mouse has smoother movement
+</span><span class='line'>                smooth_x += 0.5 * (raw_x-smooth_x)
+</span><span class='line'>                smooth_y += 0.5 * (raw_y-smooth_y)
+</span><span class='line'>    
+</span><span class='line'>                x = smooth_x
+</span><span class='line'>                y = smooth_y
+</span><span class='line'>    
+</span><span class='line'>                y = 1-y # inverting y so it shows up correctly on screen
+</span><span class='line'>                x *= x_dim
+</span><span class='line'>                y *= y_dim
+</span><span class='line'>                # PyMouse or MacOS bugfix - can not go to extreme corners
+</span><span class='line'>                # because of hot corners?
+</span><span class='line'>                x = min(x_dim-10, max(10,x))
+</span><span class='line'>                y = min(y_dim-10, max(10,y))
+</span><span class='line'>    
+</span><span class='line'>                m.move(x,y)
+</span><span class='line'>        except KeyError:
+</span><span class='line'>            pass
+</span><span class='line'>    else:
+</span><span class='line'>        # process non gaze position events from plugins here
+</span><span class='line'>        pass</span></code></pre></td></tr></table></div></figure>
+
+
+    </div>
+  </article>
+
+
+  <p class="meta">
+    
+
+
+  </p>
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: #KholoBC - All the rage over Youtube" href="/blog/kholo-bc-all-the-rage-over-youtube/">
+        ← #KholoBC - All the rage over Youtube
+      </a>
+    
+
+    
+      <a id="next_post" title="Next Post: Search Methods of a Ruby Object" href="/blog/search-methods-of-a-ruby-object/">
+        Search Methods of a Ruby Object →
+      </a>
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

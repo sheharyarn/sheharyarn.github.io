@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-03-07T01:21:45+05:00</updated>
+  <updated>2014-04-17T02:10:14+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,211 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Search Methods of a Ruby Object]]></title>
+    <link href="http://sheharyar.me//blog/search-methods-of-a-ruby-object/"/>
+    <updated>2014-04-17T01:53:45+05:00</updated>
+    <id>http://sheharyar.me//blog/search-methods-of-a-ruby-object</id>
+    <content type="html"><![CDATA[<p>Sometimes, I&rsquo;m not so sure about the methods I can call on an Object in Ruby. Sure, I can call <code>.methods</code> on that object
+to get a list of all the functions, but it isn&rsquo;t always helpful because it can fill up your entire terminal with
+hundreds of methods you don&rsquo;t want to see. I wanted to be able to get a list of only those methods that match a certain
+string I provide. So I overrode Ruby&rsquo;s Object Class with a custom method called <code>search_methods</code>, it does exactly what it
+says; searches all methods of an object that match a certain criteria.</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Object
+</span><span class='line'>  def search_methods(param)
+</span><span class='line'>    methods = []
+</span><span class='line'>    self.methods.each { |m| methods &lt;&lt; m if m.to_s.include? param }
+</span><span class='line'>    return methods
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now call it on different objects like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Array.search_methods 'enum'
+</span><span class='line'># =&gt; [:to_enum, :enum_for]
+</span><span class='line'>
+</span><span class='line'>Player.last.search_methods 'trust'
+</span><span class='line'># =&gt; [:untrust, :untrusted?, :trust]
+</span><span class='line'>
+</span><span class='line'>"hello".search_methods "to_"
+</span><span class='line'># =&gt; [:to_i, :to_f, :to_s, :to_str, :to_sym, :to_r, :to_c, :to_enum]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can see the <a href="https://gist.github.com/sheharyarn/10772579">gist on github</a>. I&rsquo;ve also added it to my <code>.irbrc</code> in my
+<a href="https://github.com/sheharyarn/dotfiles">~/.dotfiles</a> so this always gets preloaded whenever I run <code>irb</code> or <code>rails c</code>.
+You can see it here: <a href="https://github.com/sheharyarn/dotfiles/blob/master/Ruby/irbrc">.irbrc</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Controlling Mouse Using Your Eye (With Pupil)]]></title>
+    <link href="http://sheharyar.me//blog/mouse-control-with-pupil-without-surfaces/"/>
+    <updated>2014-03-27T09:45:02+05:00</updated>
+    <id>http://sheharyar.me//blog/mouse-control-with-pupil-without-surfaces</id>
+    <content type="html"><![CDATA[<p>A while back <a href="http://sheharyar.me//blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">I mentioned</a> that I was working on a an Eye-Tracking Project
+called <a href="https://github.com/pupil-labs/pupil">Pupil</a> with a couple of friends of mine. It&rsquo;s come a long way now and we&rsquo;ve have had
+considerable success &ndash; but that&rsquo;s for another post. Pupil is a great tool for eye-tracking and getting gaze data that can be used with
+other applications in realtime. It utilizes two HD cameras mounted on an eye-glasses frame at 180˚ from each other. One is called &lsquo;Eye
+Camera&rsquo; that records your eye movements and the other is called &lsquo;World Camera&rsquo; which is used to process exactly where the user is
+looking at. This data can be streamed to other applications over TCP in real time.</p>
+
+<p>We wanted to control the mouse using our eye gestures, but it heavily relied on the World Camera and defining virtual screens called
+surfaces within the application. This obviously resulted in greater accuracy since it moved the pointer only when you actually looked
+at the screen. But we didn&rsquo;t have a fixed World Cam and wanted to control the mouse using raw gaze data, i.e. use the data from your
+current gaze at the world (instead at the screen) and move the cursor to the appropriate coordinates on the screen w.r.t that gaze.
+So what we did was, we made small changes to the <a href="https://gist.github.com/willpatera/7908319">provided script</a>, removing any reference
+to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> data to move the cursor.</p>
+
+<!--more-->
+
+
+<h1>Required Dependencies:</h1>
+
+<p>You need to have <code>PyMouse</code> and <code>Xlib</code> installed to make the script work. You can install them by running these commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo pip install pymouse
+</span><span class='line'>$ sudo apt-get install python-xlib</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>To Control the Mouse:</h1>
+
+<ol>
+<li>Run Pupil</li>
+<li>Adjust Focus, Zoom, ROI so that your eye is perfectly tracked</li>
+<li>Do the Calibration Process in the World View (We prefer the <code>Natural Features</code> method, since we don&rsquo;t use a fixed World Cam). Make
+sure to use lots of points. You can start by pressing <code>c</code> on your keyboard.</li>
+<li>Once your gaze is also being perfectly tracked, start the <a href="">TCP Streaming Server</a> by pressing <code>s</code> on your keyboard</li>
+<li>Make sure everything&rsquo;s working fine by visiting <a href="http://0.0.0.0:5000">http://0.0.0.0:5000</a> in your browser.</li>
+<li>Now, in a new terminal, run the script: <code>$ python mouse_control.py</code></li>
+</ol>
+
+
+<h1>The Script (<a href="https://gist.github.com/sheharyarn/9754664">mouse_control.py</a>):</h1>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import zmq
+</span><span class='line'>from pymouse import PyMouse
+</span><span class='line'>
+</span><span class='line'>#mouse setup
+</span><span class='line'>m = PyMouse()
+</span><span class='line'>x_dim, y_dim = m.screen_size()
+</span><span class='line'>
+</span><span class='line'>#network setup
+</span><span class='line'>context = zmq.Context()
+</span><span class='line'>socket = context.socket(zmq.SUB)
+</span><span class='line'>socket.connect("tcp://127.0.0.1:5000")
+</span><span class='line'>#filter by messages by stating string 'STRING'. '' receives all messages
+</span><span class='line'>socket.setsockopt(zmq.SUBSCRIBE, '')
+</span><span class='line'>smooth_x, smooth_y= 0.5, 0.5
+</span><span class='line'>
+</span><span class='line'>while True:
+</span><span class='line'>    msg = socket.recv()
+</span><span class='line'>    items = msg.split("\n") 
+</span><span class='line'>    msg_type = items.pop(0)
+</span><span class='line'>    items = dict([i.split(':') for i in items[:-1] ])
+</span><span class='line'>    if msg_type == 'Pupil':
+</span><span class='line'>        try:
+</span><span class='line'>            my_gaze = items['norm_gaze']
+</span><span class='line'>            
+</span><span class='line'>            if my_gaze != "None":
+</span><span class='line'>                raw_x,raw_y = map(float,my_gaze[1:-1].split(','))
+</span><span class='line'>                
+</span><span class='line'>                # smoothing out the gaze so the mouse has smoother movement
+</span><span class='line'>                smooth_x += 0.5 * (raw_x-smooth_x)
+</span><span class='line'>                smooth_y += 0.5 * (raw_y-smooth_y)
+</span><span class='line'>    
+</span><span class='line'>                x = smooth_x
+</span><span class='line'>                y = smooth_y
+</span><span class='line'>    
+</span><span class='line'>                y = 1-y # inverting y so it shows up correctly on screen
+</span><span class='line'>                x *= x_dim
+</span><span class='line'>                y *= y_dim
+</span><span class='line'>                # PyMouse or MacOS bugfix - can not go to extreme corners
+</span><span class='line'>                # because of hot corners?
+</span><span class='line'>                x = min(x_dim-10, max(10,x))
+</span><span class='line'>                y = min(y_dim-10, max(10,y))
+</span><span class='line'>    
+</span><span class='line'>                m.move(x,y)
+</span><span class='line'>        except KeyError:
+</span><span class='line'>            pass
+</span><span class='line'>    else:
+</span><span class='line'>        # process non gaze position events from plugins here
+</span><span class='line'>        pass</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[#KholoBC - All the Rage Over Youtube]]></title>

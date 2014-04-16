@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>#KholoBC - All the Rage Over Youtube - Sheharyar Naseer</title>
+  <title>Search Methods of a Ruby Object - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Mar 6th, 2014 #KholoBC - All the Rage Over Youtube If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I& &hellip;">
+  <meta name="description" content="Apr 17th, 2014 Search Methods of a Ruby Object Sometimes, I&rsquo;m not so sure about the methods I can call on an Object in Ruby. Sure, I can call &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,11 +18,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
-  <meta property="og:title" content="#KholoBC - All the Rage Over Youtube - Sheharyar Naseer" />
-  <meta property="og:description" content="Mar 6th, 2014 #KholoBC - All the Rage Over Youtube If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I& &hellip;" />
+  <meta property="og:title" content="Search Methods of a Ruby Object - Sheharyar Naseer" />
+  <meta property="og:description" content="Apr 17th, 2014 Search Methods of a Ruby Object Sometimes, I&rsquo;m not so sure about the methods I can call on an Object in Ruby. Sure, I can call &hellip;" />
 
   
-  <link rel="canonical" href="http://sheharyar.me//blog/kholo-bc-all-the-rage-over-youtube">
+  <link rel="canonical" href="http://sheharyar.me//blog/search-methods-of-a-ruby-object">
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
@@ -82,52 +82,68 @@
   
 
 
-<time datetime="2014-03-06T02:51:17+05:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
+<time datetime="2014-04-17T01:53:45+05:00" pubdate data-updated="true">Apr 17<span>th</span>, 2014</time>
     </div>
 
     
       <h2 class="post_title">
         <a href="">
-          #KholoBC - All the Rage Over Youtube
+          Search Methods of a Ruby Object
         </a>
       </h2>
     
 
     <div class="post_content">
-      <p>If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I&rsquo;m okay with that &ndash; &lsquo;Porn Sites&rsquo;) but
-banning YouTube? Seriously guys. And it&rsquo;s been quite a while since it was blocked. The real reason it was blocked was because of a
-blasphemous video called &lt;Don&rsquo;t Even Remember the Name> being posted somewhere on it. Pakistanis, or should I say Muslims, take that
-very seriously. But the Pakistani Government didn&rsquo;t do what the rest of the Muslim world did, that is blocked the video, instead they
-simply blocked all of Youtube. Pakistanis have been using Spotflux, HideMyAss, Hotspot Shield and God-Knows-What other Proxy programs
-to get access to Youtube; We <strong><em>are</em></strong> a little frustrated (Well, not me &ndash; I&rsquo;ve been using Tor long before for everything).</p>
+      <p>Sometimes, I&rsquo;m not so sure about the methods I can call on an Object in Ruby. Sure, I can call <code>.methods</code> on that object
+to get a list of all the functions, but it isn&rsquo;t always helpful because it can fill up your entire terminal with
+hundreds of methods you don&rsquo;t want to see. I wanted to be able to get a list of only those methods that match a certain
+string I provide. So I overrode Ruby&rsquo;s Object Class with a custom method called <code>search_methods</code>, it does exactly what it
+says; searches all methods of an object that match a certain criteria.</p>
 
 <!--more-->
 
 
 
 
-<iframe src="//player.vimeo.com/video/87489847" width="750" height="422" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Object
+</span><span class='line'>  def search_methods(param)
+</span><span class='line'>    methods = []
+</span><span class='line'>    self.methods.each { |m| methods &lt;&lt; m if m.to_s.include? param }
+</span><span class='line'>    return methods
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
 
 
-<p>But last week that video was finally taken down, but the Pakistani Government still refuses to lift the ban on  Youtube. To fight the evil
-Pakistani Government Dragon, rose the Rapping Warrior, Ali Gul Pir, with the mighty sword of #KholoBC. He released his video &ldquo;Kholo
-Ban Chor&rdquo; on Youtube and Vimeo and within days gained tens of thousands of views despite censorship. This video has inspired somewhat of
-a &ldquo;Youtube Unblocking Revolution&rdquo; causing thousands of Internet Users from Pakistan to start using the #KholoBC Hashtag on Social Media
-Websites to demand the lift on the ban.</p>
+<p>You can now call it on different objects like this:</p>
 
-<p><a href="http://blogs.tribune.com.pk/story/21198/kholo-bc-and-eight-other-reasons-to-lift-the-ban-on-youtube-now/">The Tribune</a> points out:</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Array.search_methods 'enum'
+</span><span class='line'># =&gt; [:to_enum, :enum_for]
+</span><span class='line'>
+</span><span class='line'>Player.last.search_methods 'trust'
+</span><span class='line'># =&gt; [:untrust, :untrusted?, :trust]
+</span><span class='line'>
+</span><span class='line'>"hello".search_methods "to_"
+</span><span class='line'># =&gt; [:to_i, :to_f, :to_s, :to_str, :to_sym, :to_r, :to_c, :to_enum]</span></code></pre></td></tr></table></div></figure>
 
-<blockquote><p>The ban has never been about protecting the honour of Prophet Muhammad (pbuh),
-come to think about it. Its real purpose seems to be a calculated halt,
-so that the activities of our unscrupulous leaders are not exposed.</p></blockquote>
 
-<p>and that seems to be the very point of the video.</p>
-
-<h2>NOTE:</h2>
-
-<p>I want to clarify that I have high regards for the Holy Prophet Muhammad (pbuh) and I, like millions of other Muslims, cannot bear any
-blasphemous act in his honour. But shutting down the entire website seems inappropriate since it&rsquo;s a source of education as well and
-has helped so many people learn something new. The right way is simply to block the specific pages, like the rest of the world is doing.</p>
+<p>You can see the <a href="https://gist.github.com/sheharyarn/10772579">gist on github</a>. I&rsquo;ve also added it to my <code>.irbrc</code> in my
+<a href="https://github.com/sheharyarn/dotfiles">~/.dotfiles</a> so this always gets preloaded whenever I run <code>irb</code> or <code>rails c</code>.
+You can see it here: <a href="https://github.com/sheharyarn/dotfiles/blob/master/Ruby/irbrc">.irbrc</a></p>
 
     </div>
   </article>
@@ -143,15 +159,11 @@ has helped so many people learn something new. The right way is simply to block 
     <div class="separator"></div>
     
     
-      <a id="previous_post" title="Previous Post: Installing TSocks (TorSocks) on MacOSX" href="/blog/installing-tsocks-on-macosx/">
-        ← Installing TSocks (TorSocks) on MacOSX
+      <a id="previous_post" title="Previous Post: Controlling Mouse using your Eye (with Pupil)" href="/blog/mouse-control-with-pupil-without-surfaces/">
+        ← Controlling Mouse using your Eye (with Pupil)
       </a>
     
 
-    
-      <a id="next_post" title="Next Post: Controlling Mouse using your Eye (with Pupil)" href="/blog/mouse-control-with-pupil-without-surfaces/">
-        Controlling Mouse using your Eye (with Pupil) →
-      </a>
     
 
   </div>
