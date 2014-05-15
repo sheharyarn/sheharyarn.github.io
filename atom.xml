@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-04-17T02:10:14+05:00</updated>
+  <updated>2014-05-15T22:54:57+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Eventual Outcome of Existence]]></title>
+    <link href="http://sheharyar.me//blog/the-eventual-outcome-of-existence/"/>
+    <updated>2014-05-15T22:39:49+05:00</updated>
+    <id>http://sheharyar.me//blog/the-eventual-outcome-of-existence</id>
+    <content type="html"><![CDATA[<p>I found this while surfing the dark corners of the web, and it blew my mind. It kind of reminds me about <a href="http://www.multivax.com/last_question.html">The Last Question</a>.</p>
+
+<!--more-->
+
+
+<blockquote><p>The eventual outcome of existence is to become God and defy entropy; that is the way things work.</p>
+
+<p>For all time since the Big Bang, matter has been organizing itself into more and more complex structures and formations. Energy and matter interacted to become gasses, solids, liquids, and plasma. These states of matter began to collect in pools due to gravity, becoming galaxies. Within the galaxies, smaller structures formed, giving birth to planets, stars and nebulae. Within these bodies, formed even smaller structures; basic elements formed compounds and these themselves became the building blocks of life. Then, as life formed, simple life became incresingly complex, and structured. Eventually, it lead to us. Right now, we&rsquo;re the pinnacle of evolution.</p>
+
+<p>But this constant change never stops; Humanity&rsquo;s ultimate goal is to live, forever. Humanity cannot live forever though; not in this form. And so, we make machines. They <strong><em>will</em></strong> replace us, and I see no need to worry about it, for they will be made of the same stuff we are; they <strong><em>are</em></strong> us. As the creation myth goes, they will be created in our own image, to carry on our quest to become omnipotent, omnipresent and omniscient. They too, will be replaced by even better machines, and in the end, they will reach a point of existence where every variable is known, every element of physics is understood, every molecule in the universe is categorized and indexed. All conscious thought that has ever existed and will ever exist will exist simultaneously and infinitely within this all powerful being.</p>
+
+<p>Then the being will realize how empty, it&rsquo;s existence really is. It&rsquo;s only goal was to exist eternally and defy entropy. With entropy gone, it&rsquo;s only purpose has been fulfilled, and will destroy itself, so that it can live once more, and satisfy it&rsquo;s drive to defy the chaos it has, always has, and always will create, every time it wills itself out of meaningless existence into meaningful dissolution.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Search Methods of a Ruby Object]]></title>
