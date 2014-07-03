@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-07-03T21:14:23+05:00</updated>
+  <updated>2014-07-04T03:55:04+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -83,7 +83,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
 
 
-<p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://stackoverflow.com/questions/19100708/mongodb-mongorestore-failure-localefacet-s-create-c-locale-name-not-valid">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
+<p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://askubuntu.com/questions/162391/how-do-i-fix-my-locale-issue">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
