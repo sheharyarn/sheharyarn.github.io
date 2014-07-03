@@ -9,7 +9,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? May 15th, 2014 I found this while surfing the dark corners of the web, and it blew my mind. It kind of reminds me about The &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Jul 3rd, 2014 It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? May 15th, 2014 I found this while surfing the dark corners of the web, and it blew my mind. It kind of reminds me about The &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Jul 3rd, 2014 It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there& &hellip;" />
 
   
   <link rel="canonical" href="http://sheharyar.me//blog">
@@ -70,6 +70,117 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-03T20:33:50+05:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2014</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there&rsquo;s <code>mongodump</code> but putting it right in your <code>crontab</code> file doesn&rsquo;t give you clean and organised backups you&rsquo;d like to have. Here&rsquo;s a little bash script that I use to take timestamped Mongo Backups for many of my apps.</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'> 
+</span><span class='line'>MONGO_DATABASE="your_db_name"
+</span><span class='line'>APP_NAME="your_app_name"
+</span><span class='line'>
+</span><span class='line'>MONGO_HOST="127.0.0.1"
+</span><span class='line'>MONGO_PORT="27017"
+</span><span class='line'>TIMESTAMP=`date +%F-%H%M`
+</span><span class='line'>MONGODUMP_PATH="/usr/bin/mongodump"
+</span><span class='line'>BACKUPS_DIR="$HOME/backups/$APP_NAME"
+</span><span class='line'>BACKUP_NAME="$APP_NAME-$TIMESTAMP"
+</span><span class='line'> 
+</span><span class='line'># mongo admin --eval "printjson(db.fsyncLock())"
+</span><span class='line'># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE
+</span><span class='line'>$MONGODUMP_PATH -d $MONGO_DATABASE
+</span><span class='line'> 
+</span><span class='line'>mkdir -p $BACKUPS_DIR
+</span><span class='line'>mv dump $BACKUP_NAME
+</span><span class='line'>tar -zcvf $BACKUPS_DIR/$BACKUP_NAME.tgz $BACKUP_NAME
+</span><span class='line'>rm -rf $BACKUP_NAME
+</span><span class='line'> 
+</span><span class='line'># mongo admin --eval "printjson(db.fsyncUnlock())"</span></code></pre></td></tr></table></div></figure>
+
+
+<h6><a href="https://gist.github.com/sheharyarn/0f04c1ba18462cddaaf5">View Gist on Github</a></h6>
+
+<p>First, you need to specify the name of the Database as well as your App in the <code>MONGO_DATABASE</code> and <code>APP_NAME</code> parameters.</p>
+
+<p>You can also set the default storage location of the backups in the <code>BACKUPS_DIR</code> parameter. If you are taking backups remotely, add the details in the <code>HOST</code> and <code>PORT</code> parameters and comment/uncomment the appropriate lines. If you&rsquo;d like, you can also uncomment the <code>fsyncLock</code> and <code>fsyncUnlock</code> lines, this doesn&rsquo;t let the database update while the backup is being made.</p>
+
+<p>After putting in values for the parameters, test if the script is working, but before that, you need to make it executable. Save it as <code>mongo_backup.sh</code> and run:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://stackoverflow.com/questions/19100708/mongodb-mongorestore-failure-localefacet-s-create-c-locale-name-not-valid">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo su
+</span><span class='line'>crontab -e</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;ll create a new <code>Cron</code> file if you haven&rsquo;t already created one. In the newly opened file, enter this in a new line:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Replace with the path of your script. This means that the command following <code>* * *</code> will be executed daily at <code>00 00</code> (12.00am).</p>
+
+<p>You can also pair this script with <code>s3cmd</code> and <a href="http://www.codeproject.com/Tips/547759/Automating-backup-for-MongoDB-using-CRON-and-S-CMD">store your backups on Amazon S3</a>.</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -531,71 +642,6 @@ execute any other command that connects to the internet. One thing that pisses m
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-05T11:18:01+05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>Last time <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
-
-<p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ python main.py
-</span><span class='line'>Traceback (most recent call last):
-</span><span class='line'>  File "main.py", line 79, in &lt;module&gt;
-</span><span class='line'>    from eye import eye
-</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/capture/eye.py", line 20, in &lt;module&gt;
-</span><span class='line'>    from methods import *
-</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/shared_modules/methods.py", line 16, in &lt;module&gt;
-</span><span class='line'>    import cv2
-</span><span class='line'>ImportError: libIlmImf.so.6: cannot open shared object file: No such file or directory</span></code></pre></td></tr></table></div></figure>
-
-
-<!--more-->
-
-
-<p>I googled high and low, looked at the <a href="https://groups.google.com/forum/#!forum/pupil-discuss">Pupil Google Group</a>, opened up <a href="https://github.com/pupil-labs/pupil/issues/4">Github Issues</a>. I was the only one getting this error, but why? I had followed the <a href="https://github.com/pupil-labs/pupil/wiki/Dependencies-Installation-Linux">Installation Guide</a> closely, and on three different clean installations of Ubuntu. This was really frustrating.</p>
-
-<p>In the end, it was a friend on Facebook who told me to try working after installing <code>openexr</code>. I did, and problem solved. <code>libIlmImf.so.6</code> is a package bundled with it.</p>
-
-<p>Anyways, you can do this to make the error go away:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install openexr</span></code></pre></td></tr></table></div></figure>
-
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -611,6 +657,10 @@ execute any other command that connects to the internet. One thing that pisses m
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/regular-mongo-backups-using-cron/">Regular Mongo Backups Using Cron</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/the-eventual-outcome-of-existence/">The Eventual Outcome of Existence</a>
       </li>
     
@@ -624,10 +674,6 @@ execute any other command that connects to the internet. One thing that pisses m
     
       <li class="post">
         <a href="/blog/kholo-bc-all-the-rage-over-youtube/">#KholoBC - All the Rage Over Youtube</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/installing-tsocks-on-macosx/">Installing TSocks (TorSocks) on MacOSX</a>
       </li>
     
   </ul>
