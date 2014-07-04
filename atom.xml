@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-07-04T18:28:25+05:00</updated>
+  <updated>2014-07-04T18:39:56+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -46,7 +46,6 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-<span class='line-number'>22</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
 </span><span class='line'> 
 </span><span class='line'>MONGO_DATABASE="your_db_name"
@@ -62,13 +61,12 @@
 </span><span class='line'># mongo admin --eval "printjson(db.fsyncLock())"
 </span><span class='line'># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE
 </span><span class='line'>$MONGODUMP_PATH -d $MONGO_DATABASE
+</span><span class='line'># mongo admin --eval "printjson(db.fsyncUnlock())"
 </span><span class='line'> 
 </span><span class='line'>mkdir -p $BACKUPS_DIR
 </span><span class='line'>mv dump $BACKUP_NAME
 </span><span class='line'>tar -zcvf $BACKUPS_DIR/$BACKUP_NAME.tgz $BACKUP_NAME
-</span><span class='line'>rm -rf $BACKUP_NAME
-</span><span class='line'> 
-</span><span class='line'># mongo admin --eval "printjson(db.fsyncUnlock())"</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>rm -rf $BACKUP_NAME</span></code></pre></td></tr></table></div></figure>
 
 
 <h6><a href="https://gist.github.com/sheharyarn/0f04c1ba18462cddaaf5">View Gist on Github</a></h6>
