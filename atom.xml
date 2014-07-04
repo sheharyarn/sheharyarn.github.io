@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-07-04T03:55:04+05:00</updated>
+  <updated>2014-07-04T18:28:25+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -56,7 +56,7 @@
 </span><span class='line'>MONGO_PORT="27017"
 </span><span class='line'>TIMESTAMP=`date +%F-%H%M`
 </span><span class='line'>MONGODUMP_PATH="/usr/bin/mongodump"
-</span><span class='line'>BACKUPS_DIR="$HOME/backups/$APP_NAME"
+</span><span class='line'>BACKUPS_DIR="/home/username/backups/$APP_NAME"
 </span><span class='line'>BACKUP_NAME="$APP_NAME-$TIMESTAMP"
 </span><span class='line'> 
 </span><span class='line'># mongo admin --eval "printjson(db.fsyncLock())"
