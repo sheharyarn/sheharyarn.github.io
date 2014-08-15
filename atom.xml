@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-07-09T05:46:06+05:00</updated>
+  <updated>2014-08-16T02:41:16+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Nginx Config Syntax Highlighting in SublimeText]]></title>
+    <link href="http://sheharyar.me//blog/nginx-config-syntax-highlighting-in-sublimetext/"/>
+    <updated>2014-08-16T02:16:26+05:00</updated>
+    <id>http://sheharyar.me//blog/nginx-config-syntax-highlighting-in-sublimetext</id>
+    <content type="html"><![CDATA[<p>I love <a href="http://sublimetext.com/">Sublime</a>, I can&rsquo;t emphasize that enough. Also, quite often enough I have to deal with <code>nginx</code> configuration files and without the syntax highlighting support for nginx files in Sublime Text, it can become a pain in the ass. Today I found the ass-pain remover for my problem and I thought I share it here.</p>
+
+<!--more-->
+
+
+<p>Introducing the Awesome <a href="https://sublime.wbond.net/packages/nginx">Nginx Syntax Highlighting Plugin</a> by <a href="http://brandonwamboldt.ca/nginx-syntax-highlighting-for-sublime-1422/">Brandon Wamboldt</a>. It automatically recognizes <code>*.conf</code>, <code>*.conf.erb</code>, <code>nginx.conf</code> and other relevant extensions &amp; file names and also offers tons of completions within nginx files.</p>
+
+<p><img src="http://i.imgur.com/Ykt61xx.png" alt="Nginx Syntax Highlighting" /></p>
+
+<p><strong><em>To install</em></strong>, simply download the <a href="https://github.com/brandonwamboldt/sublime-nginx">source</a> and place it in your Packages Directory or better yet, if you have Package Control installed in Sublime, look for the <em>Nginx</em> package by <em>Brandon Wamboldt</em> and install it via the package manager right in Sublime.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Regular Mongo Backups Using Cron]]></title>
