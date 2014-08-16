@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-08-16T09:51:08+05:00</updated>
+  <updated>2014-08-17T02:34:22+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rails App With Nginx, Puma & Capistrano in Production]]></title>
-    <link href="http://sheharyar.me//blog/rails-app-with-nginx/"/>
+    <link href="http://sheharyar.me//blog/rails-with-nginx-puma-capistrano-in-production/"/>
     <updated>2014-08-16T09:27:15+05:00</updated>
-    <id>http://sheharyar.me//blog/rails-app-with-nginx</id>
+    <id>http://sheharyar.me//blog/rails-with-nginx-puma-capistrano-in-production</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
 
 <p>After going through countless articles and spending hours after hours fixing the bugs and issues I encountered while implementing what was written in those articles, I was able to compile a guide similar to the Unicorn one.</p>
