@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Nginx Config Syntax Highlighting in SublimeText - Sheharyar Naseer</title>
+  <title>Rails App With Nginx, Puma & Capistrano in Production - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Aug 16th, 2014 Nginx Config Syntax Highlighting in SublimeText I love Sublime, I can&rsquo;t emphasize that enough. Also, quite often enough I have &hellip;">
+  <meta name="description" content="Aug 16th, 2014 Rails App With Nginx, Puma & Capistrano in Production I&rsquo;ve used James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,11 +18,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
-  <meta property="og:title" content="Nginx Config Syntax Highlighting in SublimeText - Sheharyar Naseer" />
-  <meta property="og:description" content="Aug 16th, 2014 Nginx Config Syntax Highlighting in SublimeText I love Sublime, I can&rsquo;t emphasize that enough. Also, quite often enough I have &hellip;" />
+  <meta property="og:title" content="Rails App With Nginx, Puma & Capistrano in Production - Sheharyar Naseer" />
+  <meta property="og:description" content="Aug 16th, 2014 Rails App With Nginx, Puma & Capistrano in Production I&rsquo;ve used James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano &hellip;" />
 
   
-  <link rel="canonical" href="http://sheharyar.me//blog/nginx-config-syntax-highlighting-in-sublimetext">
+  <link rel="canonical" href="http://sheharyar.me//blog/rails-app-with-nginx">
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
@@ -82,28 +82,39 @@
   
 
 
-<time datetime="2014-08-16T02:16:26+05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time>
+<time datetime="2014-08-16T09:27:15+05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time>
     </div>
 
     
       <h2 class="post_title">
         <a href="">
-          Nginx Config Syntax Highlighting in SublimeText
+          Rails App With Nginx, Puma & Capistrano in Production
         </a>
       </h2>
     
 
     <div class="post_content">
-      <p>I love <a href="http://sublimetext.com/">Sublime</a>, I can&rsquo;t emphasize that enough. Also, quite often enough I have to deal with <code>nginx</code> configuration files and without the syntax highlighting support for nginx files in Sublime Text, it can become a pain in the ass. Today I found the ass-pain remover for my problem and I thought I share it here.</p>
+      <p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
+
+<p>After going through countless articles and spending hours after hours fixing the bugs and issues I encountered while implementing what was written in those articles, I was able to compile a guide similar to the Unicorn one.</p>
 
 <!--more-->
 
 
-<p>Introducing the Awesome <a href="https://sublime.wbond.net/packages/nginx">Nginx Syntax Highlighting Plugin</a> by <a href="http://brandonwamboldt.ca/nginx-syntax-highlighting-for-sublime-1422/">Brandon Wamboldt</a>. It automatically recognizes <code>*.conf</code>, <code>*.conf.erb</code>, <code>nginx.conf</code> and other relevant extensions &amp; file names and also offers tons of completions within nginx files.</p>
+<h1>See it: <a href="https://coderwall.com/p/ttrhow">Deploying Rails app using Nginx, Puma and Capistrano</a></h1>
 
-<p><img src="http://i.imgur.com/Ykt61xx.png" alt="Nginx Syntax Highlighting" /></p>
+<p>I made this guide for myself and since this was my first time with <code>puma</code> there are bound to be tons of issues. It uses and was tested with:</p>
 
-<p><strong><em>To install</em></strong>, simply download the <a href="https://github.com/brandonwamboldt/sublime-nginx">source</a> and place it in your Packages Directory or better yet, if you have Package Control installed in Sublime, look for the <em>Nginx</em> package by <em>Brandon Wamboldt</em> and install it via the package manager right in Sublime.</p>
+<ul>
+<li>Ruby 2.1</li>
+<li>Rails 4.1.2</li>
+<li>Capistrano 3.2.1</li>
+<li>Ubuntu 14.04 LTS x64</li>
+<li>Only &lsquo;approved&rsquo; gems and plugins mentioned on the official <code>capistrano</code> and <code>puma</code> wikis</li>
+</ul>
+
+
+<p><strong>Request:</strong> If I&rsquo;ve missed something, or if there&rsquo;s something that can be done in a better way in the guide, please comment and let me know.</p>
 
     </div>
   </article>
@@ -119,15 +130,11 @@
     <div class="separator"></div>
     
     
-      <a id="previous_post" title="Previous Post: Regular Mongo Backups using Cron" href="/blog/regular-mongo-backups-using-cron/">
-        ← Regular Mongo Backups using Cron
+      <a id="previous_post" title="Previous Post: Nginx config Syntax Highlighting in SublimeText" href="/blog/nginx-config-syntax-highlighting-in-sublimetext/">
+        ← Nginx config Syntax Highlighting in SublimeText
       </a>
     
 
-    
-      <a id="next_post" title="Next Post: Rails app with Nginx, Puma & Capistrano in Production" href="/blog/rails-app-with-nginx/">
-        Rails app with Nginx, Puma & Capistrano in Production →
-      </a>
     
 
   </div>
