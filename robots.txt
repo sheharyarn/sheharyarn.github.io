@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://sheharyar.me//sitemap.xml 
+Sitemap: http://sheharyar.me/sitemap.xml 
