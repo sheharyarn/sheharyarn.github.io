@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rails App With Nginx, Puma & Capistrano in Production - Sheharyar Naseer</title>
+  <title>Rails Routes: Scope vs. Namespace - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Aug 16th, 2014 Rails App With Nginx, Puma & Capistrano in Production I&rsquo;ve used James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano &hellip;">
+  <meta name="description" content="Aug 27th, 2014 Rails Routes: Scope vs. Namespace Like Pete, I often forget how scope and namespace affect Path, URL names and Controller names. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,11 +18,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
-  <meta property="og:title" content="Rails App With Nginx, Puma & Capistrano in Production - Sheharyar Naseer" />
-  <meta property="og:description" content="Aug 16th, 2014 Rails App With Nginx, Puma & Capistrano in Production I&rsquo;ve used James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano &hellip;" />
+  <meta property="og:title" content="Rails Routes: Scope vs. Namespace - Sheharyar Naseer" />
+  <meta property="og:description" content="Aug 27th, 2014 Rails Routes: Scope vs. Namespace Like Pete, I often forget how scope and namespace affect Path, URL names and Controller names. &hellip;" />
 
   
-  <link rel="canonical" href="http://sheharyar.me//blog/rails-with-nginx-puma-capistrano-in-production">
+  <link rel="canonical" href="http://sheharyar.me//blog/rails-routes-scope-vs-namespace">
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
@@ -82,39 +82,34 @@
   
 
 
-<time datetime="2014-08-16T09:27:15+05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time>
+<time datetime="2014-08-27T22:31:10+05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
     </div>
 
     
       <h2 class="post_title">
         <a href="">
-          Rails App With Nginx, Puma & Capistrano in Production
+          Rails Routes: Scope vs. Namespace
         </a>
       </h2>
     
 
     <div class="post_content">
-      <p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
-
-<p>After going through countless articles and spending hours after hours fixing the bugs and issues I encountered while implementing what was written in those articles, I was able to compile a guide similar to the Unicorn one.</p>
+      <p>Like <a href="http://notahat.com/">Pete</a>, I often forget how <code>scope</code> and <code>namespace</code> affect Path, URL names and Controller names. Scope gives you great control over each aspect, while namespace takes one argument for everything.</p>
 
 <!--more-->
 
 
-<h1>See it: <a href="https://coderwall.com/p/ttrhow">Deploying Rails app using Nginx, Puma and Capistrano</a></h1>
-
-<p>I made this guide for myself and since this was my first time with <code>puma</code> there are bound to be tons of issues. It uses and was tested with:</p>
-
-<ul>
-<li>Ruby 2.1</li>
-<li>Rails 4.1.2</li>
-<li>Capistrano 3.2.1</li>
-<li>Ubuntu 14.04 LTS x64</li>
-<li>Only &lsquo;approved&rsquo; gems and plugins mentioned on the official <code>capistrano</code> and <code>puma</code> wikis</li>
-</ul>
 
 
-<p><strong>Request:</strong> If I&rsquo;ve missed something, or if there&rsquo;s something that can be done in a better way in the guide, please comment and let me know.</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>scope 'url_prefix', module: 'controller_prefix', as: 'route_name_prefix' do
+</span><span class='line'>  resources :posts
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>
 
     </div>
   </article>
@@ -130,15 +125,11 @@
     <div class="separator"></div>
     
     
-      <a id="previous_post" title="Previous Post: Nginx config Syntax Highlighting in SublimeText" href="/blog/nginx-config-syntax-highlighting-in-sublimetext/">
-        ← Nginx config Syntax Highlighting in SublimeText
+      <a id="previous_post" title="Previous Post: Rails app with Nginx, Puma & Capistrano in Production" href="/blog/rails-with-nginx-puma-capistrano-in-production/">
+        ← Rails app with Nginx, Puma & Capistrano in Production
       </a>
     
 
-    
-      <a id="next_post" title="Next Post: Rails Routes: Scope vs. Namespace" href="/blog/rails-routes-scope-vs-namespace/">
-        Rails Routes: Scope vs. Namespace →
-      </a>
     
 
   </div>

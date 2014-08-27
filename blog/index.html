@@ -9,7 +9,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Aug 16th, 2014 I&rsquo;ve used James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments countless times now, &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Aug 27th, 2014 Like Pete, I often forget how scope and namespace affect Path, URL names and Controller names. Scope gives you &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Aug 16th, 2014 I&rsquo;ve used James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments countless times now, &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Aug 27th, 2014 Like Pete, I often forget how scope and namespace affect Path, URL names and Controller names. Scope gives you &hellip;" />
 
   
   <link rel="canonical" href="http://sheharyar.me//blog">
@@ -70,6 +70,51 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-27T22:31:10+05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>Like <a href="http://notahat.com/">Pete</a>, I often forget how <code>scope</code> and <code>namespace</code> affect Path, URL names and Controller names. Scope gives you great control over each aspect, while namespace takes one argument for everything.</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>scope 'url_prefix', module: 'controller_prefix', as: 'route_name_prefix' do
+</span><span class='line'>  resources :posts
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -559,69 +604,6 @@ sure to use lots of points. You can start by pressing <code>c</code> on your key
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-06T02:51:17+05:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I&rsquo;m okay with that &ndash; &lsquo;Porn Sites&rsquo;) but
-banning YouTube? Seriously guys. And it&rsquo;s been quite a while since it was blocked. The real reason it was blocked was because of a
-blasphemous video called &lt;Don&rsquo;t Even Remember the Name> being posted somewhere on it. Pakistanis, or should I say Muslims, take that
-very seriously. But the Pakistani Government didn&rsquo;t do what the rest of the Muslim world did, that is blocked the video, instead they
-simply blocked all of Youtube. Pakistanis have been using Spotflux, HideMyAss, Hotspot Shield and God-Knows-What other Proxy programs
-to get access to Youtube; We <strong><em>are</em></strong> a little frustrated (Well, not me &ndash; I&rsquo;ve been using Tor long before for everything).</p>
-
-<!--more-->
-
-
-
-
-<iframe src="//player.vimeo.com/video/87489847" width="750" height="422" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<p>But last week that video was finally taken down, but the Pakistani Government still refuses to lift the ban on  Youtube. To fight the evil
-Pakistani Government Dragon, rose the Rapping Warrior, Ali Gul Pir, with the mighty sword of #KholoBC. He released his video &ldquo;Kholo
-Ban Chor&rdquo; on Youtube and Vimeo and within days gained tens of thousands of views despite censorship. This video has inspired somewhat of
-a &ldquo;Youtube Unblocking Revolution&rdquo; causing thousands of Internet Users from Pakistan to start using the #KholoBC Hashtag on Social Media
-Websites to demand the lift on the ban.</p>
-
-<p><a href="http://blogs.tribune.com.pk/story/21198/kholo-bc-and-eight-other-reasons-to-lift-the-ban-on-youtube-now/">The Tribune</a> points out:</p>
-
-<blockquote><p>The ban has never been about protecting the honour of Prophet Muhammad (pbuh),
-come to think about it. Its real purpose seems to be a calculated halt,
-so that the activities of our unscrupulous leaders are not exposed.</p></blockquote>
-
-<p>and that seems to be the very point of the video.</p>
-
-<h2>NOTE:</h2>
-
-<p>I want to clarify that I have high regards for the Holy Prophet Muhammad (pbuh) and I, like millions of other Muslims, cannot bear any
-blasphemous act in his honour. But shutting down the entire website seems inappropriate since it&rsquo;s a source of education as well and
-has helped so many people learn something new. The right way is simply to block the specific pages, like the rest of the world is doing.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -637,6 +619,10 @@ has helped so many people learn something new. The right way is simply to block 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/rails-routes-scope-vs-namespace/">Rails Routes: Scope vs. Namespace</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/rails-with-nginx-puma-capistrano-in-production/">Rails App With Nginx, Puma & Capistrano in Production</a>
       </li>
     
@@ -650,10 +636,6 @@ has helped so many people learn something new. The right way is simply to block 
     
       <li class="post">
         <a href="/blog/the-eventual-outcome-of-existence/">The Eventual Outcome of Existence</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/search-methods-of-a-ruby-object/">Search Methods of a Ruby Object</a>
       </li>
     
   </ul>

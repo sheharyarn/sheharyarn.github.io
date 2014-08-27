@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me//atom.xml" rel="self"/>
   <link href="http://sheharyar.me//"/>
-  <updated>2014-08-20T02:42:22+05:00</updated>
+  <updated>2014-08-27T22:48:48+05:00</updated>
   <id>http://sheharyar.me//</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails Routes: Scope vs. Namespace]]></title>
+    <link href="http://sheharyar.me//blog/rails-routes-scope-vs-namespace/"/>
+    <updated>2014-08-27T22:31:10+05:00</updated>
+    <id>http://sheharyar.me//blog/rails-routes-scope-vs-namespace</id>
+    <content type="html"><![CDATA[<p>Like <a href="http://notahat.com/">Pete</a>, I often forget how <code>scope</code> and <code>namespace</code> affect Path, URL names and Controller names. Scope gives you great control over each aspect, while namespace takes one argument for everything.</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>scope 'url_prefix', module: 'controller_prefix', as: 'route_name_prefix' do
+</span><span class='line'>  resources :posts
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails App With Nginx, Puma & Capistrano in Production]]></title>
@@ -547,8 +571,6 @@ execute any other command that connects to the internet. One thing that pisses m
 </pre></td><td class='code'><pre><code class=''><span class='line'>Could not switch the Monitor Configuration
 </span><span class='line'>could not set the configuration for CRTC 80</span></code></pre></td></tr></table></div></figure>
 
-
-<p><strong>image</strong></p>
 
 <p>I restarted it, but received the same error. The login screen was perfect, mind you; The error presented it self only after logging in. There was nothing else; No Icons, no Menu bar, no Unity. I googled for hours and tried everything I could; <a href="http://ubuntuforums.org/showthread.php?t=1835391">Using xrandr</a>, <a href="http://kb.parallels.com/en/114097">Editing xorg.conf</a>, <a href="http://www.parallels.com/support/desktop/troubleshooter-en_US">Running Parallels Troubleshooter</a> and so much more. In the end, I was somewhat able to restore my installation by reinstalling my Parallels Desktop Tools.</p>
 
