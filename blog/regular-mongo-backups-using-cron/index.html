@@ -101,7 +101,7 @@
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -122,27 +122,28 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
-</span><span class='line'> 
-</span><span class='line'>MONGO_DATABASE="your_db_name"
-</span><span class='line'>APP_NAME="your_app_name"
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
 </span><span class='line'>
-</span><span class='line'>MONGO_HOST="127.0.0.1"
-</span><span class='line'>MONGO_PORT="27017"
-</span><span class='line'>TIMESTAMP=`date +%F-%H%M`
-</span><span class='line'>MONGODUMP_PATH="/usr/bin/mongodump"
-</span><span class='line'>BACKUPS_DIR="/home/username/backups/$APP_NAME"
-</span><span class='line'>BACKUP_NAME="$APP_NAME-$TIMESTAMP"
-</span><span class='line'> 
-</span><span class='line'># mongo admin --eval "printjson(db.fsyncLock())"
-</span><span class='line'># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE
-</span><span class='line'>$MONGODUMP_PATH -d $MONGO_DATABASE
-</span><span class='line'># mongo admin --eval "printjson(db.fsyncUnlock())"
-</span><span class='line'> 
-</span><span class='line'>mkdir -p $BACKUPS_DIR
-</span><span class='line'>mv dump $BACKUP_NAME
-</span><span class='line'>tar -zcvf $BACKUPS_DIR/$BACKUP_NAME.tgz $BACKUP_NAME
-</span><span class='line'>rm -rf $BACKUP_NAME</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="nv">MONGO_DATABASE</span><span class="o">=</span><span class="s2">&quot;your_db_name&quot;</span>
+</span><span class='line'><span class="nv">APP_NAME</span><span class="o">=</span><span class="s2">&quot;your_app_name&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">MONGO_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span>
+</span><span class='line'><span class="nv">MONGO_PORT</span><span class="o">=</span><span class="s2">&quot;27017&quot;</span>
+</span><span class='line'><span class="nv">TIMESTAMP</span><span class="o">=</span><span class="sb">`</span>date +%F-%H%M<span class="sb">`</span>
+</span><span class='line'><span class="nv">MONGODUMP_PATH</span><span class="o">=</span><span class="s2">&quot;/usr/bin/mongodump&quot;</span>
+</span><span class='line'><span class="nv">BACKUPS_DIR</span><span class="o">=</span><span class="s2">&quot;/home/username/backups/$APP_NAME&quot;</span>
+</span><span class='line'><span class="nv">BACKUP_NAME</span><span class="o">=</span><span class="s2">&quot;$APP_NAME-$TIMESTAMP&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncLock())&quot;</span>
+</span><span class='line'><span class="c"># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE</span>
+</span><span class='line'><span class="nv">$MONGODUMP_PATH</span> -d <span class="nv">$MONGO_DATABASE</span>
+</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncUnlock())&quot;</span>
+</span><span class='line'>
+</span><span class='line'>mkdir -p <span class="nv">$BACKUPS_DIR</span>
+</span><span class='line'>mv dump <span class="nv">$BACKUP_NAME</span>
+</span><span class='line'>tar -zcvf <span class="nv">$BACKUPS_DIR</span>/<span class="nv">$BACKUP_NAME</span>.tgz <span class="nv">$BACKUP_NAME</span>
+</span><span class='line'>rm -rf <span class="nv">$BACKUP_NAME</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h6><a href="https://gist.github.com/sheharyarn/0f04c1ba18462cddaaf5">View Gist on Github</a></h6>
@@ -153,24 +154,27 @@
 
 <p>After putting in values for the parameters, test if the script is working, but before that, you need to make it executable. Save it as <code>mongo_backup.sh</code> and run:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x mongo_backup.sh
-</span><span class='line'>bash mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x mongo_backup.sh
+</span><span class='line'>bash mongo_backup.sh
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://askubuntu.com/questions/162391/how-do-i-fix-my-locale-issue">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo su
-</span><span class='line'>crontab -e</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo su
+</span><span class='line'>crontab -e
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>It&rsquo;ll create a new <code>Cron</code> file if you haven&rsquo;t already created one and open it. Enter this in a new line:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Replace with the path of your script. This means that the command following <code>* * *</code> will be executed daily at <code>00 00</code> (12.00am).</p>

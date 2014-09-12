@@ -117,10 +117,11 @@ to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> da
 
 <p>You need to have <code>PyMouse</code> and <code>Xlib</code> installed to make the script work. You can install them by running these commands:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo pip install pymouse
-</span><span class='line'>$ sudo apt-get install python-xlib</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo pip install pymouse
+</span><span class='line'><span class="nv">$ </span>sudo apt-get install python-xlib
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h1>To Control the Mouse:</h1>
@@ -138,7 +139,7 @@ sure to use lots of points. You can start by pressing <code>c</code> on your key
 
 <h1>The Script (<a href="https://gist.github.com/sheharyarn/9754664">mouse_control.py</a>):</h1>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -186,54 +187,55 @@ sure to use lots of points. You can start by pressing <code>c</code> on your key
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
 <span class='line-number'>48</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import zmq
-</span><span class='line'>from pymouse import PyMouse
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">zmq</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">pymouse</span> <span class="kn">import</span> <span class="n">PyMouse</span>
 </span><span class='line'>
-</span><span class='line'>#mouse setup
-</span><span class='line'>m = PyMouse()
-</span><span class='line'>x_dim, y_dim = m.screen_size()
+</span><span class='line'><span class="c">#mouse setup</span>
+</span><span class='line'><span class="n">m</span> <span class="o">=</span> <span class="n">PyMouse</span><span class="p">()</span>
+</span><span class='line'><span class="n">x_dim</span><span class="p">,</span> <span class="n">y_dim</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">screen_size</span><span class="p">()</span>
 </span><span class='line'>
-</span><span class='line'>#network setup
-</span><span class='line'>context = zmq.Context()
-</span><span class='line'>socket = context.socket(zmq.SUB)
-</span><span class='line'>socket.connect("tcp://127.0.0.1:5000")
-</span><span class='line'>#filter by messages by stating string 'STRING'. '' receives all messages
-</span><span class='line'>socket.setsockopt(zmq.SUBSCRIBE, '')
-</span><span class='line'>smooth_x, smooth_y= 0.5, 0.5
+</span><span class='line'><span class="c">#network setup</span>
+</span><span class='line'><span class="n">context</span> <span class="o">=</span> <span class="n">zmq</span><span class="o">.</span><span class="n">Context</span><span class="p">()</span>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">zmq</span><span class="o">.</span><span class="n">SUB</span><span class="p">)</span>
+</span><span class='line'><span class="n">socket</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;tcp://127.0.0.1:5000&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#filter by messages by stating string &#39;STRING&#39;. &#39;&#39; receives all messages</span>
+</span><span class='line'><span class="n">socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">smooth_x</span><span class="p">,</span> <span class="n">smooth_y</span><span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span>
 </span><span class='line'>
-</span><span class='line'>while True:
-</span><span class='line'>    msg = socket.recv()
-</span><span class='line'>    items = msg.split("\n") 
-</span><span class='line'>    msg_type = items.pop(0)
-</span><span class='line'>    items = dict([i.split(':') for i in items[:-1] ])
-</span><span class='line'>    if msg_type == 'Pupil':
-</span><span class='line'>        try:
-</span><span class='line'>            my_gaze = items['norm_gaze']
-</span><span class='line'>            
-</span><span class='line'>            if my_gaze != "None":
-</span><span class='line'>                raw_x,raw_y = map(float,my_gaze[1:-1].split(','))
-</span><span class='line'>                
-</span><span class='line'>                # smoothing out the gaze so the mouse has smoother movement
-</span><span class='line'>                smooth_x += 0.5 * (raw_x-smooth_x)
-</span><span class='line'>                smooth_y += 0.5 * (raw_y-smooth_y)
-</span><span class='line'>    
-</span><span class='line'>                x = smooth_x
-</span><span class='line'>                y = smooth_y
-</span><span class='line'>    
-</span><span class='line'>                y = 1-y # inverting y so it shows up correctly on screen
-</span><span class='line'>                x *= x_dim
-</span><span class='line'>                y *= y_dim
-</span><span class='line'>                # PyMouse or MacOS bugfix - can not go to extreme corners
-</span><span class='line'>                # because of hot corners?
-</span><span class='line'>                x = min(x_dim-10, max(10,x))
-</span><span class='line'>                y = min(y_dim-10, max(10,y))
-</span><span class='line'>    
-</span><span class='line'>                m.move(x,y)
-</span><span class='line'>        except KeyError:
-</span><span class='line'>            pass
-</span><span class='line'>    else:
-</span><span class='line'>        # process non gaze position events from plugins here
-</span><span class='line'>        pass</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">msg</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">items</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">msg_type</span> <span class="o">=</span> <span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">items</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">])</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">msg_type</span> <span class="o">==</span> <span class="s">&#39;Pupil&#39;</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">my_gaze</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="s">&#39;norm_gaze&#39;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span> <span class="n">my_gaze</span> <span class="o">!=</span> <span class="s">&quot;None&quot;</span><span class="p">:</span>
+</span><span class='line'>                <span class="n">raw_x</span><span class="p">,</span><span class="n">raw_y</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="n">my_gaze</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c"># smoothing out the gaze so the mouse has smoother movement</span>
+</span><span class='line'>                <span class="n">smooth_x</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_x</span><span class="o">-</span><span class="n">smooth_x</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">smooth_y</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_y</span><span class="o">-</span><span class="n">smooth_y</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">x</span> <span class="o">=</span> <span class="n">smooth_x</span>
+</span><span class='line'>                <span class="n">y</span> <span class="o">=</span> <span class="n">smooth_y</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">y</span> <span class="c"># inverting y so it shows up correctly on screen</span>
+</span><span class='line'>                <span class="n">x</span> <span class="o">*=</span> <span class="n">x_dim</span>
+</span><span class='line'>                <span class="n">y</span> <span class="o">*=</span> <span class="n">y_dim</span>
+</span><span class='line'>                <span class="c"># PyMouse or MacOS bugfix - can not go to extreme corners</span>
+</span><span class='line'>                <span class="c"># because of hot corners?</span>
+</span><span class='line'>                <span class="n">x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_dim</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+</span><span class='line'>                <span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y_dim</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">m</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">pass</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="c"># process non gaze position events from plugins here</span>
+</span><span class='line'>        <span class="k">pass</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
     </div>

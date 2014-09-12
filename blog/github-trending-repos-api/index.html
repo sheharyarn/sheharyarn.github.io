@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Github Trending Repos API - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Sep 12th, 2014 Github Trending Repos API Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches Trending Repositories from &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="http://sheharyar.me/logo.png"/>
+  <meta property="og:title" content="Github Trending Repos API - Sheharyar Naseer" />
+  <meta property="og:description" content="Sep 12th, 2014 Github Trending Repos API Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches Trending Repositories from &hellip;" />
+
+  
+  <link rel="canonical" href="http://sheharyar.me/blog/github-trending-repos-api">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-12T23:01:06+05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2014</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Github Trending Repos API
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
+
+<!--more-->
+
+
+<p>So before finally giving up and writing my own scraper, I came across this awesome command-line utility <a href="https://github.com/rochefort/git-trend">git-trend</a> that lists top repos. I extracted most of the functionality and turned it into a gem. You can view it&rsquo;s <a href="https://github.com/sheharyarn/github-trending">Source on Github</a>. To use, add this to your <code>Gemfile</code> and <code>bundle</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;github-trending&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or, you can install via:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install github-trending
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Some things that you can do with it are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;github-trending&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:ruby</span>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:scala</span><span class="p">,</span> <span class="ss">:week</span>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:month</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">all_languages</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Example Usage</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">js_repos</span> <span class="o">=</span> <span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:month</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># Get top Javascript repos this month</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">js_repos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">star_count</span><span class="si">}</span><span class="s2"> stargazers)&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;--- </span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># MrSwitch/hello.js (393 stargazers)</span>
+</span><span class='line'><span class="c1"># --- A Javascript RESTFUL API library for connecting with OAuth2 services</span>
+</span><span class='line'><span class="c1"># </span>
+</span><span class='line'><span class="c1"># mrflix/dimensions (151 stargazers)</span>
+</span><span class='line'><span class="c1"># --- A tool for designers to measure screen dimensions.</span>
+</span><span class='line'><span class="c1"># </span>
+</span><span class='line'><span class="c1"># jmdobry/angular-data (107 stargazers)</span>
+</span><span class='line'><span class="c1"># --- Data store for Angular.js.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+    </div>
+  </article>
+
+
+  <p class="meta">
+    
+
+
+  </p>
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: S3 Direct Upload Gem - Example" href="/blog/s3-direct-upload-gem-example/">
+        ← S3 Direct Upload Gem - Example
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

@@ -101,12 +101,13 @@
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>scope 'url_prefix', module: 'controller_prefix', as: 'route_name_prefix' do
-</span><span class='line'>  resources :posts
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">scope</span> <span class="s1">&#39;url_prefix&#39;</span><span class="p">,</span> <span class="ss">module</span><span class="p">:</span> <span class="s1">&#39;controller_prefix&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="s1">&#39;route_name_prefix&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">resources</span> <span class="ss">:posts</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>

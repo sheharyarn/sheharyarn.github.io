@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me/atom.xml" rel="self"/>
   <link href="http://sheharyar.me/"/>
-  <updated>2014-09-12T22:59:23+05:00</updated>
+  <updated>2014-09-12T23:30:23+05:00</updated>
   <id>http://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,94 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Github Trending Repos API]]></title>
+    <link href="http://sheharyar.me/blog/github-trending-repos-api/"/>
+    <updated>2014-09-12T23:01:06+05:00</updated>
+    <id>http://sheharyar.me/blog/github-trending-repos-api</id>
+    <content type="html"><![CDATA[<p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
+
+<!--more-->
+
+
+<p>So before finally giving up and writing my own scraper, I came across this awesome command-line utility <a href="https://github.com/rochefort/git-trend">git-trend</a> that lists top repos. I extracted most of the functionality and turned it into a gem. You can view it&rsquo;s <a href="https://github.com/sheharyarn/github-trending">Source on Github</a>. To use, add this to your <code>Gemfile</code> and <code>bundle</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;github-trending&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or, you can install via:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install github-trending
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Some things that you can do with it are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;github-trending&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:ruby</span>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:scala</span><span class="p">,</span> <span class="ss">:week</span>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:month</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">all_languages</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Example Usage</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">js_repos</span> <span class="o">=</span> <span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:month</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># Get top Javascript repos this month</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">js_repos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">star_count</span><span class="si">}</span><span class="s2"> stargazers)&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;--- </span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># MrSwitch/hello.js (393 stargazers)</span>
+</span><span class='line'><span class="c1"># --- A Javascript RESTFUL API library for connecting with OAuth2 services</span>
+</span><span class='line'><span class="c1"># </span>
+</span><span class='line'><span class="c1"># mrflix/dimensions (151 stargazers)</span>
+</span><span class='line'><span class="c1"># --- A tool for designers to measure screen dimensions.</span>
+</span><span class='line'><span class="c1"># </span>
+</span><span class='line'><span class="c1"># jmdobry/angular-data (107 stargazers)</span>
+</span><span class='line'><span class="c1"># --- Data store for Angular.js.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[S3 Direct Upload Gem - Example]]></title>
@@ -43,12 +131,13 @@
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>scope 'url_prefix', module: 'controller_prefix', as: 'route_name_prefix' do
-</span><span class='line'>  resources :posts
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">scope</span> <span class="s1">&#39;url_prefix&#39;</span><span class="p">,</span> <span class="ss">module</span><span class="p">:</span> <span class="s1">&#39;controller_prefix&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="s1">&#39;route_name_prefix&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">resources</span> <span class="ss">:posts</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>
@@ -114,7 +203,7 @@
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -135,27 +224,28 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
-</span><span class='line'> 
-</span><span class='line'>MONGO_DATABASE="your_db_name"
-</span><span class='line'>APP_NAME="your_app_name"
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
 </span><span class='line'>
-</span><span class='line'>MONGO_HOST="127.0.0.1"
-</span><span class='line'>MONGO_PORT="27017"
-</span><span class='line'>TIMESTAMP=`date +%F-%H%M`
-</span><span class='line'>MONGODUMP_PATH="/usr/bin/mongodump"
-</span><span class='line'>BACKUPS_DIR="/home/username/backups/$APP_NAME"
-</span><span class='line'>BACKUP_NAME="$APP_NAME-$TIMESTAMP"
-</span><span class='line'> 
-</span><span class='line'># mongo admin --eval "printjson(db.fsyncLock())"
-</span><span class='line'># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE
-</span><span class='line'>$MONGODUMP_PATH -d $MONGO_DATABASE
-</span><span class='line'># mongo admin --eval "printjson(db.fsyncUnlock())"
-</span><span class='line'> 
-</span><span class='line'>mkdir -p $BACKUPS_DIR
-</span><span class='line'>mv dump $BACKUP_NAME
-</span><span class='line'>tar -zcvf $BACKUPS_DIR/$BACKUP_NAME.tgz $BACKUP_NAME
-</span><span class='line'>rm -rf $BACKUP_NAME</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="nv">MONGO_DATABASE</span><span class="o">=</span><span class="s2">&quot;your_db_name&quot;</span>
+</span><span class='line'><span class="nv">APP_NAME</span><span class="o">=</span><span class="s2">&quot;your_app_name&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">MONGO_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span>
+</span><span class='line'><span class="nv">MONGO_PORT</span><span class="o">=</span><span class="s2">&quot;27017&quot;</span>
+</span><span class='line'><span class="nv">TIMESTAMP</span><span class="o">=</span><span class="sb">`</span>date +%F-%H%M<span class="sb">`</span>
+</span><span class='line'><span class="nv">MONGODUMP_PATH</span><span class="o">=</span><span class="s2">&quot;/usr/bin/mongodump&quot;</span>
+</span><span class='line'><span class="nv">BACKUPS_DIR</span><span class="o">=</span><span class="s2">&quot;/home/username/backups/$APP_NAME&quot;</span>
+</span><span class='line'><span class="nv">BACKUP_NAME</span><span class="o">=</span><span class="s2">&quot;$APP_NAME-$TIMESTAMP&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncLock())&quot;</span>
+</span><span class='line'><span class="c"># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE</span>
+</span><span class='line'><span class="nv">$MONGODUMP_PATH</span> -d <span class="nv">$MONGO_DATABASE</span>
+</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncUnlock())&quot;</span>
+</span><span class='line'>
+</span><span class='line'>mkdir -p <span class="nv">$BACKUPS_DIR</span>
+</span><span class='line'>mv dump <span class="nv">$BACKUP_NAME</span>
+</span><span class='line'>tar -zcvf <span class="nv">$BACKUPS_DIR</span>/<span class="nv">$BACKUP_NAME</span>.tgz <span class="nv">$BACKUP_NAME</span>
+</span><span class='line'>rm -rf <span class="nv">$BACKUP_NAME</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h6><a href="https://gist.github.com/sheharyarn/0f04c1ba18462cddaaf5">View Gist on Github</a></h6>
@@ -166,24 +256,27 @@
 
 <p>After putting in values for the parameters, test if the script is working, but before that, you need to make it executable. Save it as <code>mongo_backup.sh</code> and run:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x mongo_backup.sh
-</span><span class='line'>bash mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x mongo_backup.sh
+</span><span class='line'>bash mongo_backup.sh
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://askubuntu.com/questions/162391/how-do-i-fix-my-locale-issue">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo su
-</span><span class='line'>crontab -e</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo su
+</span><span class='line'>crontab -e
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>It&rsquo;ll create a new <code>Cron</code> file if you haven&rsquo;t already created one and open it. Enter this in a new line:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Replace with the path of your script. This means that the command following <code>* * *</code> will be executed daily at <code>00 00</code> (12.00am).</p>
@@ -228,25 +321,26 @@ says; searches all methods of an object that match a certain criteria.</p>
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>class Object
-</span><span class='line'>  def search_methods(param)
-</span><span class='line'>    methods = []
-</span><span class='line'>    self.methods.each { |m| methods &lt;&lt; m if m.to_s.include? param }
-</span><span class='line'>    return methods
-</span><span class='line'>  end
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Object</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">search_methods</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">methods</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="nb">methods</span> <span class="o">&lt;&lt;</span> <span class="n">m</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">include?</span> <span class="n">param</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">methods</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>You can now call it on different objects like this:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -254,14 +348,15 @@ says; searches all methods of an object that match a certain criteria.</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Array.search_methods 'enum'
-</span><span class='line'># =&gt; [:to_enum, :enum_for]
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">search_methods</span> <span class="s1">&#39;enum&#39;</span>
+</span><span class='line'><span class="c1"># =&gt; [:to_enum, :enum_for]</span>
 </span><span class='line'>
-</span><span class='line'>Player.last.search_methods 'trust'
-</span><span class='line'># =&gt; [:untrust, :untrusted?, :trust]
+</span><span class='line'><span class="no">Player</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">search_methods</span> <span class="s1">&#39;trust&#39;</span>
+</span><span class='line'><span class="c1"># =&gt; [:untrust, :untrusted?, :trust]</span>
 </span><span class='line'>
-</span><span class='line'>"hello".search_methods "to_"
-</span><span class='line'># =&gt; [:to_i, :to_f, :to_s, :to_str, :to_sym, :to_r, :to_c, :to_enum]</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="s2">&quot;hello&quot;</span><span class="o">.</span><span class="n">search_methods</span> <span class="s2">&quot;to_&quot;</span>
+</span><span class='line'><span class="c1"># =&gt; [:to_i, :to_f, :to_s, :to_str, :to_sym, :to_r, :to_c, :to_enum]</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>You can see the <a href="https://gist.github.com/sheharyarn/10772579">gist on github</a>. I&rsquo;ve also added it to my <code>.irbrc</code> in my
@@ -296,10 +391,11 @@ to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> da
 
 <p>You need to have <code>PyMouse</code> and <code>Xlib</code> installed to make the script work. You can install them by running these commands:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo pip install pymouse
-</span><span class='line'>$ sudo apt-get install python-xlib</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo pip install pymouse
+</span><span class='line'><span class="nv">$ </span>sudo apt-get install python-xlib
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h1>To Control the Mouse:</h1>
@@ -317,7 +413,7 @@ sure to use lots of points. You can start by pressing <code>c</code> on your key
 
 <h1>The Script (<a href="https://gist.github.com/sheharyarn/9754664">mouse_control.py</a>):</h1>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -365,54 +461,55 @@ sure to use lots of points. You can start by pressing <code>c</code> on your key
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
 <span class='line-number'>48</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import zmq
-</span><span class='line'>from pymouse import PyMouse
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">zmq</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">pymouse</span> <span class="kn">import</span> <span class="n">PyMouse</span>
 </span><span class='line'>
-</span><span class='line'>#mouse setup
-</span><span class='line'>m = PyMouse()
-</span><span class='line'>x_dim, y_dim = m.screen_size()
+</span><span class='line'><span class="c">#mouse setup</span>
+</span><span class='line'><span class="n">m</span> <span class="o">=</span> <span class="n">PyMouse</span><span class="p">()</span>
+</span><span class='line'><span class="n">x_dim</span><span class="p">,</span> <span class="n">y_dim</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">screen_size</span><span class="p">()</span>
 </span><span class='line'>
-</span><span class='line'>#network setup
-</span><span class='line'>context = zmq.Context()
-</span><span class='line'>socket = context.socket(zmq.SUB)
-</span><span class='line'>socket.connect("tcp://127.0.0.1:5000")
-</span><span class='line'>#filter by messages by stating string 'STRING'. '' receives all messages
-</span><span class='line'>socket.setsockopt(zmq.SUBSCRIBE, '')
-</span><span class='line'>smooth_x, smooth_y= 0.5, 0.5
+</span><span class='line'><span class="c">#network setup</span>
+</span><span class='line'><span class="n">context</span> <span class="o">=</span> <span class="n">zmq</span><span class="o">.</span><span class="n">Context</span><span class="p">()</span>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">zmq</span><span class="o">.</span><span class="n">SUB</span><span class="p">)</span>
+</span><span class='line'><span class="n">socket</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;tcp://127.0.0.1:5000&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#filter by messages by stating string &#39;STRING&#39;. &#39;&#39; receives all messages</span>
+</span><span class='line'><span class="n">socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">smooth_x</span><span class="p">,</span> <span class="n">smooth_y</span><span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span>
 </span><span class='line'>
-</span><span class='line'>while True:
-</span><span class='line'>    msg = socket.recv()
-</span><span class='line'>    items = msg.split("\n") 
-</span><span class='line'>    msg_type = items.pop(0)
-</span><span class='line'>    items = dict([i.split(':') for i in items[:-1] ])
-</span><span class='line'>    if msg_type == 'Pupil':
-</span><span class='line'>        try:
-</span><span class='line'>            my_gaze = items['norm_gaze']
-</span><span class='line'>            
-</span><span class='line'>            if my_gaze != "None":
-</span><span class='line'>                raw_x,raw_y = map(float,my_gaze[1:-1].split(','))
-</span><span class='line'>                
-</span><span class='line'>                # smoothing out the gaze so the mouse has smoother movement
-</span><span class='line'>                smooth_x += 0.5 * (raw_x-smooth_x)
-</span><span class='line'>                smooth_y += 0.5 * (raw_y-smooth_y)
-</span><span class='line'>    
-</span><span class='line'>                x = smooth_x
-</span><span class='line'>                y = smooth_y
-</span><span class='line'>    
-</span><span class='line'>                y = 1-y # inverting y so it shows up correctly on screen
-</span><span class='line'>                x *= x_dim
-</span><span class='line'>                y *= y_dim
-</span><span class='line'>                # PyMouse or MacOS bugfix - can not go to extreme corners
-</span><span class='line'>                # because of hot corners?
-</span><span class='line'>                x = min(x_dim-10, max(10,x))
-</span><span class='line'>                y = min(y_dim-10, max(10,y))
-</span><span class='line'>    
-</span><span class='line'>                m.move(x,y)
-</span><span class='line'>        except KeyError:
-</span><span class='line'>            pass
-</span><span class='line'>    else:
-</span><span class='line'>        # process non gaze position events from plugins here
-</span><span class='line'>        pass</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">msg</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">items</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">msg_type</span> <span class="o">=</span> <span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">items</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">])</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">msg_type</span> <span class="o">==</span> <span class="s">&#39;Pupil&#39;</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">my_gaze</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="s">&#39;norm_gaze&#39;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span> <span class="n">my_gaze</span> <span class="o">!=</span> <span class="s">&quot;None&quot;</span><span class="p">:</span>
+</span><span class='line'>                <span class="n">raw_x</span><span class="p">,</span><span class="n">raw_y</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="n">my_gaze</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c"># smoothing out the gaze so the mouse has smoother movement</span>
+</span><span class='line'>                <span class="n">smooth_x</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_x</span><span class="o">-</span><span class="n">smooth_x</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">smooth_y</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">raw_y</span><span class="o">-</span><span class="n">smooth_y</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">x</span> <span class="o">=</span> <span class="n">smooth_x</span>
+</span><span class='line'>                <span class="n">y</span> <span class="o">=</span> <span class="n">smooth_y</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">y</span> <span class="c"># inverting y so it shows up correctly on screen</span>
+</span><span class='line'>                <span class="n">x</span> <span class="o">*=</span> <span class="n">x_dim</span>
+</span><span class='line'>                <span class="n">y</span> <span class="o">*=</span> <span class="n">y_dim</span>
+</span><span class='line'>                <span class="c"># PyMouse or MacOS bugfix - can not go to extreme corners</span>
+</span><span class='line'>                <span class="c"># because of hot corners?</span>
+</span><span class='line'>                <span class="n">x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_dim</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+</span><span class='line'>                <span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y_dim</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="n">m</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">pass</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="c"># process non gaze position events from plugins here</span>
+</span><span class='line'>        <span class="k">pass</span>
+</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>

@@ -2,78 +2,82 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://sheharyar.me/blog/yet-another-octopress-blog/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/</loc>
-        <lastmod>2014-08-27T22:48:13+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/how-not-to-be-a-pakistani/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/installing-tsocks-on-macosx/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/kholo-bc-all-the-rage-over-youtube/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/mouse-control-with-pupil-without-surfaces/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:29:02+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/search-methods-of-a-ruby-object/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:28:28+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/the-eventual-outcome-of-existence/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/regular-mongo-backups-using-cron/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:27:55+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production/</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/rails-routes-scope-vs-namespace/</loc>
-        <lastmod>2014-08-27T22:38:29+05:00</lastmod>
+        <lastmod>2014-09-12T23:26:44+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/s3-direct-upload-gem-example/</loc>
-        <lastmod>2014-09-12T22:59:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://sheharyar.me/blog/github-trending-repos-api/</loc>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/archives/</loc>
-        <lastmod>2014-09-12T22:59:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:29:02+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/blog/</loc>
-        <lastmod>2014-09-12T22:59:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:29:02+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/</loc>
-        <lastmod>2014-09-12T22:59:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:29:02+05:00</lastmod>
     </url>
     <url>
         <loc>http://sheharyar.me/robots.txt</loc>
-        <lastmod>2014-08-20T02:42:05+05:00</lastmod>
+        <lastmod>2014-09-12T23:24:34+05:00</lastmod>
     </url>
 </urlset>
