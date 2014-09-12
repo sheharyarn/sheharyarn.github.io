@@ -9,7 +9,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed #KholoBC - All the Rage Over Youtube If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I &hellip;">
+  <meta name="description" content="Freshly Pressed Controlling Mouse Using Your Eye (With Pupil) A while back I mentioned that I was working on a an Eye-Tracking Project
+called Pupil &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,8 @@
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed #KholoBC - All the Rage Over Youtube If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Controlling Mouse Using Your Eye (With Pupil) A while back I mentioned that I was working on a an Eye-Tracking Project
+called Pupil &hellip;" />
 
   
   <link rel="canonical" href="http://sheharyar.me/blog/page/2">
@@ -77,22 +79,29 @@
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/kholo-bc-all-the-rage-over-youtube/">
-            #KholoBC - All the Rage Over Youtube
+           <a href="/blog/mouse-control-with-pupil-without-surfaces/">
+            Controlling Mouse Using Your Eye (With Pupil)
            </a>
         </h2>
         <div class="post_content">
-           <p>If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I&rsquo;m okay with that &ndash; &lsquo;Porn Sites&rsquo;) but
-banning YouTube? Seriously guys. And it&rsquo;s been quite a while since it was blocked. The real reason it was blocked was because of a
-blasphemous video called &lt;Don&rsquo;t Even Remember the Name> being posted somewhere on it. Pakistanis, or should I say Muslims, take that
-very seriously. But the Pakistani Government didn&rsquo;t do what the rest of the Muslim world did, that is blocked the video, instead they
-simply blocked all of Youtube. Pakistanis have been using Spotflux, HideMyAss, Hotspot Shield and God-Knows-What other Proxy programs
-to get access to Youtube; We <strong><em>are</em></strong> a little frustrated (Well, not me &ndash; I&rsquo;ve been using Tor long before for everything).</p>
+           <p>A while back <a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">I mentioned</a> that I was working on a an Eye-Tracking Project
+called <a href="https://github.com/pupil-labs/pupil">Pupil</a> with a couple of friends of mine. It&rsquo;s come a long way now and we&rsquo;ve have had
+considerable success &ndash; but that&rsquo;s for another post. Pupil is a great tool for eye-tracking and getting gaze data that can be used with
+other applications in realtime. It utilizes two HD cameras mounted on an eye-glasses frame at 180˚ from each other. One is called &lsquo;Eye
+Camera&rsquo; that records your eye movements and the other is called &lsquo;World Camera&rsquo; which is used to process exactly where the user is
+looking at. This data can be streamed to other applications over TCP in real time.</p>
+
+<p>We wanted to control the mouse using our eye gestures, but it heavily relied on the World Camera and defining virtual screens called
+surfaces within the application. This obviously resulted in greater accuracy since it moved the pointer only when you actually looked
+at the screen. But we didn&rsquo;t have a fixed World Cam and wanted to control the mouse using raw gaze data, i.e. use the data from your
+current gaze at the world (instead at the screen) and move the cursor to the appropriate coordinates on the screen w.r.t that gaze.
+So what we did was, we made small changes to the <a href="https://gist.github.com/willpatera/7908319">provided script</a>, removing any reference
+to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> data to move the cursor.</p>
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/kholo-bc-all-the-rage-over-youtube/">Continue →</a>
+              <a class="continue_link" href="/blog/mouse-control-with-pupil-without-surfaces/">Continue →</a>
            </p>
         </div>
      </article>
@@ -106,6 +115,15 @@ to get access to Youtube; We <strong><em>are</em></strong> a little frustrated (
          <ul class="article_list">
 
           
+             
+          
+             
+
+                <li><a href="/blog/kholo-bc-all-the-rage-over-youtube/">
+                  #KholoBC - All the Rage Over Youtube
+                   →
+                </a></li>
+
              
           
              
@@ -148,15 +166,6 @@ to get access to Youtube; We <strong><em>are</em></strong> a little frustrated (
 
                 <li><a href="/blog/macosx-opening-files-from-finder-using-keyboard/">
                   Opening Files From Finder Using Keyboard
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/yet-another-octopress-blog/">
-                  Yet Another Octopress Blog
                    →
                 </a></li>
 
