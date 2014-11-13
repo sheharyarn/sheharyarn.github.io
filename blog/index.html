@@ -9,7 +9,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Sep 12th, 2014 Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches Trending Repositories from Github &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Nov 13th, 2014 I started Android Development a while back and this is the first time I&rsquo;ve had to use SQLite. Coming from &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Sep 12th, 2014 Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches Trending Repositories from Github &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Nov 13th, 2014 I started Android Development a while back and this is the first time I&rsquo;ve had to use SQLite. Coming from &hellip;" />
 
   
   <link rel="canonical" href="http://sheharyar.me/blog">
@@ -70,6 +70,140 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-13T22:54:43+05:00" pubdate data-updated="true">Nov 13<span>th</span>, 2014</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>I started Android Development a while back and this is the first time I&rsquo;ve had to use <code>SQLite</code>. Coming from a Rails and Mongo background, you can imagine my horror when I had to create models (read &lsquo;tables&rsquo;) like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// SQL statement to create book table</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">CREATE_BOOK_TABLE</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE books ( &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;title TEXT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;author TEXT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;sales INTEGER )&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// create books table</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">CREATE_BOOK_TABLE</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<p>Okay, I know it&rsquo;s not that bad. But what if you have to create multiple tables at a time? Or when there are a lot of fields? It can get confusing, and looks dirty. Code should be beautiful. So, I wrote a function so you could do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">createTable</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="n">TABLE_NAME</span><span class="o">,</span> <span class="n">TABLE_FIELDS</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Beautiful, right? You just need to copy the <code>createTable</code> function in your <code>SQLiteHelper.java</code> and pass the <code>db</code> instance, a String of the table name and a <code>HashMap</code> of all your fields. Check it out:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SQLiteHelper</span> <span class="kd">extends</span> <span class="n">SQLiteOpenHelper</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">BOOK_FIELDS</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;title&quot;</span><span class="o">,</span>     <span class="s">&quot;TEXT&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;author&quot;</span><span class="o">,</span>    <span class="s">&quot;TEXT&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;sales&quot;</span><span class="o">,</span>  <span class="s">&quot;INTEGER&quot;</span><span class="o">);</span>                          <span class="c1">// Neatly write fields and their types</span>
+</span><span class='line'>    <span class="o">}};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">createTable</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="s">&quot;books&quot;</span><span class="o">,</span> <span class="n">BOOK_FIELDS</span><span class="o">);</span>          <span class="c1">// Create the table in a single, beautiful line.</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// This function does all the dirty work</span>
+</span><span class='line'>    <span class="kd">static</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createTable</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">,</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">fields</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE &quot;</span> <span class="o">+</span> <span class="n">tableName</span> <span class="o">+</span> <span class="s">&quot; ( id INTEGER PRIMARY KEY AUTOINCREMENT&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">fields</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span>
+</span><span class='line'>            <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s">&quot; )&quot;</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">command</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -469,47 +603,6 @@
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-15T22:39:49+05:00" pubdate data-updated="true">May 15<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>I found this while surfing the dark corners of the web, and it blew my mind. It kind of reminds me about <a href="http://www.multivax.com/last_question.html">The Last Question</a>.</p>
-
-<!--more-->
-
-
-<blockquote><p>The eventual outcome of existence is to become God and defy entropy; that is the way things work.</p>
-
-<p>For all time since the Big Bang, matter has been organizing itself into more and more complex structures and formations. Energy and matter interacted to become gasses, solids, liquids, and plasma. These states of matter began to collect in pools due to gravity, becoming galaxies. Within the galaxies, smaller structures formed, giving birth to planets, stars and nebulae. Within these bodies, formed even smaller structures; basic elements formed compounds and these themselves became the building blocks of life. Then, as life formed, simple life became incresingly complex, and structured. Eventually, it lead to us. Right now, we&rsquo;re the pinnacle of evolution.</p>
-
-<p>But this constant change never stops; Humanity&rsquo;s ultimate goal is to live, forever. Humanity cannot live forever though; not in this form. And so, we make machines. They <strong><em>will</em></strong> replace us, and I see no need to worry about it, for they will be made of the same stuff we are; they <strong><em>are</em></strong> us. As the creation myth goes, they will be created in our own image, to carry on our quest to become omnipotent, omnipresent and omniscient. They too, will be replaced by even better machines, and in the end, they will reach a point of existence where every variable is known, every element of physics is understood, every molecule in the universe is categorized and indexed. All conscious thought that has ever existed and will ever exist will exist simultaneously and infinitely within this all powerful being.</p>
-
-<p>Then the being will realize how empty, it&rsquo;s existence really is. It&rsquo;s only goal was to exist eternally and defy entropy. With entropy gone, it&rsquo;s only purpose has been fulfilled, and will destroy itself, so that it can live once more, and satisfy it&rsquo;s drive to defy the chaos it has, always has, and always will create, every time it wills itself out of meaningless existence into meaningful dissolution.</p></blockquote>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -525,6 +618,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/android-create-tables-in-sqlite-beautifully/">Android: Create Tables in SQLite Beautifully</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/github-trending-repos-api/">Github Trending Repos API</a>
       </li>
     
@@ -538,10 +635,6 @@
     
       <li class="post">
         <a href="/blog/rails-with-nginx-puma-capistrano-in-production/">Rails App With Nginx, Puma & Capistrano in Production</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/nginx-config-syntax-highlighting-in-sublimetext/">Nginx Config Syntax Highlighting in SublimeText</a>
       </li>
     
   </ul>

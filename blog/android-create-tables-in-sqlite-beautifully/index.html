@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android: Create Tables in SQLite Beautifully - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Nov 13th, 2014 Android: Create Tables in SQLite Beautifully I started Android Development a while back and this is the first time I&rsquo;ve had to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="http://sheharyar.me/logo.png"/>
+  <meta property="og:title" content="Android: Create Tables in SQLite Beautifully - Sheharyar Naseer" />
+  <meta property="og:description" content="Nov 13th, 2014 Android: Create Tables in SQLite Beautifully I started Android Development a while back and this is the first time I&rsquo;ve had to &hellip;" />
+
+  
+  <link rel="canonical" href="http://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-13T22:54:43+05:00" pubdate data-updated="true">Nov 13<span>th</span>, 2014</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Android: Create Tables in SQLite Beautifully
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>I started Android Development a while back and this is the first time I&rsquo;ve had to use <code>SQLite</code>. Coming from a Rails and Mongo background, you can imagine my horror when I had to create models (read &lsquo;tables&rsquo;) like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// SQL statement to create book table</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">CREATE_BOOK_TABLE</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE books ( &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;title TEXT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;author TEXT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;sales INTEGER )&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// create books table</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">CREATE_BOOK_TABLE</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<p>Okay, I know it&rsquo;s not that bad. But what if you have to create multiple tables at a time? Or when there are a lot of fields? It can get confusing, and looks dirty. Code should be beautiful. So, I wrote a function so you could do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">createTable</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="n">TABLE_NAME</span><span class="o">,</span> <span class="n">TABLE_FIELDS</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Beautiful, right? You just need to copy the <code>createTable</code> function in your <code>SQLiteHelper.java</code> and pass the <code>db</code> instance, a String of the table name and a <code>HashMap</code> of all your fields. Check it out:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SQLiteHelper</span> <span class="kd">extends</span> <span class="n">SQLiteOpenHelper</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">BOOK_FIELDS</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;title&quot;</span><span class="o">,</span>     <span class="s">&quot;TEXT&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;author&quot;</span><span class="o">,</span>    <span class="s">&quot;TEXT&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;sales&quot;</span><span class="o">,</span>  <span class="s">&quot;INTEGER&quot;</span><span class="o">);</span>                          <span class="c1">// Neatly write fields and their types</span>
+</span><span class='line'>    <span class="o">}};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">createTable</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="s">&quot;books&quot;</span><span class="o">,</span> <span class="n">BOOK_FIELDS</span><span class="o">);</span>          <span class="c1">// Create the table in a single, beautiful line.</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// This function does all the dirty work</span>
+</span><span class='line'>    <span class="kd">static</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createTable</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">,</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">fields</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE &quot;</span> <span class="o">+</span> <span class="n">tableName</span> <span class="o">+</span> <span class="s">&quot; ( id INTEGER PRIMARY KEY AUTOINCREMENT&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">fields</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span>
+</span><span class='line'>            <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s">&quot; )&quot;</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">command</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+    </div>
+  </article>
+
+
+  <p class="meta">
+    
+
+
+  </p>
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Github Trending Repos API" href="/blog/github-trending-repos-api/">
+        ← Github Trending Repos API
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
