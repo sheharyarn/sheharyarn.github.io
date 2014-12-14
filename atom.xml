@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="http://sheharyar.me/atom.xml" rel="self"/>
   <link href="http://sheharyar.me/"/>
-  <updated>2014-11-13T23:27:37+05:00</updated>
+  <updated>2014-12-15T02:21:58+05:00</updated>
   <id>http://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Calculate Word Frequency of Files in Bash]]></title>
+    <link href="http://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash/"/>
+    <updated>2014-12-15T00:13:07+05:00</updated>
+    <id>http://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash</id>
+    <content type="html"><![CDATA[<p>I was reading <a href="http://tomayko.com/">Ryan Tomayko&rsquo;s</a> blog post <a href="http://tomayko.com/writings/awkward-ruby">AWK-ward Ruby</a> explaining how the Unix <a href="http://en.wikipedia.org/wiki/AWK">AWK Tool</a> is among the ancestors of Ruby and Perl. He wrote a few examples showing some of AWK&rsquo;s advanced features, one of them which listed the word frequencies of any file provided. I found this example quite useful and extracted it as a function in to my <a href="https://github.com/sheharyarn/dotfiles">Dotfiles</a>.</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>word_frequency<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  awk <span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">     BEGIN { FS=&quot;[^a-zA-Z]+&quot; }</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">     {</span>
+</span><span class='line'><span class="s1">         for (i=1; i&lt;=NF; i++) {</span>
+</span><span class='line'><span class="s1">             word = tolower($i)</span>
+</span><span class='line'><span class="s1">             words[word]++</span>
+</span><span class='line'><span class="s1">         }</span>
+</span><span class='line'><span class="s1">     }</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">     END {</span>
+</span><span class='line'><span class="s1">         for (w in words)</span>
+</span><span class='line'><span class="s1">              printf(&quot;%3d %s\n&quot;, words[w], w)</span>
+</span><span class='line'><span class="s1">     }</span>
+</span><span class='line'><span class="s1"> &#39;</span> |
+</span><span class='line'>  sort -rn
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can <code>pipe</code> the output of any file to this function and it will list all words and their frequencies in Descending order.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Examples:</span>
+</span><span class='line'>
+</span><span class='line'>cat my_text_file.txt | word_frequency
+</span><span class='line'><span class="c"># Pipe the contents of a text file to the function using `cat`</span>
+</span><span class='line'>
+</span><span class='line'>curl -s https://github.com/humans.txt | word_frequency
+</span><span class='line'><span class="c"># Get word frequency of a file on the internet</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Looking forward to using AWK more and more.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Android: Create Tables in SQLite Beautifully]]></title>

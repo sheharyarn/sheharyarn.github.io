@@ -9,7 +9,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Nov 13th, 2014 I started Android Development a while back and this is the first time I&rsquo;ve had to use SQLite. Coming from &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Dec 15th, 2014 I was reading Ryan Tomayko&rsquo;s blog post AWK-ward Ruby explaining how the Unix AWK Tool is among the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
 
   <meta property="og:image" content="http://sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Nov 13th, 2014 I started Android Development a while back and this is the first time I&rsquo;ve had to use SQLite. Coming from &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Dec 15th, 2014 I was reading Ryan Tomayko&rsquo;s blog post AWK-ward Ruby explaining how the Unix AWK Tool is among the &hellip;" />
 
   
   <link rel="canonical" href="http://sheharyar.me/blog">
@@ -70,6 +70,105 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-15T00:13:07+05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2014</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>I was reading <a href="http://tomayko.com/">Ryan Tomayko&rsquo;s</a> blog post <a href="http://tomayko.com/writings/awkward-ruby">AWK-ward Ruby</a> explaining how the Unix <a href="http://en.wikipedia.org/wiki/AWK">AWK Tool</a> is among the ancestors of Ruby and Perl. He wrote a few examples showing some of AWK&rsquo;s advanced features, one of them which listed the word frequencies of any file provided. I found this example quite useful and extracted it as a function in to my <a href="https://github.com/sheharyarn/dotfiles">Dotfiles</a>.</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>word_frequency<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  awk <span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">     BEGIN { FS=&quot;[^a-zA-Z]+&quot; }</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">     {</span>
+</span><span class='line'><span class="s1">         for (i=1; i&lt;=NF; i++) {</span>
+</span><span class='line'><span class="s1">             word = tolower($i)</span>
+</span><span class='line'><span class="s1">             words[word]++</span>
+</span><span class='line'><span class="s1">         }</span>
+</span><span class='line'><span class="s1">     }</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">     END {</span>
+</span><span class='line'><span class="s1">         for (w in words)</span>
+</span><span class='line'><span class="s1">              printf(&quot;%3d %s\n&quot;, words[w], w)</span>
+</span><span class='line'><span class="s1">     }</span>
+</span><span class='line'><span class="s1"> &#39;</span> |
+</span><span class='line'>  sort -rn
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can <code>pipe</code> the output of any file to this function and it will list all words and their frequencies in Descending order.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Examples:</span>
+</span><span class='line'>
+</span><span class='line'>cat my_text_file.txt | word_frequency
+</span><span class='line'><span class="c"># Pipe the contents of a text file to the function using `cat`</span>
+</span><span class='line'>
+</span><span class='line'>curl -s https://github.com/humans.txt | word_frequency
+</span><span class='line'><span class="c"># Get word frequency of a file on the internet</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Looking forward to using AWK more and more.</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -488,121 +587,6 @@
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-03T20:33:50+05:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there&rsquo;s <code>mongodump</code> but putting it right in your <code>crontab</code> file doesn&rsquo;t give you clean and organised backups you&rsquo;d like to have. Here&rsquo;s a little bash script that I use to take timestamped Mongo Backups for many of my apps.</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">MONGO_DATABASE</span><span class="o">=</span><span class="s2">&quot;your_db_name&quot;</span>
-</span><span class='line'><span class="nv">APP_NAME</span><span class="o">=</span><span class="s2">&quot;your_app_name&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">MONGO_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span>
-</span><span class='line'><span class="nv">MONGO_PORT</span><span class="o">=</span><span class="s2">&quot;27017&quot;</span>
-</span><span class='line'><span class="nv">TIMESTAMP</span><span class="o">=</span><span class="sb">`</span>date +%F-%H%M<span class="sb">`</span>
-</span><span class='line'><span class="nv">MONGODUMP_PATH</span><span class="o">=</span><span class="s2">&quot;/usr/bin/mongodump&quot;</span>
-</span><span class='line'><span class="nv">BACKUPS_DIR</span><span class="o">=</span><span class="s2">&quot;/home/username/backups/$APP_NAME&quot;</span>
-</span><span class='line'><span class="nv">BACKUP_NAME</span><span class="o">=</span><span class="s2">&quot;$APP_NAME-$TIMESTAMP&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncLock())&quot;</span>
-</span><span class='line'><span class="c"># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE</span>
-</span><span class='line'><span class="nv">$MONGODUMP_PATH</span> -d <span class="nv">$MONGO_DATABASE</span>
-</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncUnlock())&quot;</span>
-</span><span class='line'>
-</span><span class='line'>mkdir -p <span class="nv">$BACKUPS_DIR</span>
-</span><span class='line'>mv dump <span class="nv">$BACKUP_NAME</span>
-</span><span class='line'>tar -zcvf <span class="nv">$BACKUPS_DIR</span>/<span class="nv">$BACKUP_NAME</span>.tgz <span class="nv">$BACKUP_NAME</span>
-</span><span class='line'>rm -rf <span class="nv">$BACKUP_NAME</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h6><a href="https://gist.github.com/sheharyarn/0f04c1ba18462cddaaf5">View Gist on Github</a></h6>
-
-<p>First, you need to specify the name of the Database as well as your App in the <code>MONGO_DATABASE</code> and <code>APP_NAME</code> parameters.</p>
-
-<p>You can also set the default storage location of the backups in the <code>BACKUPS_DIR</code> parameter. If you are taking backups remotely, add the details in the <code>HOST</code> and <code>PORT</code> parameters and comment/uncomment the appropriate lines. If you&rsquo;d like, you can also uncomment the <code>fsyncLock</code> and <code>fsyncUnlock</code> lines, this doesn&rsquo;t let the database update while the backup is being made.</p>
-
-<p>After putting in values for the parameters, test if the script is working, but before that, you need to make it executable. Save it as <code>mongo_backup.sh</code> and run:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x mongo_backup.sh
-</span><span class='line'>bash mongo_backup.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://askubuntu.com/questions/162391/how-do-i-fix-my-locale-issue">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo su
-</span><span class='line'>crontab -e
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&rsquo;ll create a new <code>Cron</code> file if you haven&rsquo;t already created one and open it. Enter this in a new line:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Replace with the path of your script. This means that the command following <code>* * *</code> will be executed daily at <code>00 00</code> (12.00am).</p>
-
-<p>You can also pair this script with <code>s3cmd</code> and <a href="http://www.codeproject.com/Tips/547759/Automating-backup-for-MongoDB-using-CRON-and-S-CMD">store your backups on Amazon S3</a>.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -618,6 +602,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/calculate-word-frequency-of-files-in-bash/">Calculate Word Frequency of Files in Bash</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/android-create-tables-in-sqlite-beautifully/">Android: Create Tables in SQLite Beautifully</a>
       </li>
     
@@ -631,10 +619,6 @@
     
       <li class="post">
         <a href="/blog/rails-routes-scope-vs-namespace/">Rails Routes: Scope vs. Namespace</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/rails-with-nginx-puma-capistrano-in-production/">Rails App With Nginx, Puma & Capistrano in Production</a>
       </li>
     
   </ul>

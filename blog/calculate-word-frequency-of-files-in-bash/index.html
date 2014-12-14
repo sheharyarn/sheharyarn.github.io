@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Calculate Word Frequency of Files in Bash - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Dec 15th, 2014 Calculate Word Frequency of Files in Bash I was reading Ryan Tomayko&rsquo;s blog post AWK-ward Ruby explaining how the Unix AWK Tool &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="http://sheharyar.me/logo.png"/>
+  <meta property="og:title" content="Calculate Word Frequency of Files in Bash - Sheharyar Naseer" />
+  <meta property="og:description" content="Dec 15th, 2014 Calculate Word Frequency of Files in Bash I was reading Ryan Tomayko&rsquo;s blog post AWK-ward Ruby explaining how the Unix AWK Tool &hellip;" />
+
+  
+  <link rel="canonical" href="http://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-15T00:13:07+05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2014</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Calculate Word Frequency of Files in Bash
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>I was reading <a href="http://tomayko.com/">Ryan Tomayko&rsquo;s</a> blog post <a href="http://tomayko.com/writings/awkward-ruby">AWK-ward Ruby</a> explaining how the Unix <a href="http://en.wikipedia.org/wiki/AWK">AWK Tool</a> is among the ancestors of Ruby and Perl. He wrote a few examples showing some of AWK&rsquo;s advanced features, one of them which listed the word frequencies of any file provided. I found this example quite useful and extracted it as a function in to my <a href="https://github.com/sheharyarn/dotfiles">Dotfiles</a>.</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function </span>word_frequency<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  awk <span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">     BEGIN { FS=&quot;[^a-zA-Z]+&quot; }</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">     {</span>
+</span><span class='line'><span class="s1">         for (i=1; i&lt;=NF; i++) {</span>
+</span><span class='line'><span class="s1">             word = tolower($i)</span>
+</span><span class='line'><span class="s1">             words[word]++</span>
+</span><span class='line'><span class="s1">         }</span>
+</span><span class='line'><span class="s1">     }</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">     END {</span>
+</span><span class='line'><span class="s1">         for (w in words)</span>
+</span><span class='line'><span class="s1">              printf(&quot;%3d %s\n&quot;, words[w], w)</span>
+</span><span class='line'><span class="s1">     }</span>
+</span><span class='line'><span class="s1"> &#39;</span> |
+</span><span class='line'>  sort -rn
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can <code>pipe</code> the output of any file to this function and it will list all words and their frequencies in Descending order.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Examples:</span>
+</span><span class='line'>
+</span><span class='line'>cat my_text_file.txt | word_frequency
+</span><span class='line'><span class="c"># Pipe the contents of a text file to the function using `cat`</span>
+</span><span class='line'>
+</span><span class='line'>curl -s https://github.com/humans.txt | word_frequency
+</span><span class='line'><span class="c"># Get word frequency of a file on the internet</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Looking forward to using AWK more and more.</p>
+
+    </div>
+  </article>
+
+
+  <p class="meta">
+    
+
+
+  </p>
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Android: Create tables in SQLite beautifully" href="/blog/android-create-tables-in-sqlite-beautifully/">
+        ← Android: Create tables in SQLite beautifully
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
