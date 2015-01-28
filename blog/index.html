@@ -14,7 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Dec 15th, 2014 I was reading Ryan Tomayko&rsquo;s blog post AWK-ward Ruby explaining how the Unix AWK Tool is among the &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Jan 28th, 2015 I came across this post Setting up SSL on Github Pages and wanted to try
+it out, but since my website set-up is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +25,8 @@
 
   <meta property="og:image" content="//sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Dec 15th, 2014 I was reading Ryan Tomayko&rsquo;s blog post AWK-ward Ruby explaining how the Unix AWK Tool is among the &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Jan 28th, 2015 I came across this post Setting up SSL on Github Pages and wanted to try
+it out, but since my website set-up is &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -76,6 +78,142 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-28T05:44:53+05:00" pubdate data-updated="true">Jan 28<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>I came across this post <a href="https://blog.keanulee.com/2014/10/11/setting-up-ssl-on-github-pages.html">Setting up SSL on Github Pages</a> and wanted to try
+it out, but since my website set-up is a bit different than Keanu&rsquo;s I had to go through a slightly different route. One reason being that this website is
+hosted on the apex (root) domain i.e. without <code>www</code>. This guide is focused towards
+an Octopress blog with a Custom Domain hosted through Github Pages, but this should work for Jekyll Static Sites as well.</p>
+
+<!-- more -->
+
+
+<h1>Getting Started</h1>
+
+<p>(Almost the same as Keanu&rsquo;s points)</p>
+
+<ol>
+<li><a href="https://support.cloudflare.com/hc/en-us/articles/201720164-Sign-up-planning-guide">Sign up for Cloudflare</a> if you don&rsquo;t already have an account</li>
+<li>Add your website, and make sure all <em>automatically</em> generated records match those on your registrar&rsquo;s website
+
+<ul>
+<li>If you already have a gh-pages website and are simply moving to <code>https</code>, you don&rsquo;t need to do anything else</li>
+<li>If not, and are trying to set up your site at apex, create an <code>A</code> record pointing to Github&rsquo;s IP addresses, else a <code>CNAME</code> pointing to <code>your-username.github.io</code></li>
+<li>Make sure there&rsquo;s a <code>CNAME</code> file at the root of your gh-pages repo with your domain name</li>
+</ul>
+</li>
+<li>Go to your Domain Registrar&rsquo;s website and change the Domain Name Servers to those Cloudflare provides you with</li>
+<li>Finish Setting up your Domain on Cloudflare and go to the Domain Dashboard</li>
+<li>Open the &ldquo;Cloudflare Settings&rdquo; for your domain, and change the SSL Setting to &ldquo;Flexible SSL&rdquo;</li>
+</ol>
+
+
+<p>After a couple of hours, you&rsquo;ll be able to open <code>yoursite.com</code> with <code>https</code>. But now comes the important part, letting search engines know and making your users use the SSL version.</p>
+
+<h1>Letting Search Engines know</h1>
+
+<p>In your <code>_config.yml</code>, add these:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://www.yoursite.com</span>   <span class="c1"># with the https protocol</span>
+</span><span class='line'><span class="l-Scalar-Plain">enforce_ssl</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">www.yoursite.com</span>   <span class="c1"># without any protocol</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># For example, my configuration is this:</span>
+</span><span class='line'><span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://sheharyar.me</span>
+</span><span class='line'><span class="l-Scalar-Plain">enforce_ssl</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sheharyar.me</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Make sure you have a <code>canonical</code> link in your <code>&lt;head&gt;</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;canonical&quot;</span> <span class="na">href=</span><span class="s">&quot; { { site.url } }{ { page.url } }&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;re on Octopress, then you probably already have the <a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/code/.themes/sybtle/source/_includes/head.html#L28-L29">cooler version</a> that creates beautiful canonical links.</p>
+
+<h1>Redirect users to https</h1>
+
+<p>Add this script to the very top of your <code>&lt;head&gt;</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">host</span> <span class="o">=</span> <span class="s2">&quot;yoursite.com&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">((</span><span class="nx">host</span> <span class="o">==</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">!=</span> <span class="s2">&quot;https:&quot;</span><span class="p">))</span>
+</span><span class='line'>        <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">=</span> <span class="s2">&quot;https&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Issues?</h2>
+
+<p>If you find some stylesheets/scripts missing, make sure that you&rsquo;re using the new <code>https</code> paths for your resources. A better option would be to not use the protocol at all:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- Change this --&gt;</span>
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://www.somesite.com/path/to/styles.css&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- to this: --&gt;</span>
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//www.somesite.com/path/to/styles.css&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>More Resources &amp; Examples:</h2>
+
+<ul>
+<li><a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages/">Setting up a Custom Domain with Github Pages</a></li>
+<li><a href="https://konklone.com/post/github-pages-now-sorta-supports-https-so-use-it">GitHub Pages Now Supports HTTPS</a></li>
+<li><a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/code/_config.yml#L5-L6">Example _config.yml</a></li>
+<li><a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/master/CNAME">Example CNAME</a></li>
+<li><a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/code/.themes/sybtle/source/_includes/head.html#L7-L11">Example head.html</a></li>
+</ul>
+
+
+<br />
+
+
+<p>Have something to add? Tweet to me <a href="https://twitter.com/sheharyarn">@sheharyarn</a></p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -554,45 +692,6 @@
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-16T02:16:26+05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>I love <a href="http://sublimetext.com/">Sublime</a>, I can&rsquo;t emphasize that enough. Also, quite often enough I have to deal with <code>nginx</code> configuration files and without the syntax highlighting support for nginx files in Sublime Text, it can become a pain in the ass. Today I found the ass-pain remover for my problem and I thought I share it here.</p>
-
-<!--more-->
-
-
-<p>Introducing the Awesome <a href="https://sublime.wbond.net/packages/nginx">Nginx Syntax Highlighting Plugin</a> by <a href="http://brandonwamboldt.ca/nginx-syntax-highlighting-for-sublime-1422/">Brandon Wamboldt</a>. It automatically recognizes <code>*.conf</code>, <code>*.conf.erb</code>, <code>nginx.conf</code> and other relevant extensions &amp; file names and also offers tons of completions within nginx files.</p>
-
-<p><img src="http://i.imgur.com/Ykt61xx.png" alt="Nginx Syntax Highlighting" /></p>
-
-<p><strong><em>To install</em></strong>, simply download the <a href="https://github.com/brandonwamboldt/sublime-nginx">source</a> and place it in your Packages Directory or better yet, if you have Package Control installed in Sublime, look for the <em>Nginx</em> package by <em>Brandon Wamboldt</em> and install it via the package manager right in Sublime.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -608,6 +707,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/free-ssl-for-github-pages-with-custom-domains/">Set Up SSL on Github Pages With Custom Domains for Free</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/calculate-word-frequency-of-files-in-bash/">Calculate Word Frequency of Files in Bash</a>
       </li>
     
@@ -621,10 +724,6 @@
     
       <li class="post">
         <a href="/blog/s3-direct-upload-gem-example/">S3 Direct Upload Gem - Example</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/rails-routes-scope-vs-namespace/">Rails Routes: Scope vs. Namespace</a>
       </li>
     
   </ul>
