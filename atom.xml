@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Sheharyar Naseer]]></title>
-  <link href="http://sheharyar.me/atom.xml" rel="self"/>
-  <link href="http://sheharyar.me/"/>
-  <updated>2014-12-15T02:21:58+05:00</updated>
-  <id>http://sheharyar.me/</id>
+  <link href="https://sheharyar.me/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2015-01-28T05:26:32+05:00</updated>
+  <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Calculate Word Frequency of Files in Bash]]></title>
-    <link href="http://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash/"/>
+    <link href="https://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash/"/>
     <updated>2014-12-15T00:13:07+05:00</updated>
-    <id>http://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash</id>
+    <id>https://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash</id>
     <content type="html"><![CDATA[<p>I was reading <a href="http://tomayko.com/">Ryan Tomayko&rsquo;s</a> blog post <a href="http://tomayko.com/writings/awkward-ruby">AWK-ward Ruby</a> explaining how the Unix <a href="http://en.wikipedia.org/wiki/AWK">AWK Tool</a> is among the ancestors of Ruby and Perl. He wrote a few examples showing some of AWK&rsquo;s advanced features, one of them which listed the word frequencies of any file provided. I found this example quite useful and extracted it as a function in to my <a href="https://github.com/sheharyarn/dotfiles">Dotfiles</a>.</p>
 
 <!-- more -->
@@ -93,9 +93,9 @@
   
   <entry>
     <title type="html"><![CDATA[Android: Create Tables in SQLite Beautifully]]></title>
-    <link href="http://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully/"/>
+    <link href="https://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully/"/>
     <updated>2014-11-13T22:54:43+05:00</updated>
-    <id>http://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully</id>
+    <id>https://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully</id>
     <content type="html"><![CDATA[<p>I started Android Development a while back and this is the first time I&rsquo;ve had to use <code>SQLite</code>. Coming from a Rails and Mongo background, you can imagine my horror when I had to create models (read &lsquo;tables&rsquo;) like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -206,9 +206,9 @@
   
   <entry>
     <title type="html"><![CDATA[Github Trending Repos API]]></title>
-    <link href="http://sheharyar.me/blog/github-trending-repos-api/"/>
+    <link href="https://sheharyar.me/blog/github-trending-repos-api/"/>
     <updated>2014-09-12T23:01:06+05:00</updated>
-    <id>http://sheharyar.me/blog/github-trending-repos-api</id>
+    <id>https://sheharyar.me/blog/github-trending-repos-api</id>
     <content type="html"><![CDATA[<p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
 
 <!--more-->
@@ -294,9 +294,9 @@
   
   <entry>
     <title type="html"><![CDATA[S3 Direct Upload Gem - Example]]></title>
-    <link href="http://sheharyar.me/blog/s3-direct-upload-gem-example/"/>
+    <link href="https://sheharyar.me/blog/s3-direct-upload-gem-example/"/>
     <updated>2014-09-10T22:47:23+05:00</updated>
-    <id>http://sheharyar.me/blog/s3-direct-upload-gem-example</id>
+    <id>https://sheharyar.me/blog/s3-direct-upload-gem-example</id>
     <content type="html"><![CDATA[<p>A while back I had to use the <a href="https://github.com/waynehoover/s3_direct_upload"><code>S3 Direct Upload</code></a> gem for a project. I couldn&rsquo;t find a proper tutorial or a working example that I could follow to get the uploads working. After debugging for hours, <a href="https://github.com/waynehoover/s3_direct_upload/issues/30">I found</a> that the problem was in fact with the gem not being able to form proper URLs for uploading files to S3. The patch in the link saved me.</p>
 
 <!--more-->
@@ -312,9 +312,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rails Routes: Scope vs. Namespace]]></title>
-    <link href="http://sheharyar.me/blog/rails-routes-scope-vs-namespace/"/>
+    <link href="https://sheharyar.me/blog/rails-routes-scope-vs-namespace/"/>
     <updated>2014-08-27T22:31:10+05:00</updated>
-    <id>http://sheharyar.me/blog/rails-routes-scope-vs-namespace</id>
+    <id>https://sheharyar.me/blog/rails-routes-scope-vs-namespace</id>
     <content type="html"><![CDATA[<p>Like <a href="http://notahat.com/">Pete</a>, I often forget how <code>scope</code> and <code>namespace</code> affect Path, URL names and Controller names. Scope gives you great control over each aspect, while namespace takes one argument for everything.</p>
 
 <!--more-->
@@ -337,9 +337,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rails App With Nginx, Puma & Capistrano in Production]]></title>
-    <link href="http://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production/"/>
+    <link href="https://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production/"/>
     <updated>2014-08-16T09:27:15+05:00</updated>
-    <id>http://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production</id>
+    <id>https://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
 
 <p>After going through countless articles and spending hours after hours fixing the bugs and issues I encountered while implementing what was written in those articles, I was able to compile a guide similar to the Unicorn one.</p>
@@ -366,9 +366,9 @@
   
   <entry>
     <title type="html"><![CDATA[Nginx Config Syntax Highlighting in SublimeText]]></title>
-    <link href="http://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext/"/>
+    <link href="https://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext/"/>
     <updated>2014-08-16T02:16:26+05:00</updated>
-    <id>http://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext</id>
+    <id>https://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext</id>
     <content type="html"><![CDATA[<p>I love <a href="http://sublimetext.com/">Sublime</a>, I can&rsquo;t emphasize that enough. Also, quite often enough I have to deal with <code>nginx</code> configuration files and without the syntax highlighting support for nginx files in Sublime Text, it can become a pain in the ass. Today I found the ass-pain remover for my problem and I thought I share it here.</p>
 
 <!--more-->
@@ -384,9 +384,9 @@
   
   <entry>
     <title type="html"><![CDATA[Regular Mongo Backups Using Cron]]></title>
-    <link href="http://sheharyar.me/blog/regular-mongo-backups-using-cron/"/>
+    <link href="https://sheharyar.me/blog/regular-mongo-backups-using-cron/"/>
     <updated>2014-07-03T20:33:50+05:00</updated>
-    <id>http://sheharyar.me/blog/regular-mongo-backups-using-cron</id>
+    <id>https://sheharyar.me/blog/regular-mongo-backups-using-cron</id>
     <content type="html"><![CDATA[<p>It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there&rsquo;s <code>mongodump</code> but putting it right in your <code>crontab</code> file doesn&rsquo;t give you clean and organised backups you&rsquo;d like to have. Here&rsquo;s a little bash script that I use to take timestamped Mongo Backups for many of my apps.</p>
 
 <!--more-->
@@ -478,9 +478,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Eventual Outcome of Existence]]></title>
-    <link href="http://sheharyar.me/blog/the-eventual-outcome-of-existence/"/>
+    <link href="https://sheharyar.me/blog/the-eventual-outcome-of-existence/"/>
     <updated>2014-05-15T22:39:49+05:00</updated>
-    <id>http://sheharyar.me/blog/the-eventual-outcome-of-existence</id>
+    <id>https://sheharyar.me/blog/the-eventual-outcome-of-existence</id>
     <content type="html"><![CDATA[<p>I found this while surfing the dark corners of the web, and it blew my mind. It kind of reminds me about <a href="http://www.multivax.com/last_question.html">The Last Question</a>.</p>
 
 <!--more-->
@@ -498,9 +498,9 @@
   
   <entry>
     <title type="html"><![CDATA[Search Methods of a Ruby Object]]></title>
-    <link href="http://sheharyar.me/blog/search-methods-of-a-ruby-object/"/>
+    <link href="https://sheharyar.me/blog/search-methods-of-a-ruby-object/"/>
     <updated>2014-04-17T01:53:45+05:00</updated>
-    <id>http://sheharyar.me/blog/search-methods-of-a-ruby-object</id>
+    <id>https://sheharyar.me/blog/search-methods-of-a-ruby-object</id>
     <content type="html"><![CDATA[<p>Sometimes, I&rsquo;m not so sure about the methods I can call on an Object in Ruby. Sure, I can call <code>.methods</code> on that object
 to get a list of all the functions, but it isn&rsquo;t always helpful because it can fill up your entire terminal with
 hundreds of methods you don&rsquo;t want to see. I wanted to be able to get a list of only those methods that match a certain
@@ -558,10 +558,10 @@ You can see it in the <a href="https://github.com/sheharyarn/dotfiles/blob/maste
   
   <entry>
     <title type="html"><![CDATA[Controlling Mouse Using Your Eye (With Pupil)]]></title>
-    <link href="http://sheharyar.me/blog/mouse-control-with-pupil-without-surfaces/"/>
+    <link href="https://sheharyar.me/blog/mouse-control-with-pupil-without-surfaces/"/>
     <updated>2014-03-27T09:45:02+05:00</updated>
-    <id>http://sheharyar.me/blog/mouse-control-with-pupil-without-surfaces</id>
-    <content type="html"><![CDATA[<p>A while back <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">I mentioned</a> that I was working on a an Eye-Tracking Project
+    <id>https://sheharyar.me/blog/mouse-control-with-pupil-without-surfaces</id>
+    <content type="html"><![CDATA[<p>A while back <a href="https://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">I mentioned</a> that I was working on a an Eye-Tracking Project
 called <a href="https://github.com/pupil-labs/pupil">Pupil</a> with a couple of friends of mine. It&rsquo;s come a long way now and we&rsquo;ve have had
 considerable success &ndash; but that&rsquo;s for another post. Pupil is a great tool for eye-tracking and getting gaze data that can be used with
 other applications in realtime. It utilizes two HD cameras mounted on an eye-glasses frame at 180˚ from each other. One is called &lsquo;Eye
@@ -707,9 +707,9 @@ sure to use lots of points. You can start by pressing <code>c</code> on your key
   
   <entry>
     <title type="html"><![CDATA[#KholoBC - All the Rage Over Youtube]]></title>
-    <link href="http://sheharyar.me/blog/kholo-bc-all-the-rage-over-youtube/"/>
+    <link href="https://sheharyar.me/blog/kholo-bc-all-the-rage-over-youtube/"/>
     <updated>2014-03-06T02:51:17+05:00</updated>
-    <id>http://sheharyar.me/blog/kholo-bc-all-the-rage-over-youtube</id>
+    <id>https://sheharyar.me/blog/kholo-bc-all-the-rage-over-youtube</id>
     <content type="html"><![CDATA[<p>If you live in Pakistan, you know how common Internet Censorship is here (and to some extent, I&rsquo;m okay with that &ndash; &lsquo;Porn Sites&rsquo;) but
 banning YouTube? Seriously guys. And it&rsquo;s been quite a while since it was blocked. The real reason it was blocked was because of a
 blasphemous video called &lt;Don&rsquo;t Even Remember the Name> being posted somewhere on it. Pakistanis, or should I say Muslims, take that
@@ -722,7 +722,7 @@ to get access to Youtube; We <strong><em>are</em></strong> a little frustrated (
 
 
 
-<iframe src="http://sheharyar.me//player.vimeo.com/video/87489847" width="750" height="422" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<iframe src="https://sheharyar.me//player.vimeo.com/video/87489847" width="750" height="422" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
 
 <p>But last week that video was finally taken down, but the Pakistani Government still refuses to lift the ban on  Youtube. To fight the evil
@@ -749,9 +749,9 @@ has helped so many people learn something new. The right way is simply to block 
   
   <entry>
     <title type="html"><![CDATA[Installing TSocks (TorSocks) on MacOSX]]></title>
-    <link href="http://sheharyar.me/blog/installing-tsocks-on-macosx/"/>
+    <link href="https://sheharyar.me/blog/installing-tsocks-on-macosx/"/>
     <updated>2014-03-03T20:28:26+05:00</updated>
-    <id>http://sheharyar.me/blog/installing-tsocks-on-macosx</id>
+    <id>https://sheharyar.me/blog/installing-tsocks-on-macosx</id>
     <content type="html"><![CDATA[<p>I recently came across this nifty little terminal app called <a href="https://whatbox.ca/wiki/tsocks">TSocks</a> that allows you to use a Socks Proxy
 for your terminal commands. I already use <a href="http://torproject.org/">Tor</a> for all other web communications on my Macbook Air, so I wanted to
 be able to use Tor for my terminal commands as well. You can download and install it via <a href="http://sonnykt.tumblr.com/post/1256048245/using-terminal-commands-with-socks-proxy">MacPorts</a> or
@@ -803,9 +803,9 @@ execute any other command that connects to the internet. One thing that pisses m
   
   <entry>
     <title type="html"><![CDATA[How Not to Be a Pakistani]]></title>
-    <link href="http://sheharyar.me/blog/how-not-to-be-a-pakistani/"/>
+    <link href="https://sheharyar.me/blog/how-not-to-be-a-pakistani/"/>
     <updated>2014-02-08T18:15:27+05:00</updated>
-    <id>http://sheharyar.me/blog/how-not-to-be-a-pakistani</id>
+    <id>https://sheharyar.me/blog/how-not-to-be-a-pakistani</id>
     <content type="html"><![CDATA[<p>I came across this blog today, called <a href="http://ogchronic.wordpress.com/">How not to be a Pakistani</a>, and I can&rsquo;t believe how perfectly the author describes some of the things of our Pakistani Culture.</p>
 
 <p>A few posts that gave me a good laugh (and made me think) were <a href="http://ogchronic.wordpress.com/2014/01/28/how-to-be-a-social-cheetah/">How to be a Social Cheetah</a> and <a href="http://ogchronic.wordpress.com/2013/07/31/how-to-be-an-average-pakistani-chawal/">How to be an average Pakistani &lsquo;Chawal&rsquo;</a>, especially the second one. It made me doubt myself a little. This is <strong>exactly</strong> how things are here and I don&rsquo;t want to be a part of it.</p>
@@ -816,9 +816,9 @@ execute any other command that connects to the internet. One thing that pisses m
   
   <entry>
     <title type="html"><![CDATA[LibIlmImf.so.6 Missing From OpenCV Project]]></title>
-    <link href="http://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project/"/>
+    <link href="https://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project/"/>
     <updated>2014-02-05T11:18:01+05:00</updated>
-    <id>http://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project</id>
+    <id>https://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project</id>
     <content type="html"><![CDATA[<p>Last time <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
 
 <p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
@@ -860,9 +860,9 @@ execute any other command that connects to the internet. One thing that pisses m
   
   <entry>
     <title type="html"><![CDATA[Ubuntu 13.10 in Parallels - CRTC 80 Error]]></title>
-    <link href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/"/>
+    <link href="https://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/"/>
     <updated>2014-02-02T16:01:16+05:00</updated>
-    <id>http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80</id>
+    <id>https://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80</id>
     <content type="html"><![CDATA[<p>Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new Hobby Project of mine, <a href="http://pupil-labs.com/pupil/">Pupil</a>.</p>
 
 <p>It was a clean installation of Ubuntu 13.10 in Parallels 9 on my new Macbook. I had invested too much time installing pupil, only to find that the display drivers or GTK or something had been corrupted. This was the second time I was booting ubuntu and had been slapped in the face by this:</p>
@@ -912,9 +912,9 @@ execute any other command that connects to the internet. One thing that pisses m
   
   <entry>
     <title type="html"><![CDATA[Opening Files From Finder Using Keyboard]]></title>
-    <link href="http://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard/"/>
+    <link href="https://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard/"/>
     <updated>2014-02-02T10:05:00+05:00</updated>
-    <id>http://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard</id>
+    <id>https://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard</id>
     <content type="html"><![CDATA[<p>I&rsquo;m a recent Mac convert so it was really weird for me when I realized that hitting the Return key in Finder renames the file instead of opening it. I&rsquo;ve spent the better part of my life using Windows and Linux and as you can imagine this was really frustrating for me (and still is).</p>
 
 <p>After a bit of Googling, I found out that you can open selected files in Finder using the <code>⌘ + O</code> combination on your keyboard. I&rsquo;m still trying to find a way to modify this to the &lsquo;Return&rsquo; key to have a consistent <em>Keyboard experience</em> on all my PCs.</p>
@@ -925,9 +925,9 @@ execute any other command that connects to the internet. One thing that pisses m
   
   <entry>
     <title type="html"><![CDATA[Yet Another Octopress Blog]]></title>
-    <link href="http://sheharyar.me/blog/yet-another-octopress-blog/"/>
+    <link href="https://sheharyar.me/blog/yet-another-octopress-blog/"/>
     <updated>2014-01-28T03:13:21+05:00</updated>
-    <id>http://sheharyar.me/blog/yet-another-octopress-blog</id>
+    <id>https://sheharyar.me/blog/yet-another-octopress-blog</id>
     <content type="html"><![CDATA[<p>No. This isn&rsquo;t another rant by a new Rubyist about how Ruby is so beautiful, open and awesome &amp; how <a href="http://octopress.org">Octopress</a> has liberated yet another slave of <a href="http://wordpress.org">Wordpress</a>. I love Ruby, Rails, Octopress and other <em>Hip</em> Geeky things; but I love Wordpress too. Moving to Octopress is something I have been wanting to do for a long time. I wanted to have complete control over my writings. I wanted them to be as minimal as possible, both in terms of design and code.</p>
 
 <p><strong>Let me stop you right there.</strong> Octopress is not for you. You&rsquo;ll have to write in Markdown, there&rsquo;s zero community support compared to wordpress, you have to write and deploy from possibly only one system and you&rsquo;ll have to get your hands dirty. Real Dirty. Getting hard? Well, I am. My condition is something like <a href="http://billpatrianakos.me/blog/2012/10/31/the-making-of-an-octopress-theme/">Bill Patrianakos</a> tells it:</p>
