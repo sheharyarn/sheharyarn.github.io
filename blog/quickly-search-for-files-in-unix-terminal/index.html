@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Quickly Search for Files in Unix Terminal - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Jan 30th, 2015 Quickly Search for Files in Unix Terminal find is a powerful command-line utility but most of the time I just really need to search &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="//sheharyar.me/logo.png"/>
+  <meta property="og:title" content="Quickly Search for Files in Unix Terminal - Sheharyar Naseer" />
+  <meta property="og:description" content="Jan 30th, 2015 Quickly Search for Files in Unix Terminal find is a powerful command-line utility but most of the time I just really need to search &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-30T05:38:42+05:00" pubdate data-updated="true">Jan 30<span>th</span>, 2015</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Quickly Search for Files in Unix Terminal
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p><code>find</code> is a powerful command-line utility but most of the time I just really need to search for matching files
+and directories in the current directory. I also usually end up <code>grep</code>-ing the output and using wildcards around
+the argument.</p>
+
+<p>So why not just simplify the whole thing?</p>
+
+<!-- more -->
+
+
+<p>Creating a simple function that does that for us would be the way to go, so this should do the job:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$1&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let me explain what this does. <code>find</code> does a case-insensitive <code>-iname</code> search in the current directory <code>.</code> of all the files
+and folders matching the provided string <code>"*$1*"</code> and also looks in sub-directories <code>-d</code>. Then <code>sed</code> deletes the first
+two characters of each line (they are <code>./</code>) to clean up the results. <code>grep -i</code> is then used to highlight the string in the results.</p>
+
+<p>You can use it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>search vim
+</span><span class='line'>Vim/.vimrc
+</span><span class='line'>Vim/vundles.vim
+</span><span class='line'>Vim
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now add this function to your <code>.bash_profile</code> or better yet, your <a href="https://github.com/sheharyarn/dotfiles/blob/master/Zsh/functions.sh#L15-L27">.dotfiles</a> so it always gets loaded in to your shell session. I&rsquo;ve modified this function a bit more to accept multiple arguments:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq 0 <span class="o">]]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;usage: search string [string2 string3 ...]&quot;</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'><span class="k">        for </span>i in <span class="s2">&quot;$@&quot;</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">            </span>find . -iname <span class="s2">&quot;*$i*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$i&quot;</span>
+</span><span class='line'>            <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>        <span class="k">done</span>
+</span><span class='line'><span class="k">    fi</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now go! Be Free!</p>
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/find/'>find</a>, <a class='category' href='/blog/categories/terminal/'>terminal</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Set up SSL on Github Pages with Custom Domains for Free" href="/blog/free-ssl-for-github-pages-with-custom-domains/">
+        ← Set up SSL on Github Pages with Custom Domains for Free
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

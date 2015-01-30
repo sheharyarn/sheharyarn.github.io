@@ -14,8 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Jan 28th, 2015 I came across this post Setting up SSL on Github Pages and wanted to try
-it out, but since my website set-up is &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Jan 30th, 2015 find is a powerful command-line utility but most of the time I just really need to search for matching files
+and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,8 +25,8 @@ it out, but since my website set-up is &hellip;">
 
   <meta property="og:image" content="//sheharyar.me/logo.png"/>
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Jan 28th, 2015 I came across this post Setting up SSL on Github Pages and wanted to try
-it out, but since my website set-up is &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Jan 30th, 2015 find is a powerful command-line utility but most of the time I just really need to search for matching files
+and &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -78,6 +78,102 @@ it out, but since my website set-up is &hellip;" />
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-30T05:38:42+05:00" pubdate data-updated="true">Jan 30<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p><code>find</code> is a powerful command-line utility but most of the time I just really need to search for matching files
+and directories in the current directory. I also usually end up <code>grep</code>-ing the output and using wildcards around
+the argument.</p>
+
+<p>So why not just simplify the whole thing?</p>
+
+<!-- more -->
+
+
+<p>Creating a simple function that does that for us would be the way to go, so this should do the job:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$1&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let me explain what this does. <code>find</code> does a case-insensitive <code>-iname</code> search in the current directory <code>.</code> of all the files
+and folders matching the provided string <code>"*$1*"</code> and also looks in sub-directories <code>-d</code>. Then <code>sed</code> deletes the first
+two characters of each line (they are <code>./</code>) to clean up the results. <code>grep -i</code> is then used to highlight the string in the results.</p>
+
+<p>You can use it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>search vim
+</span><span class='line'>Vim/.vimrc
+</span><span class='line'>Vim/vundles.vim
+</span><span class='line'>Vim
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can now add this function to your <code>.bash_profile</code> or better yet, your <a href="https://github.com/sheharyarn/dotfiles/blob/master/Zsh/functions.sh#L15-L27">.dotfiles</a> so it always gets loaded in to your shell session. I&rsquo;ve modified this function a bit more to accept multiple arguments:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq 0 <span class="o">]]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;usage: search string [string2 string3 ...]&quot;</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'><span class="k">        for </span>i in <span class="s2">&quot;$@&quot;</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">            </span>find . -iname <span class="s2">&quot;*$i*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$i&quot;</span>
+</span><span class='line'>            <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>        <span class="k">done</span>
+</span><span class='line'><span class="k">    fi</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now go! Be Free!</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -642,56 +738,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-16T09:27:15+05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
-
-<p>After going through countless articles and spending hours after hours fixing the bugs and issues I encountered while implementing what was written in those articles, I was able to compile a guide similar to the Unicorn one.</p>
-
-<!--more-->
-
-
-<h1>See it: <a href="https://coderwall.com/p/ttrhow">Deploying Rails app using Nginx, Puma and Capistrano</a></h1>
-
-<p>I made this guide for myself and since this was my first time with <code>puma</code> there are bound to be tons of issues. It uses and was tested with:</p>
-
-<ul>
-<li>Ruby 2.1</li>
-<li>Rails 4.1.2</li>
-<li>Capistrano 3.2.1</li>
-<li>Ubuntu 14.04 LTS x64</li>
-<li>Only &lsquo;approved&rsquo; gems and plugins mentioned on the official <code>capistrano</code> and <code>puma</code> wikis</li>
-</ul>
-
-
-<p><strong>Request:</strong> If I&rsquo;ve missed something, or if there&rsquo;s something that can be done in a better way in the guide, please comment and let me know.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -707,6 +753,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/quickly-search-for-files-in-unix-terminal/">Quickly Search for Files in Unix Terminal</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/free-ssl-for-github-pages-with-custom-domains/">Set Up SSL on Github Pages With Custom Domains for Free</a>
       </li>
     
@@ -720,10 +770,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
     
       <li class="post">
         <a href="/blog/github-trending-repos-api/">Github Trending Repos API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/s3-direct-upload-gem-example/">S3 Direct Upload Gem - Example</a>
       </li>
     
   </ul>
