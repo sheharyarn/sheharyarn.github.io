@@ -14,8 +14,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Jan 30th, 2015 find is a powerful command-line utility but most of the time I just really need to search for matching files
-and &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 15th, 2015 For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,8 +25,7 @@ and &hellip;">
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Jan 30th, 2015 find is a powerful command-line utility but most of the time I just really need to search for matching files
-and &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Feb 15th, 2015 For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -79,6 +77,128 @@ and &hellip;" />
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-15T06:50:44+05:00" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
+Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
+I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">heroku-mongo-sync</a>, but it is now deprecated in favor of
+<a href="https://github.com/marcofognog/heroku-mongo-sync">marcofognog&rsquo;s fork</a>. Sadly, neither of them worked for me.</p>
+
+<p>So I decided to write my own. Meet <a href="https://github.com/sheharyarn/mongo-sync"><strong>mongo-sync</strong></a>.</p>
+
+<!-- more -->
+
+
+<p><img src="http://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></p>
+
+<p>It&rsquo;s a simple shell script that allows you to sync your local and remote MongoDB databases, using two commands; <code>push</code> and <code>pull</code>.
+Start by cloning the script on your machine:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://github.com/sheharyarn/mongo-sync.git
+</span><span class='line'><span class="nb">cd </span>mongo-sync
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edit the provided <code>config.yml</code> with your db details:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
+</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, you can start syncing your databases:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>./mongo-sync push       <span class="c"># Push DB to Remote</span>
+</span><span class='line'>./mongo-sync pull       <span class="c"># Pull DB to Local</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;m planning to convert it into a Ruby Gem and a Heroku Plugin as well.</p>
+
+<h1>Github: <a href="https://github.com/sheharyarn/mongo-sync">sheharyarn / mongo-sync</a></h1>
+
+<br/>
+
+
+<br/>
+
+
+<h3>Notes</h3>
+
+<ul>
+<li>The <code>push</code> and <code>pull</code> commands overwrite the target DB</li>
+<li>If you include this script into your project, it&rsquo;s a good idea to add <code>config.yml</code> to your <code>.gitignore</code></li>
+</ul>
+
+
+<br/>
+
+
+<h3>Further Reading</h3>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/reference/program/mongodump/#bin.mongodump">mongodump</a></li>
+<li><a href="http://docs.mongodb.org/manual/reference/program/mongorestore/#bin.mongorestore">mongorestore</a></li>
+<li><a href="http://www.theirishpenguin.com/2011/01/20/push-and-pull-data-between-your-local-mongodb-and-heroku-or-mongohq.html">Push and pull data between your local MongoDB and Heroku or MongoHQ</a></li>
+</ul>
+
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -693,52 +813,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-27T22:31:10+05:00" pubdate data-updated="true">Aug 27<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>Like <a href="http://notahat.com/">Pete</a>, I often forget how <code>scope</code> and <code>namespace</code> affect Path, URL names and Controller names. Scope gives you great control over each aspect, while namespace takes one argument for everything.</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">scope</span> <span class="s1">&#39;url_prefix&#39;</span><span class="p">,</span> <span class="ss">module</span><span class="p">:</span> <span class="s1">&#39;controller_prefix&#39;</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="s1">&#39;route_name_prefix&#39;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">resources</span> <span class="ss">:posts</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -754,6 +828,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/sync-mongodb-local-and-production-heroku/">Sync MongoDB Data Between Development and Production Databases</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/quickly-search-for-files-in-unix-terminal/">Quickly Search for Files in Unix Terminal</a>
       </li>
     
@@ -767,10 +845,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
     
       <li class="post">
         <a href="/blog/android-create-tables-in-sqlite-beautifully/">Android: Create Tables in SQLite Beautifully</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/github-trending-repos-api/">Github Trending Repos API</a>
       </li>
     
   </ul>

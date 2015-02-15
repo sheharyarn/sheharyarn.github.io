@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-01-30T16:30:36+05:00</updated>
+  <updated>2015-02-15T07:41:48+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>
+    <link href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/"/>
+    <updated>2015-02-15T06:50:44+05:00</updated>
+    <id>https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku</id>
+    <content type="html"><![CDATA[<p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
+Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
+I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">heroku-mongo-sync</a>, but it is now deprecated in favor of
+<a href="https://github.com/marcofognog/heroku-mongo-sync">marcofognog&rsquo;s fork</a>. Sadly, neither of them worked for me.</p>
+
+<p>So I decided to write my own. Meet <a href="https://github.com/sheharyarn/mongo-sync"><strong>mongo-sync</strong></a>.</p>
+
+<!-- more -->
+
+
+<p><img src="http://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></p>
+
+<p>It&rsquo;s a simple shell script that allows you to sync your local and remote MongoDB databases, using two commands; <code>push</code> and <code>pull</code>.
+Start by cloning the script on your machine:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://github.com/sheharyarn/mongo-sync.git
+</span><span class='line'><span class="nb">cd </span>mongo-sync
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edit the provided <code>config.yml</code> with your db details:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
+</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, you can start syncing your databases:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>./mongo-sync push       <span class="c"># Push DB to Remote</span>
+</span><span class='line'>./mongo-sync pull       <span class="c"># Pull DB to Local</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;m planning to convert it into a Ruby Gem and a Heroku Plugin as well.</p>
+
+<h1>Github: <a href="https://github.com/sheharyarn/mongo-sync">sheharyarn / mongo-sync</a></h1>
+
+<br/>
+
+
+<br/>
+
+
+<h3>Notes</h3>
+
+<ul>
+<li>The <code>push</code> and <code>pull</code> commands overwrite the target DB</li>
+<li>If you include this script into your project, it&rsquo;s a good idea to add <code>config.yml</code> to your <code>.gitignore</code></li>
+</ul>
+
+
+<br/>
+
+
+<h3>Further Reading</h3>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/reference/program/mongodump/#bin.mongodump">mongodump</a></li>
+<li><a href="http://docs.mongodb.org/manual/reference/program/mongorestore/#bin.mongorestore">mongorestore</a></li>
+<li><a href="http://www.theirishpenguin.com/2011/01/20/push-and-pull-data-between-your-local-mongodb-and-heroku-or-mongohq.html">Push and pull data between your local MongoDB and Heroku or MongoHQ</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Quickly Search for Files in Unix Terminal]]></title>
@@ -1110,25 +1211,6 @@ execute any other command that connects to the internet. One thing that pisses m
 <p>After a bit of Googling, I found out that you can open selected files in Finder using the <code>⌘ + O</code> combination on your keyboard. I&rsquo;m still trying to find a way to modify this to the &lsquo;Return&rsquo; key to have a consistent <em>Keyboard experience</em> on all my PCs.</p>
 
 <p>Anyways, digging my new Macbook Air. :D</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Yet Another Octopress Blog]]></title>
-    <link href="https://sheharyar.me/blog/yet-another-octopress-blog/"/>
-    <updated>2014-01-28T03:13:21+05:00</updated>
-    <id>https://sheharyar.me/blog/yet-another-octopress-blog</id>
-    <content type="html"><![CDATA[<p>No. This isn&rsquo;t another rant by a new Rubyist about how Ruby is so beautiful, open and awesome &amp; how <a href="http://octopress.org">Octopress</a> has liberated yet another slave of <a href="http://wordpress.org">Wordpress</a>. I love Ruby, Rails, Octopress and other <em>Hip</em> Geeky things; but I love Wordpress too. Moving to Octopress is something I have been wanting to do for a long time. I wanted to have complete control over my writings. I wanted them to be as minimal as possible, both in terms of design and code.</p>
-
-<p><strong>Let me stop you right there.</strong> Octopress is not for you. You&rsquo;ll have to write in Markdown, there&rsquo;s zero community support compared to wordpress, you have to write and deploy from possibly only one system and you&rsquo;ll have to get your hands dirty. Real Dirty. Getting hard? Well, I am. My condition is something like <a href="http://billpatrianakos.me/blog/2012/10/31/the-making-of-an-octopress-theme/">Bill Patrianakos</a> tells it:</p>
-
-<blockquote><p>There’s something about static files, Markdown, Git repos, the terminal, and a text editor that turns me on.</p></blockquote>
-
-<p>Octopress is really cool. This might be my first public post on the platform, but I&rsquo;ve been experimenting with Octopress for months on my local system. The Sass, the Liquid Engine and other fine grains of the platform made me fall in love. But the theme &ndash; It was overly complicated and too much used on the web. I wanted it to be a little different and hence I decided to launch an Octopress Blog only when I have made my own Octopress theme.</p>
-
-<p>Thus born was <code>Sybtle</code>, an Octopress theme created from scratch and inspired by the <a href="https://svbtle.com">Svbtle</a> online writing platform. I might release it in the future, but for now if you want to use it, you&rsquo;ll have to go through the <a href="https://github.com/sheharyarn/sheharyarn.github.io">code</a> yourself and clean it up.</p>
-
-<p>That&rsquo;s enough rant for today.</p>
 ]]></content>
   </entry>
   

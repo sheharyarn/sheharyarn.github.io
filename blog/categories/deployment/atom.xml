@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Unix, | Sheharyar Naseer]]></title>
-  <link href="https://sheharyar.me/blog/categories/unix/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Deployment, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/deployment/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
   <updated>2015-02-15T07:41:48+05:00</updated>
   <id>https://sheharyar.me/</id>
