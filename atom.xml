@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-02-15T07:43:40+05:00</updated>
+  <updated>2015-02-15T07:45:37+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -28,7 +28,7 @@ I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">herok
 <!-- more -->
 
 
-<p><img src="https://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></p>
+<p><a href="https://github.com/sheharyarn/mongo-sync"><img src="https://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></a></p>
 
 <p>It&rsquo;s a simple shell script that allows you to sync your local and remote MongoDB databases, using two commands; <code>push</code> and <code>pull</code>.
 Start by cloning the script on your machine:</p>
