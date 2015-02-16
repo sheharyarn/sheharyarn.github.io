@@ -14,7 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 15th, 2015 For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 16th, 2015 In my previous post, I had written about my
+mongo-sync shell script that allows you to sync Local and Remote &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +26,8 @@
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Feb 15th, 2015 For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Feb 16th, 2015 In my previous post, I had written about my
+mongo-sync shell script that allows you to sync Local and Remote &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -77,6 +79,139 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-16T20:13:35+05:00" pubdate data-updated="true">Feb 16<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p><a href="/blog/sync-mongodb-local-and-production-heroku/">In my previous post</a>, I had written about my
+<a href="https://github.com/sheharyarn/mongo-sync">mongo-sync</a> shell script that allows you to sync Local and Remote Mongo Databases.
+I spent the last day converting it into a <a href="https://github.com/sheharyarn/mongo-sync-ruby">Ruby Gem</a>
+so that you can perform actions using nice Rake Tasks and invoke the commands from Rails Console or <code>irb</code>.</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/sheharyarn/mongo-sync-ruby"><img src="https://i.imgur.com/jvIUfJf.gif" alt="MongoSync Ruby Gem Demo GIF" /></a></p>
+
+<p>If the gif above wasn&rsquo;t explanatory enough, start by adding it to your <code>Gemfile</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;mongo_sync&#39;</span><span class="p">,</span>   <span class="ss">group</span><span class="p">:</span> <span class="ss">:development</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bundle and run the generator to create configuration template:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle
+</span><span class='line'><span class="nv">$ </span>rails g mongo_sync:config
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edit the newly created <code>config/mongo_sync.yml</code>, putting in details of your remote and local DBs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
+</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># All fields are required</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To Sync, use these rake tasks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake mongo_sync:push       <span class="c"># Push DB to Remote</span>
+</span><span class='line'>rake mongo_sync:pull       <span class="c"># Pull DB to Local</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>You can use it in <code>rails console</code> as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;mongo_sync&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">pull</span>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># You can also pass path to a custom config file</span>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span> <span class="s2">&quot;path/to/custom/mongo_sync.yml&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A few important things to note are:</p>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/tutorial/#getting-started"><code>mongodb</code></a> needs to be installed on your system (obviously)</li>
+<li>Pushing/Pulling <strong><em>overwrites</em></strong> the Target DB</li>
+<li>It&rsquo;s a good idea to keep your <code>mongo_sync.yml</code> in <code>.gitignore</code> or load the values from the <code>ENV</code></li>
+</ul>
+
+
+<p>There&rsquo;s still <a href="https://github.com/sheharyarn/mongo-sync-ruby#todo">much to do</a> but for now it should work perfectly with your Rails Projects.
+<a href="http://twitter.com/sheharyarn">Find me on twitter</a> if you have something to add.</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -774,45 +909,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-10T22:47:23+05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>A while back I had to use the <a href="https://github.com/waynehoover/s3_direct_upload"><code>S3 Direct Upload</code></a> gem for a project. I couldn&rsquo;t find a proper tutorial or a working example that I could follow to get the uploads working. After debugging for hours, <a href="https://github.com/waynehoover/s3_direct_upload/issues/30">I found</a> that the problem was in fact with the gem not being able to form proper URLs for uploading files to S3. The patch in the link saved me.</p>
-
-<!--more-->
-
-
-<p>Anyways, it&rsquo;s been a while since I made this example rails application, that works with your S3 buckets out of the box. All you need to do is export your AWS creds. Check it out:</p>
-
-<h1>sheharyarn / <a href="https://github.com/sheharyarn/s3_direct_upload_example">s3_direct_upload_example</a></h1>
-
-<p>It already includes the patch, and is meant to be just an example so you can test if your uploads are working they way they&rsquo;re supposed to be. Just follow the instructions on the Github Repo, and you&rsquo;re good to go.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -828,6 +924,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/mongosync-ruby-gem/">MongoSync Ruby Gem</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/sync-mongodb-local-and-production-heroku/">Sync MongoDB Data Between Development and Production Databases</a>
       </li>
     
@@ -841,10 +941,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
     
       <li class="post">
         <a href="/blog/calculate-word-frequency-of-files-in-bash/">Calculate Word Frequency of Files in Bash</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/android-create-tables-in-sqlite-beautifully/">Android: Create Tables in SQLite Beautifully</a>
       </li>
     
   </ul>

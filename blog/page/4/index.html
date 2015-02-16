@@ -14,8 +14,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Controlling Mouse Using Your Eye (With Pupil) A while back I mentioned that I was working on a an Eye-Tracking Project
-called Pupil &hellip;">
+  <meta name="description" content="Freshly Pressed Yet Another Octopress Blog No. This isn&rsquo;t another rant by a new Rubyist about how Ruby is so beautiful, open and awesome &amp &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,12 +25,11 @@ called Pupil &hellip;">
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Controlling Mouse Using Your Eye (With Pupil) A while back I mentioned that I was working on a an Eye-Tracking Project
-called Pupil &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Yet Another Octopress Blog No. This isn&rsquo;t another rant by a new Rubyist about how Ruby is so beautiful, open and awesome &amp &hellip;" />
 
   
-  <link rel="canonical" href="https://sheharyar.me/blog/page/3">
-  <!-- <link rel="canonical" href="https://sheharyar.me/blog/page/3/index.html"> -->
+  <link rel="canonical" href="https://sheharyar.me/blog/page/4">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/page/4/index.html"> -->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
@@ -86,29 +84,26 @@ called Pupil &hellip;" />
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/mouse-control-with-pupil-without-surfaces/">
-            Controlling Mouse Using Your Eye (With Pupil)
+           <a href="/blog/yet-another-octopress-blog/">
+            Yet Another Octopress Blog
            </a>
         </h2>
         <div class="post_content">
-           <p>A while back <a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80">I mentioned</a> that I was working on a an Eye-Tracking Project
-called <a href="https://github.com/pupil-labs/pupil">Pupil</a> with a couple of friends of mine. It&rsquo;s come a long way now and we&rsquo;ve have had
-considerable success &ndash; but that&rsquo;s for another post. Pupil is a great tool for eye-tracking and getting gaze data that can be used with
-other applications in realtime. It utilizes two HD cameras mounted on an eye-glasses frame at 180˚ from each other. One is called &lsquo;Eye
-Camera&rsquo; that records your eye movements and the other is called &lsquo;World Camera&rsquo; which is used to process exactly where the user is
-looking at. This data can be streamed to other applications over TCP in real time.</p>
+           <p>No. This isn&rsquo;t another rant by a new Rubyist about how Ruby is so beautiful, open and awesome &amp; how <a href="http://octopress.org">Octopress</a> has liberated yet another slave of <a href="http://wordpress.org">Wordpress</a>. I love Ruby, Rails, Octopress and other <em>Hip</em> Geeky things; but I love Wordpress too. Moving to Octopress is something I have been wanting to do for a long time. I wanted to have complete control over my writings. I wanted them to be as minimal as possible, both in terms of design and code.</p>
 
-<p>We wanted to control the mouse using our eye gestures, but it heavily relied on the World Camera and defining virtual screens called
-surfaces within the application. This obviously resulted in greater accuracy since it moved the pointer only when you actually looked
-at the screen. But we didn&rsquo;t have a fixed World Cam and wanted to control the mouse using raw gaze data, i.e. use the data from your
-current gaze at the world (instead at the screen) and move the cursor to the appropriate coordinates on the screen w.r.t that gaze.
-So what we did was, we made small changes to the <a href="https://gist.github.com/willpatera/7908319">provided script</a>, removing any reference
-to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> data to move the cursor.</p>
+<p><strong>Let me stop you right there.</strong> Octopress is not for you. You&rsquo;ll have to write in Markdown, there&rsquo;s zero community support compared to wordpress, you have to write and deploy from possibly only one system and you&rsquo;ll have to get your hands dirty. Real Dirty. Getting hard? Well, I am. My condition is something like <a href="http://billpatrianakos.me/blog/2012/10/31/the-making-of-an-octopress-theme/">Bill Patrianakos</a> tells it:</p>
 
+<blockquote><p>There’s something about static files, Markdown, Git repos, the terminal, and a text editor that turns me on.</p></blockquote>
+
+<p>Octopress is really cool. This might be my first public post on the platform, but I&rsquo;ve been experimenting with Octopress for months on my local system. The Sass, the Liquid Engine and other fine grains of the platform made me fall in love. But the theme &ndash; It was overly complicated and too much used on the web. I wanted it to be a little different and hence I decided to launch an Octopress Blog only when I have made my own Octopress theme.</p>
+
+<p>Thus born was <code>Sybtle</code>, an Octopress theme created from scratch and inspired by the <a href="https://svbtle.com">Svbtle</a> online writing platform. I might release it in the future, but for now if you want to use it, you&rsquo;ll have to go through the <a href="https://github.com/sheharyarn/sheharyarn.github.io">code</a> yourself and clean it up.</p>
+
+<p>That&rsquo;s enough rant for today.</p>
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/mouse-control-with-pupil-without-surfaces/">Continue →</a>
+              <a class="continue_link" href="/blog/yet-another-octopress-blog/">Continue →</a>
            </p>
         </div>
      </article>
@@ -122,60 +117,6 @@ to the &lsquo;surface data&rsquo; and utilized the raw <code>norm_gaze</code> da
          <ul class="article_list">
 
           
-             
-          
-             
-
-                <li><a href="/blog/kholo-bc-all-the-rage-over-youtube/">
-                  #KholoBC - All the Rage Over Youtube
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/installing-tsocks-on-macosx/">
-                  Installing TSocks (TorSocks) on MacOSX
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/how-not-to-be-a-pakistani/">
-                  How Not to Be a Pakistani
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/libilmimf-so-6-missing-from-opencv-project/">
-                  LibIlmImf.so.6 Missing From OpenCV Project
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">
-                  Ubuntu 13.10 in Parallels - CRTC 80 Error
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/macosx-opening-files-from-finder-using-keyboard/">
-                  Opening Files From Finder Using Keyboard
-                   →
-                </a></li>
-
              
           
 

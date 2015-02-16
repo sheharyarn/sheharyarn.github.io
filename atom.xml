@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-02-15T07:45:37+05:00</updated>
+  <updated>2015-02-16T20:46:13+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,118 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MongoSync Ruby Gem]]></title>
+    <link href="https://sheharyar.me/blog/mongosync-ruby-gem/"/>
+    <updated>2015-02-16T20:13:35+05:00</updated>
+    <id>https://sheharyar.me/blog/mongosync-ruby-gem</id>
+    <content type="html"><![CDATA[<p><a href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/">In my previous post</a>, I had written about my
+<a href="https://github.com/sheharyarn/mongo-sync">mongo-sync</a> shell script that allows you to sync Local and Remote Mongo Databases.
+I spent the last day converting it into a <a href="https://github.com/sheharyarn/mongo-sync-ruby">Ruby Gem</a>
+so that you can perform actions using nice Rake Tasks and invoke the commands from Rails Console or <code>irb</code>.</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/sheharyarn/mongo-sync-ruby"><img src="https://i.imgur.com/jvIUfJf.gif" alt="MongoSync Ruby Gem Demo GIF" /></a></p>
+
+<p>If the gif above wasn&rsquo;t explanatory enough, start by adding it to your <code>Gemfile</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;mongo_sync&#39;</span><span class="p">,</span>   <span class="ss">group</span><span class="p">:</span> <span class="ss">:development</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bundle and run the generator to create configuration template:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle
+</span><span class='line'><span class="nv">$ </span>rails g mongo_sync:config
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edit the newly created <code>config/mongo_sync.yml</code>, putting in details of your remote and local DBs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
+</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># All fields are required</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To Sync, use these rake tasks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake mongo_sync:push       <span class="c"># Push DB to Remote</span>
+</span><span class='line'>rake mongo_sync:pull       <span class="c"># Pull DB to Local</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>You can use it in <code>rails console</code> as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;mongo_sync&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">pull</span>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># You can also pass path to a custom config file</span>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span> <span class="s2">&quot;path/to/custom/mongo_sync.yml&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A few important things to note are:</p>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/tutorial/#getting-started"><code>mongodb</code></a> needs to be installed on your system (obviously)</li>
+<li>Pushing/Pulling <strong><em>overwrites</em></strong> the Target DB</li>
+<li>It&rsquo;s a good idea to keep your <code>mongo_sync.yml</code> in <code>.gitignore</code> or load the values from the <code>ENV</code></li>
+</ul>
+
+
+<p>There&rsquo;s still <a href="https://github.com/sheharyarn/mongo-sync-ruby#todo">much to do</a> but for now it should work perfectly with your Rails Projects.
+<a href="http://twitter.com/sheharyarn">Find me on twitter</a> if you have something to add.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>
@@ -1198,19 +1310,6 @@ execute any other command that connects to the internet. One thing that pisses m
 <p>If everything went fine, you would at least be able to see your desktop. In my case, there was no Unity Sidebar or the top Menu Bar; But it&rsquo;s still something. Maybe installing Gnome would help.</p>
 
 <p><strong>Lesson:</strong> Make regular <em>Snapshots</em> of your OSes in Parallels</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Opening Files From Finder Using Keyboard]]></title>
-    <link href="https://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard/"/>
-    <updated>2014-02-02T10:05:00+05:00</updated>
-    <id>https://sheharyar.me/blog/macosx-opening-files-from-finder-using-keyboard</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m a recent Mac convert so it was really weird for me when I realized that hitting the Return key in Finder renames the file instead of opening it. I&rsquo;ve spent the better part of my life using Windows and Linux and as you can imagine this was really frustrating for me (and still is).</p>
-
-<p>After a bit of Googling, I found out that you can open selected files in Finder using the <code>⌘ + O</code> combination on your keyboard. I&rsquo;m still trying to find a way to modify this to the &lsquo;Return&rsquo; key to have a consistent <em>Keyboard experience</em> on all my PCs.</p>
-
-<p>Anyways, digging my new Macbook Air. :D</p>
 ]]></content>
   </entry>
   

@@ -10,11 +10,12 @@
     if ((host == window.location.host) && (window.location.protocol != "https:"))
         window.location.protocol = "https";
   </script> 
-  <title>Sync MongoDB Data Between Development and Production Databases - Sheharyar Naseer</title>
+  <title>MongoSync Ruby Gem - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Feb 15th, 2015 Sync MongoDB Data Between Development and Production Databases For a recent project of mine, I had to constantly copy my local &hellip;">
+  <meta name="description" content="Feb 16th, 2015 MongoSync Ruby Gem In my previous post, I had written about my
+mongo-sync shell script that allows you to sync Local and Remote Mongo &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,12 +25,13 @@
 
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
-  <meta property="og:title" content="Sync MongoDB Data Between Development and Production Databases - Sheharyar Naseer" />
-  <meta property="og:description" content="Feb 15th, 2015 Sync MongoDB Data Between Development and Production Databases For a recent project of mine, I had to constantly copy my local &hellip;" />
+  <meta property="og:title" content="MongoSync Ruby Gem - Sheharyar Naseer" />
+  <meta property="og:description" content="Feb 16th, 2015 MongoSync Ruby Gem In my previous post, I had written about my
+mongo-sync shell script that allows you to sync Local and Remote Mongo &hellip;" />
 
   
-  <link rel="canonical" href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku">
-  <!-- <link rel="canonical" href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/"> -->
+  <link rel="canonical" href="https://sheharyar.me/blog/mongosync-ruby-gem">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/mongosync-ruby-gem/"> -->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
   <link href="/favicon.ico" rel="icon">
   <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
@@ -89,41 +91,45 @@
   
 
 
-<time datetime="2015-02-15T06:50:44+05:00" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
+<time datetime="2015-02-16T20:13:35+05:00" pubdate data-updated="true">Feb 16<span>th</span>, 2015</time>
     </div>
 
     
       <h2 class="post_title">
         <a href="">
-          Sync MongoDB Data Between Development and Production Databases
+          MongoSync Ruby Gem
         </a>
       </h2>
     
 
     <div class="post_content">
-      <p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
-Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
-I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">heroku-mongo-sync</a>, but it is now deprecated in favor of
-<a href="https://github.com/marcofognog/heroku-mongo-sync">marcofognog&rsquo;s fork</a>. Sadly, neither of them worked for me.</p>
-
-<p>So I decided to write my own. Meet <a href="https://github.com/sheharyarn/mongo-sync"><strong>mongo-sync</strong></a>.</p>
+      <p><a href="/blog/sync-mongodb-local-and-production-heroku/">In my previous post</a>, I had written about my
+<a href="https://github.com/sheharyarn/mongo-sync">mongo-sync</a> shell script that allows you to sync Local and Remote Mongo Databases.
+I spent the last day converting it into a <a href="https://github.com/sheharyarn/mongo-sync-ruby">Ruby Gem</a>
+so that you can perform actions using nice Rake Tasks and invoke the commands from Rails Console or <code>irb</code>.</p>
 
 <!-- more -->
 
 
-<p><a href="https://github.com/sheharyarn/mongo-sync"><img src="https://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></a></p>
+<p><a href="https://github.com/sheharyarn/mongo-sync-ruby"><img src="https://i.imgur.com/jvIUfJf.gif" alt="MongoSync Ruby Gem Demo GIF" /></a></p>
 
-<p>It&rsquo;s a simple shell script that allows you to sync your local and remote MongoDB databases, using two commands; <code>push</code> and <code>pull</code>.
-Start by cloning the script on your machine:</p>
+<p>If the gif above wasn&rsquo;t explanatory enough, start by adding it to your <code>Gemfile</code>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://github.com/sheharyarn/mongo-sync.git
-</span><span class='line'><span class="nb">cd </span>mongo-sync
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;mongo_sync&#39;</span><span class="p">,</span>   <span class="ss">group</span><span class="p">:</span> <span class="ss">:development</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Edit the provided <code>config.yml</code> with your db details:</p>
+<p>Bundle and run the generator to create configuration template:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle
+</span><span class='line'><span class="nv">$ </span>rails g mongo_sync:config
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edit the newly created <code>config/mongo_sync.yml</code>, putting in details of your remote and local DBs:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -139,6 +145,8 @@ Start by cloning the script on your machine:</p>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
 </pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
 </span><span class='line'>
@@ -153,47 +161,52 @@ Start by cloning the script on your machine:</p>
 </span><span class='line'>
 </span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
 </span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># All fields are required</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now, you can start syncing your databases:</p>
+<p>To Sync, use these rake tasks:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>./mongo-sync push       <span class="c"># Push DB to Remote</span>
-</span><span class='line'>./mongo-sync pull       <span class="c"># Pull DB to Local</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake mongo_sync:push       <span class="c"># Push DB to Remote</span>
+</span><span class='line'>rake mongo_sync:pull       <span class="c"># Pull DB to Local</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>I&rsquo;m planning to convert it into a Ruby Gem and a Heroku Plugin as well.</p>
+<p></p>
 
-<h1>Github: <a href="https://github.com/sheharyarn/mongo-sync">sheharyarn / mongo-sync</a></h1>
+<p>You can use it in <code>rails console</code> as well:</p>
 
-<br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;mongo_sync&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">pull</span>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># You can also pass path to a custom config file</span>
+</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span> <span class="s2">&quot;path/to/custom/mongo_sync.yml&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<br/>
-
-
-<h3>Notes</h3>
+<p>A few important things to note are:</p>
 
 <ul>
-<li>The <code>push</code> and <code>pull</code> commands overwrite the target DB</li>
-<li>If you include this script into your project, it&rsquo;s a good idea to add <code>config.yml</code> to your <code>.gitignore</code></li>
+<li><a href="http://docs.mongodb.org/manual/tutorial/#getting-started"><code>mongodb</code></a> needs to be installed on your system (obviously)</li>
+<li>Pushing/Pulling <strong><em>overwrites</em></strong> the Target DB</li>
+<li>It&rsquo;s a good idea to keep your <code>mongo_sync.yml</code> in <code>.gitignore</code> or load the values from the <code>ENV</code></li>
 </ul>
 
 
-<br/>
-
-
-<h3>Further Reading</h3>
-
-<ul>
-<li><a href="http://docs.mongodb.org/manual/reference/program/mongodump/#bin.mongodump">mongodump</a></li>
-<li><a href="http://docs.mongodb.org/manual/reference/program/mongorestore/#bin.mongorestore">mongorestore</a></li>
-<li><a href="http://www.theirishpenguin.com/2011/01/20/push-and-pull-data-between-your-local-mongodb-and-heroku-or-mongohq.html">Push and pull data between your local MongoDB and Heroku or MongoHQ</a></li>
-</ul>
-
+<p>There&rsquo;s still <a href="https://github.com/sheharyarn/mongo-sync-ruby#todo">much to do</a> but for now it should work perfectly with your Rails Projects.
+<a href="http://twitter.com/sheharyarn">Find me on twitter</a> if you have something to add.</p>
 
     </div>
   </article>
@@ -202,12 +215,6 @@ Start by cloning the script on your machine:</p>
 <!--   <p class="meta">
     
 
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/deployment/'>deployment,</a>, <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/mongodb/'>mongodb,</a>, <a class='category' href='/blog/categories/shell/'>shell,</a>, <a class='category' href='/blog/categories/unix/'>unix,</a>
-  
-</span>
-
 
   </p> -->
   
@@ -215,15 +222,11 @@ Start by cloning the script on your machine:</p>
     <div class="separator"></div>
     
     
-      <a id="previous_post" title="Previous Post: Quickly search for files in Unix Terminal" href="/blog/quickly-search-for-files-in-unix-terminal/">
-        ← Quickly search for files in Unix Terminal
+      <a id="previous_post" title="Previous Post: Sync MongoDB data between Development and Production databases" href="/blog/sync-mongodb-local-and-production-heroku/">
+        ← Sync MongoDB data between Development and Production databases
       </a>
     
 
-    
-      <a id="next_post" title="Next Post: MongoSync Ruby Gem" href="/blog/mongosync-ruby-gem/">
-        MongoSync Ruby Gem →
-      </a>
     
 
   </div>
