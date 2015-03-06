@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-02-16T20:46:13+05:00</updated>
+  <updated>2015-03-06T05:03:22+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[What I Learned From the GNU Grep]]></title>
+    <link href="https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep/"/>
+    <updated>2015-03-06T04:27:12+05:00</updated>
+    <id>https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep</id>
+    <content type="html"><![CDATA[<p>While going through my <a href="https://news.ycombinator.com/news">HackerNews</a> feed today, I came across this:
+<a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">Why GNU Grep is Fast</a>. It&rsquo;s an archived
+email from Mike Haertel, the original author of the GNU Grep, to Gabor Kovesdan discussing the reasons behind the speed
+of the GNU Grep.</p>
+
+<p>The email is filled with great knowledge in easy-to-understand &ldquo;tricks&rdquo;.</p>
+
+<!--more-->
+
+
+<p>Two of these tricks that speed up Grep, Mike explains, are:</p>
+
+<blockquote><ul>
+<li>Grep avoids looking at every Input Byte</li>
+<li>Grep executes very few instuctions for each byte it <em>does</em> look at</li>
+</ul>
+</blockquote>
+
+<p>Other great lessons, I took away, are:</p>
+
+<blockquote><ul>
+<li>Use of Boyer-Moore Algorithm</li>
+<li>Use of Unbuffered Input using Raw System Call and avoid copying the input before searching it</li>
+<li>Don&rsquo;t look for newlines until after a match has been found</li>
+<li>You need to get down to the Kernel&rsquo;s level to make it really fast</li>
+</ul>
+</blockquote>
+
+<p> And the greatest lesson:</p>
+
+<blockquote><p>The key to making programs fast is to make them do practically nothing</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MongoSync Ruby Gem]]></title>
@@ -1258,58 +1297,6 @@ execute any other command that connects to the internet. One thing that pisses m
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install openexr</span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ubuntu 13.10 in Parallels - CRTC 80 Error]]></title>
-    <link href="https://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/"/>
-    <updated>2014-02-02T16:01:16+05:00</updated>
-    <id>https://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80</id>
-    <content type="html"><![CDATA[<p>Last night I spent hours configuring Ubuntu and Installing Dependencies, programs and God-knows-what for a new Hobby Project of mine, <a href="http://pupil-labs.com/pupil/">Pupil</a>.</p>
-
-<p>It was a clean installation of Ubuntu 13.10 in Parallels 9 on my new Macbook. I had invested too much time installing pupil, only to find that the display drivers or GTK or something had been corrupted. This was the second time I was booting ubuntu and had been slapped in the face by this:</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Could not switch the Monitor Configuration
-</span><span class='line'>could not set the configuration for CRTC 80</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I restarted it, but received the same error. The login screen was perfect, mind you; The error presented it self only after logging in. There was nothing else; No Icons, no Menu bar, no Unity. I googled for hours and tried everything I could; <a href="http://ubuntuforums.org/showthread.php?t=1835391">Using xrandr</a>, <a href="http://kb.parallels.com/en/114097">Editing xorg.conf</a>, <a href="http://www.parallels.com/support/desktop/troubleshooter-en_US">Running Parallels Troubleshooter</a> and so much more. In the end, I was somewhat able to restore my installation by reinstalling my Parallels Desktop Tools.</p>
-
-<p>These are the exact steps I followed after logging in:</p>
-
-<ol>
-<li>Press <code>Control + Alt + F1</code></li>
-<li>In the full-screen terminal, login with your credentials</li>
-<li>In the Parallels Desktop Menu, select <em>Devices > CD/DVD 1 > Connect Image</em></li>
-<li>In the new Finder dialog, browse to <em>Applications > Parallels Desktop > Contents > Resources > Tools > pri-tools-lin.iso</em></li>
-<li>Now back in your terminal screen, type the following commands:</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkdir /media/cdrom
-</span><span class='line'>sudo mount /dev/sr0 /media/cdrom
-</span><span class='line'><span class="nb">cd</span> /media/cdrom
-</span><span class='line'>sudo ./install
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Parallels Tools&#8217; installation will begin. Go through the steps and complete the installation. After that, reboot using: <code>$ sudo reboot</code></p>
-
-<p>If everything went fine, you would at least be able to see your desktop. In my case, there was no Unity Sidebar or the top Menu Bar; But it&rsquo;s still something. Maybe installing Gnome would help.</p>
-
-<p><strong>Lesson:</strong> Make regular <em>Snapshots</em> of your OSes in Parallels</p>
 ]]></content>
   </entry>
   

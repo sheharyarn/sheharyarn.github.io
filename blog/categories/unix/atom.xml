@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Unix, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/unix/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-02-16T20:46:13+05:00</updated>
+  <updated>2015-03-06T05:03:22+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[What I Learned From the GNU Grep]]></title>
+    <link href="https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep/"/>
+    <updated>2015-03-06T04:27:12+05:00</updated>
+    <id>https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep</id>
+    <content type="html"><![CDATA[<p>While going through my <a href="https://news.ycombinator.com/news">HackerNews</a> feed today, I came across this:
+<a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">Why GNU Grep is Fast</a>. It&rsquo;s an archived
+email from Mike Haertel, the original author of the GNU Grep, to Gabor Kovesdan discussing the reasons behind the speed
+of the GNU Grep.</p>
+
+<p>The email is filled with great knowledge in easy-to-understand &ldquo;tricks&rdquo;.</p>
+
+<!--more-->
+
+
+<p>Two of these tricks that speed up Grep, Mike explains, are:</p>
+
+<blockquote><ul>
+<li>Grep avoids looking at every Input Byte</li>
+<li>Grep executes very few instuctions for each byte it <em>does</em> look at</li>
+</ul>
+</blockquote>
+
+<p>Other great lessons, I took away, are:</p>
+
+<blockquote><ul>
+<li>Use of Boyer-Moore Algorithm</li>
+<li>Use of Unbuffered Input using Raw System Call and avoid copying the input before searching it</li>
+<li>Don&rsquo;t look for newlines until after a match has been found</li>
+<li>You need to get down to the Kernel&rsquo;s level to make it really fast</li>
+</ul>
+</blockquote>
+
+<p> And the greatest lesson:</p>
+
+<blockquote><p>The key to making programs fast is to make them do practically nothing</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>

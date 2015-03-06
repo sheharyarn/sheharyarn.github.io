@@ -14,8 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Feb 16th, 2015 In my previous post, I had written about my
-mongo-sync shell script that allows you to sync Local and Remote &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 6th, 2015 While going through my HackerNews feed today, I came across this:
+Why GNU Grep is Fast. It&rsquo;s an archived &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,8 +26,8 @@ mongo-sync shell script that allows you to sync Local and Remote &hellip;">
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Feb 16th, 2015 In my previous post, I had written about my
-mongo-sync shell script that allows you to sync Local and Remote &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Mar 6th, 2015 While going through my HackerNews feed today, I came across this:
+Why GNU Grep is Fast. It&rsquo;s an archived &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -79,6 +79,66 @@ mongo-sync shell script that allows you to sync Local and Remote &hellip;" />
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-06T04:27:12+05:00" pubdate data-updated="true">Mar 6<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>While going through my <a href="https://news.ycombinator.com/news">HackerNews</a> feed today, I came across this:
+<a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">Why GNU Grep is Fast</a>. It&rsquo;s an archived
+email from Mike Haertel, the original author of the GNU Grep, to Gabor Kovesdan discussing the reasons behind the speed
+of the GNU Grep.</p>
+
+<p>The email is filled with great knowledge in easy-to-understand &ldquo;tricks&rdquo;.</p>
+
+<!--more-->
+
+
+<p>Two of these tricks that speed up Grep, Mike explains, are:</p>
+
+<blockquote><ul>
+<li>Grep avoids looking at every Input Byte</li>
+<li>Grep executes very few instuctions for each byte it <em>does</em> look at</li>
+</ul>
+</blockquote>
+
+<p>Other great lessons, I took away, are:</p>
+
+<blockquote><ul>
+<li>Use of Boyer-Moore Algorithm</li>
+<li>Use of Unbuffered Input using Raw System Call and avoid copying the input before searching it</li>
+<li>Don&rsquo;t look for newlines until after a match has been found</li>
+<li>You need to get down to the Kernel&rsquo;s level to make it really fast</li>
+</ul>
+</blockquote>
+
+<p> And the greatest lesson:</p>
+
+<blockquote><p>The key to making programs fast is to make them do practically nothing</p></blockquote>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -800,115 +860,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-12T23:01:06+05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
-
-<!--more-->
-
-
-<p>So before finally giving up and writing my own scraper, I came across this awesome command-line utility <a href="https://github.com/rochefort/git-trend">git-trend</a> that lists top repos. I extracted most of the functionality and turned it into a gem. You can view it&rsquo;s <a href="https://github.com/sheharyarn/github-trending">Source on Github</a>. To use, add this to your <code>Gemfile</code> and <code>bundle</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;github-trending&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Or, you can install via:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install github-trending
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Some things that you can do with it are:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;github-trending&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:ruby</span>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:scala</span><span class="p">,</span> <span class="ss">:week</span>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:month</span>
-</span><span class='line'>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">all_languages</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Example Usage</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">js_repos</span> <span class="o">=</span> <span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:month</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># Get top Javascript repos this month</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">js_repos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">star_count</span><span class="si">}</span><span class="s2"> stargazers)&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;--- </span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># MrSwitch/hello.js (393 stargazers)</span>
-</span><span class='line'><span class="c1"># --- A Javascript RESTFUL API library for connecting with OAuth2 services</span>
-</span><span class='line'><span class="c1"># </span>
-</span><span class='line'><span class="c1"># mrflix/dimensions (151 stargazers)</span>
-</span><span class='line'><span class="c1"># --- A tool for designers to measure screen dimensions.</span>
-</span><span class='line'><span class="c1"># </span>
-</span><span class='line'><span class="c1"># jmdobry/angular-data (107 stargazers)</span>
-</span><span class='line'><span class="c1"># --- Data store for Angular.js.</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -924,6 +875,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/what-i-learned-from-the-gnu-grep/">What I Learned From the GNU Grep</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/mongosync-ruby-gem/">MongoSync Ruby Gem</a>
       </li>
     
@@ -937,10 +892,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
     
       <li class="post">
         <a href="/blog/free-ssl-for-github-pages-with-custom-domains/">Set Up SSL on Github Pages With Custom Domains for Free</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/calculate-word-frequency-of-files-in-bash/">Calculate Word Frequency of Files in Bash</a>
       </li>
     
   </ul>
