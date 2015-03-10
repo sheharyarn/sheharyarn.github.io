@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-03-06T05:03:22+05:00</updated>
+  <updated>2015-03-10T12:50:23+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,71 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SQL vs NoSQL: MongoDB Is Web Scale!]]></title>
+    <link href="https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale/"/>
+    <updated>2015-03-10T11:36:17+05:00</updated>
+    <id>https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale</id>
+    <content type="html"><![CDATA[<p>While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome Video. Although it starts
+out slow, I can promise you it will change your stance on the SQL vs NoSQL debate.</p>
+
+<div class='video-container'>
+<div class='video-embed'>
+    <script type="text/javascript" src="https://sheharyar.me//cdn.sublimevideo.net/js/xa2w0yft.js"></script> 
+    <video id="b2F-DItXtZs" class="sublime" width="640" height="360" title="Mongo DB is Web Scale" data-uid="b2F-DItXtZs" data-youtube-id="b2F-DItXtZs" preload="none">
+    </video>
+</div>
+</div>
+
+
+
+
+<!-- more -->
+
+
+
+
+<br/>
+
+
+<p>Summary of the important points of this video:</p>
+
+<blockquote><ul>
+<li><code>/dev/null</code> is the fastest Database out there</li>
+<li>Sadly, it doesn&rsquo;t support Sharding</li>
+<li>Sharding is the &lsquo;Secret Sauce&rsquo; that makes MongoDB so fast and awesome</li>
+<li>MongoDB is Web Scale and SQL is not</li>
+<li>MongoDB <em>just works</em></li>
+</ul>
+</blockquote>
+
+<p>But on a serious note, this video does raise some good points (this coming from a <em>MongoDB Fanboi</em>)</p>
+
+<ul>
+<li>SQL isn&rsquo;t what it used to be</li>
+<li>Today&rsquo;s relational systems are very mature and extremely powerful</li>
+<li>The <em>&ldquo;Doesn&rsquo;t Scale&rdquo;</em> argument doesn&rsquo;t hold anymore. Quoting <em>Jeff Cogswell</em>:</li>
+</ul>
+
+
+<blockquote><p>[Relational DBs are] extremely powerful and can optimize joins and cache them. Huge banks that serve thousands
+of branches and millions of customers, including hundreds of thousands of online members, survive just fine using SQL</p></blockquote>
+
+<p>I suggest reading these articles as well:</p>
+
+<ul>
+<li><a href="http://news.dice.com/2012/07/16/sql-vs-nosql-which-is-better/">SQL vs. NoSQL: Which Is Better?</a></li>
+<li><a href="http://www.mongodb.com/nosql-explained">NoSQL Explained (By MongoDB)</a></li>
+</ul>
+
+
+<br />
+
+
+<p>Disagree? Have something to add? <a href="http://twitter.com/sheharyarn">Rage on Twitter!</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[What I Learned From the GNU Grep]]></title>
@@ -1253,50 +1318,6 @@ execute any other command that connects to the internet. One thing that pisses m
 <p>A few posts that gave me a good laugh (and made me think) were <a href="http://ogchronic.wordpress.com/2014/01/28/how-to-be-a-social-cheetah/">How to be a Social Cheetah</a> and <a href="http://ogchronic.wordpress.com/2013/07/31/how-to-be-an-average-pakistani-chawal/">How to be an average Pakistani &lsquo;Chawal&rsquo;</a>, especially the second one. It made me doubt myself a little. This is <strong>exactly</strong> how things are here and I don&rsquo;t want to be a part of it.</p>
 
 <p>I won&rsquo;t go into any more details, but you should definitely check the blog out!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[LibIlmImf.so.6 Missing From OpenCV Project]]></title>
-    <link href="https://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project/"/>
-    <updated>2014-02-05T11:18:01+05:00</updated>
-    <id>https://sheharyar.me/blog/libilmimf-so-6-missing-from-opencv-project</id>
-    <content type="html"><![CDATA[<p>Last time <a href="http://sheharyar.me/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">I mentioned</a> that I was working on a new Hobby Project, <a href="http://pupil-labs.com/pupil/">Pupil</a>. This was my first time working with Python and OpenCV for that matter.</p>
-
-<p>This project was already getting on my nerves. So many errors, before I even had the chance to touch the code. One error that was driving me nuts was:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ python main.py
-</span><span class='line'>Traceback (most recent call last):
-</span><span class='line'>  File "main.py", line 79, in &lt;module&gt;
-</span><span class='line'>    from eye import eye
-</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/capture/eye.py", line 20, in &lt;module&gt;
-</span><span class='line'>    from methods import *
-</span><span class='line'>  File "/home/psycho/pupil-shit/pupil/pupil_src/shared_modules/methods.py", line 16, in &lt;module&gt;
-</span><span class='line'>    import cv2
-</span><span class='line'>ImportError: libIlmImf.so.6: cannot open shared object file: No such file or directory</span></code></pre></td></tr></table></div></figure>
-
-
-<!--more-->
-
-
-<p>I googled high and low, looked at the <a href="https://groups.google.com/forum/#!forum/pupil-discuss">Pupil Google Group</a>, opened up <a href="https://github.com/pupil-labs/pupil/issues/4">Github Issues</a>. I was the only one getting this error, but why? I had followed the <a href="https://github.com/pupil-labs/pupil/wiki/Dependencies-Installation-Linux">Installation Guide</a> closely, and on three different clean installations of Ubuntu. This was really frustrating.</p>
-
-<p>In the end, it was a friend on Facebook who told me to try working after installing <code>openexr</code>. I did, and problem solved. <code>libIlmImf.so.6</code> is a package bundled with it.</p>
-
-<p>Anyways, you can do this to make the error go away:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install openexr</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

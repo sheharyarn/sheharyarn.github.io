@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sql, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/sql/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2015-03-10T12:50:23+05:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SQL vs NoSQL: MongoDB Is Web Scale!]]></title>
+    <link href="https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale/"/>
+    <updated>2015-03-10T11:36:17+05:00</updated>
+    <id>https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale</id>
+    <content type="html"><![CDATA[<p>While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome Video. Although it starts
+out slow, I can promise you it will change your stance on the SQL vs NoSQL debate.</p>
+
+<div class='video-container'>
+<div class='video-embed'>
+    <script type="text/javascript" src="https://sheharyar.me//cdn.sublimevideo.net/js/xa2w0yft.js"></script> 
+    <video id="b2F-DItXtZs" class="sublime" width="640" height="360" title="Mongo DB is Web Scale" data-uid="b2F-DItXtZs" data-youtube-id="b2F-DItXtZs" preload="none">
+    </video>
+</div>
+</div>
+
+
+
+
+<!-- more -->
+
+
+
+
+<br/>
+
+
+<p>Summary of the important points of this video:</p>
+
+<blockquote><ul>
+<li><code>/dev/null</code> is the fastest Database out there</li>
+<li>Sadly, it doesn&rsquo;t support Sharding</li>
+<li>Sharding is the &lsquo;Secret Sauce&rsquo; that makes MongoDB so fast and awesome</li>
+<li>MongoDB is Web Scale and SQL is not</li>
+<li>MongoDB <em>just works</em></li>
+</ul>
+</blockquote>
+
+<p>But on a serious note, this video does raise some good points (this coming from a <em>MongoDB Fanboi</em>)</p>
+
+<ul>
+<li>SQL isn&rsquo;t what it used to be</li>
+<li>Today&rsquo;s relational systems are very mature and extremely powerful</li>
+<li>The <em>&ldquo;Doesn&rsquo;t Scale&rdquo;</em> argument doesn&rsquo;t hold anymore. Quoting <em>Jeff Cogswell</em>:</li>
+</ul>
+
+
+<blockquote><p>[Relational DBs are] extremely powerful and can optimize joins and cache them. Huge banks that serve thousands
+of branches and millions of customers, including hundreds of thousands of online members, survive just fine using SQL</p></blockquote>
+
+<p>I suggest reading these articles as well:</p>
+
+<ul>
+<li><a href="http://news.dice.com/2012/07/16/sql-vs-nosql-which-is-better/">SQL vs. NoSQL: Which Is Better?</a></li>
+<li><a href="http://www.mongodb.com/nosql-explained">NoSQL Explained (By MongoDB)</a></li>
+</ul>
+
+
+<br />
+
+
+<p>Disagree? Have something to add? <a href="http://twitter.com/sheharyarn">Rage on Twitter!</a></p>
+]]></content>
+  </entry>
+  
+</feed>
