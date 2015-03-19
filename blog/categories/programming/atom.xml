@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Programming, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2015-03-20T03:10:53+05:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Imperative vs. Declarative]]></title>
+    <link href="https://sheharyar.me/blog/imperative-vs-declarative/"/>
+    <updated>2015-03-20T02:27:44+05:00</updated>
+    <id>https://sheharyar.me/blog/imperative-vs-declarative</id>
+    <content type="html"><![CDATA[<p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
+by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
+
+<!-- more -->
+
+
+<p>So as Philip explains it:</p>
+
+<blockquote><ul>
+<li><strong>Imperative Programming:</strong> Telling the &ldquo;machine&rdquo; how to do something, and as a result what you want to happen will happen</li>
+<li><strong>Declarative Programming:</strong> Telling the &ldquo;machine&rdquo; what you would like to happen, and let the computer figure out how to do it</li>
+</ul>
+</blockquote>
+
+<p>(Where &lsquo;Machine&rsquo; is Computer/database/programming language/etc)</p>
+
+<br />
+
+
+<h1>Imperative</h1>
+
+<p>Suppose, you have an array of numbers and you want to double every value. If you have recently started Ruby,
+you&rsquo;ll probably try doing things the old way; i.e. Iterating over the array, and doubling each value:</p>
+
+<p>```ruby
+nums = [1,2,3,4,5]
+dubs = []</p>
+
+<p>for n in nums</p>
+
+<pre><code>dubs &lt;&lt; n * 2
+</code></pre>
+
+<p>end
+```</p>
+
+<p>or maybe if you already know about <code>each</code>, you&rsquo;ll go about doing it this way:</p>
+
+<p>```ruby
+nums = [1,2,3,4,5]
+dubs = []</p>
+
+<p>nums.each do |n|</p>
+
+<pre><code>dubs &lt;&lt; n * 2
+</code></pre>
+
+<p>end
+```</p>
+
+<br />
+
+
+<h1>Declarative (The Ruby Way)</h1>
+
+<p>Now, the Ruby way of doing things is different (which also happens to be Declarative BTW):</p>
+
+<p><code>ruby
+nums = [1,2,3,4,5]
+dubs = nums.map { |n| n * 2  }
+</code></p>
+
+<p>I on the other hand would take this a level higher to show how cool I am:</p>
+
+<p>```ruby
+class Integer</p>
+
+<pre><code>def double
+    self * 2
+end
+</code></pre>
+
+<p>end</p>
+
+<p>nums = [1,2,3,4,5]
+dubs = nums.map(&amp;:double)
+```</p>
+
+<br />
+
+
+<h1>Conclusion</h1>
+
+<blockquote><ul>
+<li>Loops are Imperative</li>
+<li>Map is Declarative</li>
+</ul>
+</blockquote>
+
+<p><code>
+Ruby ROOLZ, Java DROOLZ
+</code></p>
+
+<p>Also this:</p>
+
+<p class='video-container'>
+<iframe style='width: 100%; height: auto; min-height: 360px;' src='http://yplay.sheharyar.me/embed/5GpOfwbFRcs' scrolling='NO' frameborder='0' style='overflow:hidden; border: 0px;'  webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe>
+</p>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Imperative vs. Declarative - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Mar 20th, 2015 Imperative vs. Declarative I came across this beautifully detailed post, Imperative vs. Declarative
+by Philip Roberts, and wanted to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Imperative vs. Declarative - Sheharyar Naseer" />
+  <meta property="og:description" content="Mar 20th, 2015 Imperative vs. Declarative I came across this beautifully detailed post, Imperative vs. Declarative
+by Philip Roberts, and wanted to &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/imperative-vs-declarative">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/imperative-vs-declarative/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-20T02:27:44+05:00" pubdate data-updated="true">Mar 20<span>th</span>, 2015</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Imperative vs. Declarative
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
+by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
+
+<!-- more -->
+
+
+<p>So as Philip explains it:</p>
+
+<blockquote><ul>
+<li><strong>Imperative Programming:</strong> Telling the &ldquo;machine&rdquo; how to do something, and as a result what you want to happen will happen</li>
+<li><strong>Declarative Programming:</strong> Telling the &ldquo;machine&rdquo; what you would like to happen, and let the computer figure out how to do it</li>
+</ul>
+</blockquote>
+
+<p>(Where &lsquo;Machine&rsquo; is Computer/database/programming language/etc)</p>
+
+<br />
+
+
+<h1>Imperative</h1>
+
+<p>Suppose, you have an array of numbers and you want to double every value. If you have recently started Ruby,
+you&rsquo;ll probably try doing things the old way; i.e. Iterating over the array, and doubling each value:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="n">nums</span>
+</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or maybe if you already know about <code>each</code>, you&rsquo;ll go about doing it this way:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">nums</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<br />
+
+
+<h1>Declarative (The Ruby Way)</h1>
+
+<p>Now, the Ruby way of doing things is different (which also happens to be Declarative BTW):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I on the other hand would take this a level higher to show how cool I am:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">double</span>
+</span><span class='line'>        <span class="nb">self</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:double</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<br />
+
+
+<h1>Conclusion</h1>
+
+<blockquote><ul>
+<li>Loops are Imperative</li>
+<li>Map is Declarative</li>
+</ul>
+</blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Ruby</span> <span class="no">ROOLZ</span><span class="p">,</span> <span class="no">Java</span> <span class="no">DROOLZ</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also this:</p>
+
+<p class='video-container'>
+<iframe style='width: 100%; height: auto; min-height: 360px;' src='http://yplay.sheharyar.me/embed/5GpOfwbFRcs' scrolling='NO' frameborder='0' style='overflow:hidden; border: 0px;'  webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe>
+</p>
+
+
+
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/programming/'>programming,</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: SQL vs NoSQL: MongoDB is Web Scale!" href="/blog/sql-vs-nosql-mongodb-is-web-scale/">
+        ← SQL vs NoSQL: MongoDB is Web Scale!
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

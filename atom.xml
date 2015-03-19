@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-03-10T12:50:23+05:00</updated>
+  <updated>2015-03-20T03:10:53+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Imperative vs. Declarative]]></title>
+    <link href="https://sheharyar.me/blog/imperative-vs-declarative/"/>
+    <updated>2015-03-20T02:27:44+05:00</updated>
+    <id>https://sheharyar.me/blog/imperative-vs-declarative</id>
+    <content type="html"><![CDATA[<p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
+by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
+
+<!-- more -->
+
+
+<p>So as Philip explains it:</p>
+
+<blockquote><ul>
+<li><strong>Imperative Programming:</strong> Telling the &ldquo;machine&rdquo; how to do something, and as a result what you want to happen will happen</li>
+<li><strong>Declarative Programming:</strong> Telling the &ldquo;machine&rdquo; what you would like to happen, and let the computer figure out how to do it</li>
+</ul>
+</blockquote>
+
+<p>(Where &lsquo;Machine&rsquo; is Computer/database/programming language/etc)</p>
+
+<br />
+
+
+<h1>Imperative</h1>
+
+<p>Suppose, you have an array of numbers and you want to double every value. If you have recently started Ruby,
+you&rsquo;ll probably try doing things the old way; i.e. Iterating over the array, and doubling each value:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="n">nums</span>
+</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or maybe if you already know about <code>each</code>, you&rsquo;ll go about doing it this way:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">nums</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<br />
+
+
+<h1>Declarative (The Ruby Way)</h1>
+
+<p>Now, the Ruby way of doing things is different (which also happens to be Declarative BTW):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I on the other hand would take this a level higher to show how cool I am:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">double</span>
+</span><span class='line'>        <span class="nb">self</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:double</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<br />
+
+
+<h1>Conclusion</h1>
+
+<blockquote><ul>
+<li>Loops are Imperative</li>
+<li>Map is Declarative</li>
+</ul>
+</blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Ruby</span> <span class="no">ROOLZ</span><span class="p">,</span> <span class="no">Java</span> <span class="no">DROOLZ</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also this:</p>
+
+<p class='video-container'>
+<iframe style='width: 100%; height: auto; min-height: 360px;' src='http://yplay.sheharyar.me/embed/5GpOfwbFRcs' scrolling='NO' frameborder='0' style='overflow:hidden; border: 0px;'  webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe>
+</p>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SQL vs NoSQL: MongoDB Is Web Scale!]]></title>
@@ -1305,19 +1434,6 @@ execute any other command that connects to the internet. One thing that pisses m
 
 
 <p>Happy (Anonymous) Surfing!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How Not to Be a Pakistani]]></title>
-    <link href="https://sheharyar.me/blog/how-not-to-be-a-pakistani/"/>
-    <updated>2014-02-08T18:15:27+05:00</updated>
-    <id>https://sheharyar.me/blog/how-not-to-be-a-pakistani</id>
-    <content type="html"><![CDATA[<p>I came across this blog today, called <a href="http://ogchronic.wordpress.com/">How not to be a Pakistani</a>, and I can&rsquo;t believe how perfectly the author describes some of the things of our Pakistani Culture.</p>
-
-<p>A few posts that gave me a good laugh (and made me think) were <a href="http://ogchronic.wordpress.com/2014/01/28/how-to-be-a-social-cheetah/">How to be a Social Cheetah</a> and <a href="http://ogchronic.wordpress.com/2013/07/31/how-to-be-an-average-pakistani-chawal/">How to be an average Pakistani &lsquo;Chawal&rsquo;</a>, especially the second one. It made me doubt myself a little. This is <strong>exactly</strong> how things are here and I don&rsquo;t want to be a part of it.</p>
-
-<p>I won&rsquo;t go into any more details, but you should definitely check the blog out!</p>
 ]]></content>
   </entry>
   

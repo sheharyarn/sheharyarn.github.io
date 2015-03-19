@@ -14,7 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 10th, 2015 While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 20th, 2015 I came across this beautifully detailed post, Imperative vs. Declarative
+by Philip Roberts, and wanted to share &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +26,8 @@
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Mar 10th, 2015 While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Mar 20th, 2015 I came across this beautifully detailed post, Imperative vs. Declarative
+by Philip Roberts, and wanted to share &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -77,6 +79,156 @@
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-20T02:27:44+05:00" pubdate data-updated="true">Mar 20<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
+by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
+
+<!-- more -->
+
+
+<p>So as Philip explains it:</p>
+
+<blockquote><ul>
+<li><strong>Imperative Programming:</strong> Telling the &ldquo;machine&rdquo; how to do something, and as a result what you want to happen will happen</li>
+<li><strong>Declarative Programming:</strong> Telling the &ldquo;machine&rdquo; what you would like to happen, and let the computer figure out how to do it</li>
+</ul>
+</blockquote>
+
+<p>(Where &lsquo;Machine&rsquo; is Computer/database/programming language/etc)</p>
+
+<br />
+
+
+<h1>Imperative</h1>
+
+<p>Suppose, you have an array of numbers and you want to double every value. If you have recently started Ruby,
+you&rsquo;ll probably try doing things the old way; i.e. Iterating over the array, and doubling each value:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="n">nums</span>
+</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or maybe if you already know about <code>each</code>, you&rsquo;ll go about doing it this way:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">nums</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<br />
+
+
+<h1>Declarative (The Ruby Way)</h1>
+
+<p>Now, the Ruby way of doing things is different (which also happens to be Declarative BTW):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I on the other hand would take this a level higher to show how cool I am:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">double</span>
+</span><span class='line'>        <span class="nb">self</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
+</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:double</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<br />
+
+
+<h1>Conclusion</h1>
+
+<blockquote><ul>
+<li>Loops are Imperative</li>
+<li>Map is Declarative</li>
+</ul>
+</blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Ruby</span> <span class="no">ROOLZ</span><span class="p">,</span> <span class="no">Java</span> <span class="no">DROOLZ</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also this:</p>
+
+<p class='video-container'>
+<iframe style='width: 100%; height: auto; min-height: 360px;' src='http://yplay.sheharyar.me/embed/5GpOfwbFRcs' scrolling='NO' frameborder='0' style='overflow:hidden; border: 0px;'  webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe>
+</p>
+
+
+
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -711,105 +863,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-15T00:13:07+05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2014</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>I was reading <a href="http://tomayko.com/">Ryan Tomayko&rsquo;s</a> blog post <a href="http://tomayko.com/writings/awkward-ruby">AWK-ward Ruby</a> explaining how the Unix <a href="http://en.wikipedia.org/wiki/AWK">AWK Tool</a> is among the ancestors of Ruby and Perl. He wrote a few examples showing some of AWK&rsquo;s advanced features, one of them which listed the word frequencies of any file provided. I found this example quite useful and extracted it as a function in to my <a href="https://github.com/sheharyarn/dotfiles">Dotfiles</a>.</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function </span>word_frequency<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>  awk <span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">     BEGIN { FS=&quot;[^a-zA-Z]+&quot; }</span>
-</span><span class='line'>
-</span><span class='line'><span class="s1">     {</span>
-</span><span class='line'><span class="s1">         for (i=1; i&lt;=NF; i++) {</span>
-</span><span class='line'><span class="s1">             word = tolower($i)</span>
-</span><span class='line'><span class="s1">             words[word]++</span>
-</span><span class='line'><span class="s1">         }</span>
-</span><span class='line'><span class="s1">     }</span>
-</span><span class='line'>
-</span><span class='line'><span class="s1">     END {</span>
-</span><span class='line'><span class="s1">         for (w in words)</span>
-</span><span class='line'><span class="s1">              printf(&quot;%3d %s\n&quot;, words[w], w)</span>
-</span><span class='line'><span class="s1">     }</span>
-</span><span class='line'><span class="s1"> &#39;</span> |
-</span><span class='line'>  sort -rn
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can <code>pipe</code> the output of any file to this function and it will list all words and their frequencies in Descending order.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Examples:</span>
-</span><span class='line'>
-</span><span class='line'>cat my_text_file.txt | word_frequency
-</span><span class='line'><span class="c"># Pipe the contents of a text file to the function using `cat`</span>
-</span><span class='line'>
-</span><span class='line'>curl -s https://github.com/humans.txt | word_frequency
-</span><span class='line'><span class="c"># Get word frequency of a file on the internet</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Looking forward to using AWK more and more.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -825,6 +878,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/imperative-vs-declarative/">Imperative vs. Declarative</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/sql-vs-nosql-mongodb-is-web-scale/">SQL vs NoSQL: MongoDB Is Web Scale!</a>
       </li>
     
@@ -838,10 +895,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
     
       <li class="post">
         <a href="/blog/sync-mongodb-local-and-production-heroku/">Sync MongoDB Data Between Development and Production Databases</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/quickly-search-for-files-in-unix-terminal/">Quickly Search for Files in Unix Terminal</a>
       </li>
     
   </ul>
