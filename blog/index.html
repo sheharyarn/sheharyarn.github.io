@@ -14,8 +14,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 20th, 2015 I came across this beautifully detailed post, Imperative vs. Declarative
-by Philip Roberts, and wanted to share &hellip;">
+  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 29th, 2015 There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,8 +25,7 @@ by Philip Roberts, and wanted to share &hellip;">
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Mar 20th, 2015 I came across this beautifully detailed post, Imperative vs. Declarative
-by Philip Roberts, and wanted to share &hellip;" />
+  <meta property="og:description" content="BITCH WHAT YOU DOIN? Mar 29th, 2015 There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -79,6 +77,128 @@ by Philip Roberts, and wanted to share &hellip;" />
       <div class="blog-index">
   BITCH WHAT YOU DOIN?
   
+  
+  
+    <article>
+        <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-29T22:24:54+05:00" pubdate data-updated="true">Mar 29<span>th</span>, 2015</time>
+    </div>
+
+    
+    
+
+    <div class="post_content">
+      <p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
+So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the <a href="https://github.com/slim-template/slim/">Slim Templating Language</a>
+but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
+
+<!-- more -->
+
+
+<p>Create a <code>_google_analytics.html.slim</code> file in your <code>app/views/layouts</code> folder, and paste in the script you got from
+the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='slim'><span class='line'><span class="p">-</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">production?</span>
+</span><span class='line'>    javascript:
+</span><span class='line'>        (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
+</span><span class='line'>        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+</span><span class='line'>        <span class="nt">m</span><span class="p">=</span><span class="n">s</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span><span class="n">a</span><span class="o">.</span><span class="n">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">a</span><span class="o">.</span><span class="n">src</span><span class="o">=</span><span class="n">g</span><span class="p">;</span><span class="n">m</span><span class="o">.</span><span class="n">parentNode</span><span class="o">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+</span><span class='line'>        })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
+</span><span class='line'>
+</span><span class='line'>        <span class="nt">ga</span>(&#39;create&#39;, &#39;UA-XXXXXXXX-X&#39;, &#39;auto&#39;);
+</span><span class='line'>        <span class="nt">ga</span>(&#39;send&#39;, &#39;pageview&#39;);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, create a <code>google_analytics.coffee</code> file in your <code>app/assets/javascripts</code> directory, and paste in this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">jQuery</span> <span class="nf">-&gt;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span> <span class="s">&#39;page:change&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">_gaq</span><span class="o">?</span>
+</span><span class='line'>      <span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span><span class="s">&#39;_trackPageview&#39;</span><span class="p">]</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">pageTracker</span><span class="o">?</span>
+</span><span class='line'>      <span class="nx">pageTracker</span><span class="p">.</span><span class="nx">_trackPageview</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This file will track the page again, whenever turbolinks loads a new page. In your <code>application.html.slim</code>, render the layout right before closing the <code>head</code> tag:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='slim'><span class='line'><span class="nt">doctype</span> html
+</span><span class='line'><span class="nt">html</span>
+</span><span class='line'>  <span class="nt">head</span>
+</span><span class='line'>    <span class="nt">title</span> My Rails App
+</span><span class='line'>
+</span><span class='line'>    <span class="cp">/ Some code...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">==</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;application&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:controller</span><span class="o">]</span><span class="p">,</span> <span class="ss">media</span><span class="p">:</span> <span class="s1">&#39;all&#39;</span>
+</span><span class='line'>    <span class="p">==</span> <span class="n">render</span> <span class="s1">&#39;layouts/google_analytics&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">body</span>
+</span><span class='line'>    <span class="cp">/ Some more code...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, in your <code>application.js</code>, require the <code>coffee</code> file we previously created:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require jquery</span>
+</span><span class='line'><span class="c1">//= require jquery_ujs</span>
+</span><span class='line'><span class="c1">//= require google_analytics</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">someJavascriptStuff</span> <span class="o">=</span> <span class="p">{};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, you&rsquo;re good to go.</p>
+
+    </div>
+  </article>
+
+    </article>
   
   
     <article>
@@ -727,142 +847,6 @@ two characters of each line (they are <code>./</code>) to clean up the results. 
 
     </article>
   
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-28T05:44:53+05:00" pubdate data-updated="true">Jan 28<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>I came across this post <a href="https://blog.keanulee.com/2014/10/11/setting-up-ssl-on-github-pages.html">Setting up SSL on Github Pages</a> and wanted to try
-it out, but since my website set-up is a bit different than Keanu&rsquo;s I had to go through a slightly different route. One reason being that this website is
-hosted on the apex (root) domain i.e. without <code>www</code>. This guide is focused towards
-an Octopress blog with a Custom Domain hosted through Github Pages, but this should work for Jekyll Static Sites as well.</p>
-
-<!-- more -->
-
-
-<h1>Getting Started</h1>
-
-<p>(Almost the same as Keanu&rsquo;s points)</p>
-
-<ol>
-<li><a href="https://support.cloudflare.com/hc/en-us/articles/201720164-Sign-up-planning-guide">Sign up for Cloudflare</a> if you don&rsquo;t already have an account</li>
-<li>Add your website, and make sure all <em>automatically</em> generated records match those on your registrar&rsquo;s website
-
-<ul>
-<li>If you already have a gh-pages website and are simply moving to <code>https</code>, you don&rsquo;t need to do anything else</li>
-<li>If not, and are trying to set up your site at apex, create an <code>A</code> record pointing to Github&rsquo;s IP addresses, else a <code>CNAME</code> pointing to <code>your-username.github.io</code></li>
-<li>Make sure there&rsquo;s a <code>CNAME</code> file at the root of your gh-pages repo with your domain name</li>
-</ul>
-</li>
-<li>Go to your Domain Registrar&rsquo;s website and change the Domain Name Servers to those Cloudflare provides you with</li>
-<li>Finish Setting up your Domain on Cloudflare and go to the Domain Dashboard</li>
-<li>Open the &ldquo;Cloudflare Settings&rdquo; for your domain, and change the SSL Setting to &ldquo;Flexible SSL&rdquo;</li>
-</ol>
-
-
-<p>After a couple of hours, you&rsquo;ll be able to open <code>yoursite.com</code> with <code>https</code>. But now comes the important part, letting search engines know and making your users use the SSL version.</p>
-
-<h1>Letting Search Engines know</h1>
-
-<p>In your <code>_config.yml</code>, add these:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://www.yoursite.com</span>   <span class="c1"># with the https protocol</span>
-</span><span class='line'><span class="l-Scalar-Plain">enforce_ssl</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">www.yoursite.com</span>   <span class="c1"># without any protocol</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># For example, my configuration is this:</span>
-</span><span class='line'><span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https://sheharyar.me</span>
-</span><span class='line'><span class="l-Scalar-Plain">enforce_ssl</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sheharyar.me</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Make sure you have a <code>canonical</code> link in your <code>&lt;head&gt;</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;canonical&quot;</span> <span class="na">href=</span><span class="s">&quot; { { site.url } }{ { page.url } }&quot;</span> <span class="nt">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you&rsquo;re on Octopress, then you probably already have the <a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/code/.themes/sybtle/source/_includes/head.html#L28-L29">cooler version</a> that creates beautiful canonical links.</p>
-
-<h1>Redirect users to https</h1>
-
-<p>Add this script to the very top of your <code>&lt;head&gt;</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">host</span> <span class="o">=</span> <span class="s2">&quot;yoursite.com&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">((</span><span class="nx">host</span> <span class="o">==</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">!=</span> <span class="s2">&quot;https:&quot;</span><span class="p">))</span>
-</span><span class='line'>        <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">=</span> <span class="s2">&quot;https&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Issues?</h2>
-
-<p>If you find some stylesheets/scripts missing, make sure that you&rsquo;re using the new <code>https</code> paths for your resources. A better option would be to not use the protocol at all:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- Change this --&gt;</span>
-</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://www.somesite.com/path/to/styles.css&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c">&lt;!-- to this: --&gt;</span>
-</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//www.somesite.com/path/to/styles.css&quot;</span><span class="nt">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>More Resources &amp; Examples:</h2>
-
-<ul>
-<li><a href="https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages/">Setting up a Custom Domain with Github Pages</a></li>
-<li><a href="https://konklone.com/post/github-pages-now-sorta-supports-https-so-use-it">GitHub Pages Now Supports HTTPS</a></li>
-<li><a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/code/_config.yml#L5-L6">Example _config.yml</a></li>
-<li><a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/master/CNAME">Example CNAME</a></li>
-<li><a href="https://github.com/sheharyarn/sheharyarn.github.io/blob/code/.themes/sybtle/source/_includes/head.html#L7-L11">Example head.html</a></li>
-</ul>
-
-
-<br />
-
-
-<p>Have something to add? Tweet to me <a href="https://twitter.com/sheharyarn">@sheharyarn</a></p>
-
-    </div>
-  </article>
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -878,6 +862,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/using-google-analytics-in-rails-4-with-turbolinks/">Using Google Analytics in Rails 4 With Turbolinks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/imperative-vs-declarative/">Imperative vs. Declarative</a>
       </li>
     
@@ -891,10 +879,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
     
       <li class="post">
         <a href="/blog/mongosync-ruby-gem/">MongoSync Ruby Gem</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/sync-mongodb-local-and-production-heroku/">Sync MongoDB Data Between Development and Production Databases</a>
       </li>
     
   </ul>

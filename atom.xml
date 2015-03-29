@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-03-20T03:10:53+05:00</updated>
+  <updated>2015-03-29T22:58:43+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Google Analytics in Rails 4 With Turbolinks]]></title>
+    <link href="https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks/"/>
+    <updated>2015-03-29T22:24:54+05:00</updated>
+    <id>https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks</id>
+    <content type="html"><![CDATA[<p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
+So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the <a href="https://github.com/slim-template/slim/">Slim Templating Language</a>
+but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
+
+<!-- more -->
+
+
+<p>Create a <code>_google_analytics.html.slim</code> file in your <code>app/views/layouts</code> folder, and paste in the script you got from
+the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='slim'><span class='line'><span class="p">-</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">production?</span>
+</span><span class='line'>    javascript:
+</span><span class='line'>        (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
+</span><span class='line'>        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+</span><span class='line'>        <span class="nt">m</span><span class="p">=</span><span class="n">s</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span><span class="n">a</span><span class="o">.</span><span class="n">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">a</span><span class="o">.</span><span class="n">src</span><span class="o">=</span><span class="n">g</span><span class="p">;</span><span class="n">m</span><span class="o">.</span><span class="n">parentNode</span><span class="o">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+</span><span class='line'>        })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
+</span><span class='line'>
+</span><span class='line'>        <span class="nt">ga</span>(&#39;create&#39;, &#39;UA-XXXXXXXX-X&#39;, &#39;auto&#39;);
+</span><span class='line'>        <span class="nt">ga</span>(&#39;send&#39;, &#39;pageview&#39;);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, create a <code>google_analytics.coffee</code> file in your <code>app/assets/javascripts</code> directory, and paste in this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">jQuery</span> <span class="nf">-&gt;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span> <span class="s">&#39;page:change&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">_gaq</span><span class="o">?</span>
+</span><span class='line'>      <span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span><span class="s">&#39;_trackPageview&#39;</span><span class="p">]</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">pageTracker</span><span class="o">?</span>
+</span><span class='line'>      <span class="nx">pageTracker</span><span class="p">.</span><span class="nx">_trackPageview</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This file will track the page again, whenever turbolinks loads a new page. In your <code>application.html.slim</code>, render the layout right before closing the <code>head</code> tag:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='slim'><span class='line'><span class="nt">doctype</span> html
+</span><span class='line'><span class="nt">html</span>
+</span><span class='line'>  <span class="nt">head</span>
+</span><span class='line'>    <span class="nt">title</span> My Rails App
+</span><span class='line'>
+</span><span class='line'>    <span class="cp">/ Some code...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">==</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;application&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:controller</span><span class="o">]</span><span class="p">,</span> <span class="ss">media</span><span class="p">:</span> <span class="s1">&#39;all&#39;</span>
+</span><span class='line'>    <span class="p">==</span> <span class="n">render</span> <span class="s1">&#39;layouts/google_analytics&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">body</span>
+</span><span class='line'>    <span class="cp">/ Some more code...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, in your <code>application.js</code>, require the <code>coffee</code> file we previously created:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require jquery</span>
+</span><span class='line'><span class="c1">//= require jquery_ujs</span>
+</span><span class='line'><span class="c1">//= require google_analytics</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">someJavascriptStuff</span> <span class="o">=</span> <span class="p">{};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, you&rsquo;re good to go.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Imperative vs. Declarative]]></title>
@@ -1380,60 +1481,6 @@ so that the activities of our unscrupulous leaders are not exposed.</p></blockqu
 <p>I want to clarify that I have high regards for the Holy Prophet Muhammad (pbuh) and I, like millions of other Muslims, cannot bear any
 blasphemous act in his honour. But shutting down the entire website seems inappropriate since it&rsquo;s a source of education as well and
 has helped so many people learn something new. The right way is simply to block the specific pages, like the rest of the world is doing.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Installing TSocks (TorSocks) on MacOSX]]></title>
-    <link href="https://sheharyar.me/blog/installing-tsocks-on-macosx/"/>
-    <updated>2014-03-03T20:28:26+05:00</updated>
-    <id>https://sheharyar.me/blog/installing-tsocks-on-macosx</id>
-    <content type="html"><![CDATA[<p>I recently came across this nifty little terminal app called <a href="https://whatbox.ca/wiki/tsocks">TSocks</a> that allows you to use a Socks Proxy
-for your terminal commands. I already use <a href="http://torproject.org/">Tor</a> for all other web communications on my Macbook Air, so I wanted to
-be able to use Tor for my terminal commands as well. You can download and install it via <a href="http://sonnykt.tumblr.com/post/1256048245/using-terminal-commands-with-socks-proxy">MacPorts</a> or
-<a href="https://github.com/Homebrew/homebrew/issues/11870#issuecomment-12080107">Homebrew</a> or you can build it manually. Sadly, the TSocks Project
-is no longer maintained. So I set out to find a recent fork or a modified version that would work, and after 10 minutes into my quest I found
-<a href="http://code.google.com/p/torsocks/">TorSocks</a>. It was a customized version of TSocks, specfically built to work with Tor out of the box and since
-Tor was the real reason I wanted to use TSocks in the first place, this was perfect for me. I didn&rsquo;t need to customize anything, I just
-installed it and started using it.</p>
-
-<!--more-->
-
-
-<h2>Installation</h2>
-
-<p>You can install TorSocks via <a href="http://superuser.com/a/641732/214953">MacPorts</a> but I personally like to use <a href="http://brew.sh">Homebrew</a>:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install tor            # required depencency
-</span><span class='line'>$ brew install torsocks
-</span><span class='line'>$ brew install wget</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Usage</h2>
-
-<p>Usage is fairly simple. First start Tor using the commandline or the Vidalia GUI, then use <code>torsocks</code>, <code>usewithtor</code> or <code>torify</code> commands to
-execute any other command that connects to the internet. One thing that pisses me off is that the <code>ping</code> command doesn&rsquo;t work with it.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ torify wget google.com
-</span><span class='line'>$ torsocks wget google.com
-</span><span class='line'>$ usewithtor wget google.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You&rsquo;ll see that the file will be downloaded. Not Satisfied? You can check your IP using the following commands:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl icanhazip.com               # Your Original IP
-</span><span class='line'>$ torsocks curl icanhazip.com      # Your IP over Tor</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Happy (Anonymous) Surfing!</p>
 ]]></content>
   </entry>
   
