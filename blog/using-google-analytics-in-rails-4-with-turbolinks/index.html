@@ -102,8 +102,9 @@
 
     <div class="post_content">
       <p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
-So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the <a href="https://github.com/slim-template/slim/">Slim Templating Language</a>
-but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
+So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new
+<a href="https://support.google.com/analytics/answer/2817075">Google Universal Analytics</a>, and this guide uses the
+<a href="https://github.com/slim-template/slim/">Slim Templating Language</a> but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
 
 <!-- more -->
 
@@ -139,13 +140,11 @@ the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">jQuery</span> <span class="nf">-&gt;</span>
 </span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span> <span class="s">&#39;page:change&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">_gaq</span><span class="o">?</span>
-</span><span class='line'>      <span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span> <span class="p">[</span><span class="s">&#39;_trackPageview&#39;</span><span class="p">]</span>
-</span><span class='line'>    <span class="k">else</span> <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">pageTracker</span><span class="o">?</span>
-</span><span class='line'>      <span class="nx">pageTracker</span><span class="p">.</span><span class="nx">_trackPageview</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ga</span><span class="o">?</span>
+</span><span class='line'>      <span class="nx">ga</span><span class="p">(</span><span class="s">&#39;set&#39;</span><span class="p">,</span>  <span class="s">&#39;location&#39;</span><span class="p">,</span> <span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</span><span class='line'>      <span class="nx">ga</span><span class="p">(</span><span class="s">&#39;send&#39;</span><span class="p">,</span> <span class="s">&#39;pageview&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="s">&quot;title&quot;</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">title</span> <span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

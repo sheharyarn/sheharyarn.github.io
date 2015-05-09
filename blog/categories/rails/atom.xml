@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/rails/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-03-29T22:58:43+05:00</updated>
+  <updated>2015-05-10T03:57:08+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -19,8 +19,9 @@
     <updated>2015-03-29T22:24:54+05:00</updated>
     <id>https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks</id>
     <content type="html"><![CDATA[<p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
-So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the <a href="https://github.com/slim-template/slim/">Slim Templating Language</a>
-but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
+So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new
+<a href="https://support.google.com/analytics/answer/2817075">Google Universal Analytics</a>, and this guide uses the
+<a href="https://github.com/slim-template/slim/">Slim Templating Language</a> but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
 
 <!-- more -->
 
@@ -49,10 +50,9 @@ the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p
 jQuery &ndash;>
   $(document).on &lsquo;page:change&rsquo;, &ndash;></p>
 
-<pre><code>if window._gaq?
-  _gaq.push ['_trackPageview']
-else if window.pageTracker?
-  pageTracker._trackPageview()
+<pre><code>if window.ga?
+  ga('set',  'location', location.href.split('#')[0])
+  ga('send', 'pageview', { "title": document.title })
 </code></pre>
 
 <p>```</p>
