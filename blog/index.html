@@ -10,11 +10,11 @@
     if ((host == window.location.host) && (window.location.protocol != "https:"))
         window.location.protocol = "https";
   </script> 
-  <title>Sheharyar Naseer</title>
+  <title>Blog - Sheharyar Naseer</title>
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="BITCH WHAT YOU DOIN? Mar 29th, 2015 There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are &hellip;">
+  <meta name="description" content="Blog Mar 29 2015 Using Google Analytics in Rails 4 With Turbolinks Mar 20 2015 Imperative vs. Declarative Mar 10 2015 SQL vs NoSQL: MongoDB Is Web &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,8 +24,8 @@
 
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
-  <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="BITCH WHAT YOU DOIN? Mar 29th, 2015 There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are &hellip;" />
+  <meta property="og:title" content="Blog - Sheharyar Naseer" />
+  <meta property="og:description" content="Blog Mar 29 2015 Using Google Analytics in Rails 4 With Turbolinks Mar 20 2015 Imperative vs. Declarative Mar 10 2015 SQL vs NoSQL: MongoDB Is Web &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog">
@@ -75,820 +75,196 @@
 </header>
 
       <div class="blog-index">
-  BITCH WHAT YOU DOIN?
-  
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
+  <section id='page_header'>
+    <h1 id='page_heading'>Blog</h1>
+  </section>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-29T22:24:54+05:00" pubdate data-updated="true">Mar 29<span>th</span>, 2015</time>
-    </div>
-
+  <dl class='post-list'>    
     
-    
-
-    <div class="post_content">
-      <p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
-So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new
-<a href="https://support.google.com/analytics/answer/2817075">Google Universal Analytics</a>, and this guide uses the
-<a href="https://github.com/slim-template/slim/">Slim Templating Language</a> but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
-
-<!-- more -->
-
-
-<p>Create a <code>_google_analytics.html.slim</code> file in your <code>app/views/layouts</code> folder, and paste in the script you got from
-the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='slim'><span class='line'><span class="p">-</span> <span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">production?</span>
-</span><span class='line'>    javascript:
-</span><span class='line'>        (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
-</span><span class='line'>        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-</span><span class='line'>        <span class="nt">m</span><span class="p">=</span><span class="n">s</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span><span class="n">a</span><span class="o">.</span><span class="n">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">a</span><span class="o">.</span><span class="n">src</span><span class="o">=</span><span class="n">g</span><span class="p">;</span><span class="n">m</span><span class="o">.</span><span class="n">parentNode</span><span class="o">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
-</span><span class='line'>        })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
-</span><span class='line'>
-</span><span class='line'>        <span class="nt">ga</span>(&#39;create&#39;, &#39;UA-XXXXXXXX-X&#39;, &#39;auto&#39;);
-</span><span class='line'>        <span class="nt">ga</span>(&#39;send&#39;, &#39;pageview&#39;);
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, create a <code>google_analytics.coffee</code> file in your <code>app/assets/javascripts</code> directory, and paste in this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">jQuery</span> <span class="nf">-&gt;</span>
-</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span> <span class="s">&#39;page:change&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ga</span><span class="o">?</span>
-</span><span class='line'>      <span class="nx">ga</span><span class="p">(</span><span class="s">&#39;set&#39;</span><span class="p">,</span>  <span class="s">&#39;location&#39;</span><span class="p">,</span> <span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-</span><span class='line'>      <span class="nx">ga</span><span class="p">(</span><span class="s">&#39;send&#39;</span><span class="p">,</span> <span class="s">&#39;pageview&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="s">&quot;title&quot;</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">title</span> <span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This file will track the page again, whenever turbolinks loads a new page. In your <code>application.html.slim</code>, render the layout right before closing the <code>head</code> tag:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='slim'><span class='line'><span class="nt">doctype</span> html
-</span><span class='line'><span class="nt">html</span>
-</span><span class='line'>  <span class="nt">head</span>
-</span><span class='line'>    <span class="nt">title</span> My Rails App
-</span><span class='line'>
-</span><span class='line'>    <span class="cp">/ Some code...</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">==</span> <span class="n">stylesheet_link_tag</span> <span class="s1">&#39;application&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:controller</span><span class="o">]</span><span class="p">,</span> <span class="ss">media</span><span class="p">:</span> <span class="s1">&#39;all&#39;</span>
-</span><span class='line'>    <span class="p">==</span> <span class="n">render</span> <span class="s1">&#39;layouts/google_analytics&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nt">body</span>
-</span><span class='line'>    <span class="cp">/ Some more code...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, in your <code>application.js</code>, require the <code>coffee</code> file we previously created:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require jquery</span>
-</span><span class='line'><span class="c1">//= require jquery_ujs</span>
-</span><span class='line'><span class="c1">//= require google_analytics</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">someJavascriptStuff</span> <span class="o">=</span> <span class="p">{};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, you&rsquo;re good to go.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-20T02:27:44+05:00" pubdate data-updated="true">Mar 20<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
-by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
-
-<!-- more -->
-
-
-<p>So as Philip explains it:</p>
-
-<blockquote><ul>
-<li><strong>Imperative Programming:</strong> Telling the &ldquo;machine&rdquo; how to do something, and as a result what you want to happen will happen</li>
-<li><strong>Declarative Programming:</strong> Telling the &ldquo;machine&rdquo; what you would like to happen, and let the computer figure out how to do it</li>
-</ul>
-</blockquote>
-
-<p>(Where &lsquo;Machine&rsquo; is Computer/database/programming language/etc)</p>
-
-<br />
-
-
-<h1>Imperative</h1>
-
-<p>Suppose, you have an array of numbers and you want to double every value. If you have recently started Ruby,
-you&rsquo;ll probably try doing things the old way; i.e. Iterating over the array, and doubling each value:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
-</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="n">nums</span>
-</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>or maybe if you already know about <code>each</code>, you&rsquo;ll go about doing it this way:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
-</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">nums</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">dubs</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<br />
-
-
-<h1>Declarative (The Ruby Way)</h1>
-
-<p>Now, the Ruby way of doing things is different (which also happens to be Declarative BTW):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
-</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I on the other hand would take this a level higher to show how cool I am:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">double</span>
-</span><span class='line'>        <span class="nb">self</span> <span class="o">*</span> <span class="mi">2</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="n">nums</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="o">]</span>
-</span><span class='line'><span class="n">dubs</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:double</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<br />
-
-
-<h1>Conclusion</h1>
-
-<blockquote><ul>
-<li>Loops are Imperative</li>
-<li>Map is Declarative</li>
-</ul>
-</blockquote>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Ruby</span> <span class="no">ROOLZ</span><span class="p">,</span> <span class="no">Java</span> <span class="no">DROOLZ</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Also this:</p>
-
-<p class='video-container'>
-<iframe style='width: 100%; height: auto; min-height: 360px;' src='http://yplay.sheharyar.me/embed/5GpOfwbFRcs' scrolling='NO' frameborder='0' style='overflow:hidden; border: 0px;'  webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe>
-</p>
-
-
-
-
-    </div>
-  </article>
-
-    </article>
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-10T11:36:17+05:00" pubdate data-updated="true">Mar 10<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome Video. Although it starts
-out slow, I can promise you it will change your stance on the SQL vs NoSQL debate.</p>
-
-<div class='video-container'>
-<div class='video-embed'>
-    <script type="text/javascript" src="//cdn.sublimevideo.net/js/xa2w0yft.js"></script> 
-    <video id="b2F-DItXtZs" class="sublime" width="640" height="360" title="Mongo DB is Web Scale" data-uid="b2F-DItXtZs" data-youtube-id="b2F-DItXtZs" preload="none">
-    </video>
-</div>
-</div>
-
-
-
-
-<!-- more -->
-
-
-
-
-<br/>
-
-
-<p>Summary of the important points of this video:</p>
-
-<blockquote><ul>
-<li><code>/dev/null</code> is the fastest Database out there</li>
-<li>Sadly, it doesn&rsquo;t support Sharding</li>
-<li>Sharding is the &lsquo;Secret Sauce&rsquo; that makes MongoDB so fast and awesome</li>
-<li>MongoDB is Web Scale and SQL is not</li>
-<li>MongoDB <em>just works</em></li>
-</ul>
-</blockquote>
-
-<p>But on a serious note, this video does raise some good points (this coming from a <em>MongoDB Fanboi</em>)</p>
-
-<ul>
-<li>SQL isn&rsquo;t what it used to be</li>
-<li>Today&rsquo;s relational systems are very mature and extremely powerful</li>
-<li>The <em>&ldquo;Doesn&rsquo;t Scale&rdquo;</em> argument doesn&rsquo;t hold anymore. Quoting <em>Jeff Cogswell</em>:</li>
-</ul>
-
-
-<blockquote><p>[Relational DBs are] extremely powerful and can optimize joins and cache them. Huge banks that serve thousands
-of branches and millions of customers, including hundreds of thousands of online members, survive just fine using SQL</p></blockquote>
-
-<p>I suggest reading these articles as well:</p>
-
-<ul>
-<li><a href="http://news.dice.com/2012/07/16/sql-vs-nosql-which-is-better/">SQL vs. NoSQL: Which Is Better?</a></li>
-<li><a href="http://www.mongodb.com/nosql-explained">NoSQL Explained (By MongoDB)</a></li>
-</ul>
-
-
-<br />
-
-
-<p>Disagree? Have something to add? <a href="http://twitter.com/sheharyarn">Rage on Twitter!</a></p>
-
-    </div>
-  </article>
-
-    </article>
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-06T04:27:12+05:00" pubdate data-updated="true">Mar 6<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>While going through my <a href="https://news.ycombinator.com/news">HackerNews</a> feed today, I came across this:
-<a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">Why GNU Grep is Fast</a>. It&rsquo;s an archived
-email from Mike Haertel, the original author of the GNU Grep, to Gabor Kovesdan discussing the reasons behind the speed
-of the GNU Grep.</p>
-
-<p>The email is filled with great knowledge in easy-to-understand &ldquo;tricks&rdquo;.</p>
-
-<!--more-->
-
-
-<p>Two of these tricks that speed up Grep, Mike explains, are:</p>
-
-<blockquote><ul>
-<li>Grep avoids looking at every Input Byte</li>
-<li>Grep executes very few instuctions for each byte it <em>does</em> look at</li>
-</ul>
-</blockquote>
-
-<p>Other great lessons, I took away, are:</p>
-
-<blockquote><ul>
-<li>Use of Boyer-Moore Algorithm</li>
-<li>Use of Unbuffered Input using Raw System Call and avoid copying the input before searching it</li>
-<li>Don&rsquo;t look for newlines until after a match has been found</li>
-<li>You need to get down to the Kernel&rsquo;s level to make it really fast</li>
-</ul>
-</blockquote>
-
-<p> And the greatest lesson:</p>
-
-<blockquote><p>The key to making programs fast is to make them do practically nothing</p></blockquote>
-
-    </div>
-  </article>
-
-    </article>
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-16T20:13:35+05:00" pubdate data-updated="true">Feb 16<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p><a href="/blog/sync-mongodb-local-and-production-heroku/">In my previous post</a>, I had written about my
-<a href="https://github.com/sheharyarn/mongo-sync">mongo-sync</a> shell script that allows you to sync Local and Remote Mongo Databases.
-I spent the last day converting it into a <a href="https://github.com/sheharyarn/mongo-sync-ruby">Ruby Gem</a>
-so that you can perform actions using nice Rake Tasks and invoke the commands from Rails Console or <code>irb</code>.</p>
-
-<!-- more -->
-
-
-<p><a href="https://github.com/sheharyarn/mongo-sync-ruby"><img src="https://i.imgur.com/jvIUfJf.gif" alt="MongoSync Ruby Gem Demo GIF" /></a></p>
-
-<p>If the gif above wasn&rsquo;t explanatory enough, start by adding it to your <code>Gemfile</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;mongo_sync&#39;</span><span class="p">,</span>   <span class="ss">group</span><span class="p">:</span> <span class="ss">:development</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Bundle and run the generator to create configuration template:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle
-</span><span class='line'><span class="nv">$ </span>rails g mongo_sync:config
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Edit the newly created <code>config/mongo_sync.yml</code>, putting in details of your remote and local DBs:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
-</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># All fields are required</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To Sync, use these rake tasks:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake mongo_sync:push       <span class="c"># Push DB to Remote</span>
-</span><span class='line'>rake mongo_sync:pull       <span class="c"># Pull DB to Local</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>You can use it in <code>rails console</code> as well:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;mongo_sync&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">pull</span>
-</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># You can also pass path to a custom config file</span>
-</span><span class='line'><span class="no">MongoSync</span><span class="o">.</span><span class="n">push</span> <span class="s2">&quot;path/to/custom/mongo_sync.yml&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A few important things to note are:</p>
-
-<ul>
-<li><a href="http://docs.mongodb.org/manual/tutorial/#getting-started"><code>mongodb</code></a> needs to be installed on your system (obviously)</li>
-<li>Pushing/Pulling <strong><em>overwrites</em></strong> the Target DB</li>
-<li>It&rsquo;s a good idea to keep your <code>mongo_sync.yml</code> in <code>.gitignore</code> or load the values from the <code>ENV</code></li>
-</ul>
-
-
-<p>There&rsquo;s still <a href="https://github.com/sheharyarn/mongo-sync-ruby#todo">much to do</a> but for now it should work perfectly with your Rails Projects.
-<a href="http://twitter.com/sheharyarn">Find me on twitter</a> if you have something to add.</p>
-
-    </div>
-  </article>
-
-    </article>
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-15T06:50:44+05:00" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
-Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
-I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">heroku-mongo-sync</a>, but it is now deprecated in favor of
-<a href="https://github.com/marcofognog/heroku-mongo-sync">marcofognog&rsquo;s fork</a>. Sadly, neither of them worked for me.</p>
-
-<p>So I decided to write my own. Meet <a href="https://github.com/sheharyarn/mongo-sync"><strong>mongo-sync</strong></a>.</p>
-
-<!-- more -->
-
-
-<p><a href="https://github.com/sheharyarn/mongo-sync"><img src="https://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></a></p>
-
-<p>It&rsquo;s a simple shell script that allows you to sync your local and remote MongoDB databases, using two commands; <code>push</code> and <code>pull</code>.
-Start by cloning the script on your machine:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://github.com/sheharyarn/mongo-sync.git
-</span><span class='line'><span class="nb">cd </span>mongo-sync
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Edit the provided <code>config.yml</code> with your db details:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
-</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, you can start syncing your databases:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>./mongo-sync push       <span class="c"># Push DB to Remote</span>
-</span><span class='line'>./mongo-sync pull       <span class="c"># Pull DB to Local</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;m planning to convert it into a Ruby Gem and a Heroku Plugin as well.</p>
-
-<h1>Github: <a href="https://github.com/sheharyarn/mongo-sync">sheharyarn / mongo-sync</a></h1>
-
-<br/>
-
-
-<br/>
-
-
-<h3>Notes</h3>
-
-<ul>
-<li>The <code>push</code> and <code>pull</code> commands overwrite the target DB</li>
-<li>If you include this script into your project, it&rsquo;s a good idea to add <code>config.yml</code> to your <code>.gitignore</code></li>
-</ul>
-
-
-<br/>
-
-
-<h3>Further Reading</h3>
-
-<ul>
-<li><a href="http://docs.mongodb.org/manual/reference/program/mongodump/#bin.mongodump">mongodump</a></li>
-<li><a href="http://docs.mongodb.org/manual/reference/program/mongorestore/#bin.mongorestore">mongorestore</a></li>
-<li><a href="http://www.theirishpenguin.com/2011/01/20/push-and-pull-data-between-your-local-mongodb-and-heroku-or-mongohq.html">Push and pull data between your local MongoDB and Heroku or MongoHQ</a></li>
-</ul>
-
-
-    </div>
-  </article>
-
-    </article>
-  
-  
-    <article>
-        <article id="article" class="post">
-    <div id="post_info">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-30T05:38:42+05:00" pubdate data-updated="true">Jan 30<span>th</span>, 2015</time>
-    </div>
-
-    
-    
-
-    <div class="post_content">
-      <p><code>find</code> is a powerful command-line utility but most of the time I just really need to search for matching files
-and directories in the current directory. I also usually end up <code>grep</code>-ing the output and using wildcards around
-the argument.</p>
-
-<p>So why not just simplify the whole thing?</p>
-
-<!-- more -->
-
-
-<p>Creating a simple function that does that for us would be the way to go, so this should do the job:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$1&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let me explain what this does. <code>find</code> does a case-insensitive <code>-iname</code> search in the current directory <code>.</code> of all the files
-and folders matching the provided string <code>"*$1*"</code> and also looks in sub-directories <code>-d</code>. Then <code>sed</code> deletes the first
-two characters of each line (they are <code>./</code>) to clean up the results. <code>grep -i</code> is then used to highlight the string in the results.</p>
-
-<p>You can use it like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>search vim
-</span><span class='line'>Vim/.vimrc
-</span><span class='line'>Vim/vundles.vim
-</span><span class='line'>Vim
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can now add this function to your <code>.bash_profile</code> or better yet, your <a href="https://github.com/sheharyarn/dotfiles/blob/master/Zsh/functions.sh#L15-L27">.dotfiles</a> so it always gets loaded in to your shell session. I&rsquo;ve modified this function a bit more to accept multiple arguments:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq 0 <span class="o">]]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
-</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;usage: search string [string2 string3 ...]&quot;</span>
-</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'><span class="k">        for </span>i in <span class="s2">&quot;$@&quot;</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">            </span>find . -iname <span class="s2">&quot;*$i*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$i&quot;</span>
-</span><span class='line'>            <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>        <span class="k">done</span>
-</span><span class='line'><span class="k">    fi</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now go! Be Free!</p>
-
-    </div>
-  </article>
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
+      <dt>
+        <time datetime="2015-03-29T22:24:54+05:00" pubdate><span class='month'>Mar</span> <span class='day'>29</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
         <a href="/blog/using-google-analytics-in-rails-4-with-turbolinks/">Using Google Analytics in Rails 4 With Turbolinks</a>
-      </li>
+      </dd>
     
-      <li class="post">
+      <dt>
+        <time datetime="2015-03-20T02:27:44+05:00" pubdate><span class='month'>Mar</span> <span class='day'>20</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
         <a href="/blog/imperative-vs-declarative/">Imperative vs. Declarative</a>
-      </li>
+      </dd>
     
-      <li class="post">
+      <dt>
+        <time datetime="2015-03-10T11:36:17+05:00" pubdate><span class='month'>Mar</span> <span class='day'>10</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
         <a href="/blog/sql-vs-nosql-mongodb-is-web-scale/">SQL vs NoSQL: MongoDB Is Web Scale!</a>
-      </li>
+      </dd>
     
-      <li class="post">
+      <dt>
+        <time datetime="2015-03-06T04:27:12+05:00" pubdate><span class='month'>Mar</span> <span class='day'>06</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
         <a href="/blog/what-i-learned-from-the-gnu-grep/">What I Learned From the GNU Grep</a>
-      </li>
+      </dd>
     
-      <li class="post">
+      <dt>
+        <time datetime="2015-02-16T20:13:35+05:00" pubdate><span class='month'>Feb</span> <span class='day'>16</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
         <a href="/blog/mongosync-ruby-gem/">MongoSync Ruby Gem</a>
-      </li>
+      </dd>
     
-  </ul>
-</section>
-
-
-
-
-
-  
-</aside>
+      <dt>
+        <time datetime="2015-02-15T06:50:44+05:00" pubdate><span class='month'>Feb</span> <span class='day'>15</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/sync-mongodb-local-and-production-heroku/">Sync MongoDB Data Between Development and Production Databases</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2015-01-30T05:38:42+05:00" pubdate><span class='month'>Jan</span> <span class='day'>30</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/quickly-search-for-files-in-unix-terminal/">Quickly Search for Files in Unix Terminal</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2015-01-28T05:44:53+05:00" pubdate><span class='month'>Jan</span> <span class='day'>28</span> <span class='year'>2015</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/free-ssl-for-github-pages-with-custom-domains/">Set Up SSL on Github Pages With Custom Domains for Free</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-12-15T00:13:07+05:00" pubdate><span class='month'>Dec</span> <span class='day'>15</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/calculate-word-frequency-of-files-in-bash/">Calculate Word Frequency of Files in Bash</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-11-13T22:54:43+05:00" pubdate><span class='month'>Nov</span> <span class='day'>13</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/android-create-tables-in-sqlite-beautifully/">Android: Create Tables in SQLite Beautifully</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-09-12T23:01:06+05:00" pubdate><span class='month'>Sep</span> <span class='day'>12</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/github-trending-repos-api/">Github Trending Repos API</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-09-10T22:47:23+05:00" pubdate><span class='month'>Sep</span> <span class='day'>10</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/s3-direct-upload-gem-example/">S3 Direct Upload Gem - Example</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-08-27T22:31:10+05:00" pubdate><span class='month'>Aug</span> <span class='day'>27</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/rails-routes-scope-vs-namespace/">Rails Routes: Scope vs. Namespace</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-08-16T09:27:15+05:00" pubdate><span class='month'>Aug</span> <span class='day'>16</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/rails-with-nginx-puma-capistrano-in-production/">Rails App With Nginx, Puma & Capistrano in Production</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-08-16T02:16:26+05:00" pubdate><span class='month'>Aug</span> <span class='day'>16</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/nginx-config-syntax-highlighting-in-sublimetext/">Nginx Config Syntax Highlighting in SublimeText</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-07-03T20:33:50+05:00" pubdate><span class='month'>Jul</span> <span class='day'>03</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/regular-mongo-backups-using-cron/">Regular Mongo Backups Using Cron</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-05-15T22:39:49+05:00" pubdate><span class='month'>May</span> <span class='day'>15</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/the-eventual-outcome-of-existence/">The Eventual Outcome of Existence</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-04-17T01:53:45+05:00" pubdate><span class='month'>Apr</span> <span class='day'>17</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/search-methods-of-a-ruby-object/">Search Methods of a Ruby Object</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-03-27T09:45:02+05:00" pubdate><span class='month'>Mar</span> <span class='day'>27</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/mouse-control-with-pupil-without-surfaces/">Controlling Mouse Using Your Eye (With Pupil)</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-03-06T02:51:17+05:00" pubdate><span class='month'>Mar</span> <span class='day'>06</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/kholo-bc-all-the-rage-over-youtube/">#KholoBC - All the Rage Over Youtube</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-03-03T20:28:26+05:00" pubdate><span class='month'>Mar</span> <span class='day'>03</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/installing-tsocks-on-macosx/">Installing TSocks (TorSocks) on MacOSX</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-02-08T18:15:27+05:00" pubdate><span class='month'>Feb</span> <span class='day'>08</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/how-not-to-be-a-pakistani/">How Not to Be a Pakistani</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-02-05T11:18:01+05:00" pubdate><span class='month'>Feb</span> <span class='day'>05</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/libilmimf-so-6-missing-from-opencv-project/">LibIlmImf.so.6 Missing From OpenCV Project</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-02-02T16:01:16+05:00" pubdate><span class='month'>Feb</span> <span class='day'>02</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/ubuntu-13-10-parallels-monitor-configuration-crtc-80/">Ubuntu 13.10 in Parallels - CRTC 80 Error</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-02-02T10:05:00+05:00" pubdate><span class='month'>Feb</span> <span class='day'>02</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/macosx-opening-files-from-finder-using-keyboard/">Opening Files From Finder Using Keyboard</a>
+      </dd>
+    
+      <dt>
+        <time datetime="2014-01-28T03:13:21+05:00" pubdate><span class='month'>Jan</span> <span class='day'>28</span> <span class='year'>2014</span></time>
+      </dt>
+      <dd>
+        <a href="/blog/yet-another-octopress-blog/">Yet Another Octopress Blog</a>
+      </dd>
+    
+  </dl>
+</div>
 
 
 	  <footer id="footer">
