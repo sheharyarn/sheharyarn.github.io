@@ -116,7 +116,7 @@ the argument.</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$1&quot;</span>
+</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d <span class="p">|</span> sed <span class="s1">&#39;s/^..//&#39;</span> <span class="p">|</span> grep -i --color <span class="s2">&quot;$1&quot;</span>
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -153,16 +153,16 @@ two characters of each line (they are <code>./</code>) to clean up the results. 
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq 0 <span class="o">]]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq <span class="m">0</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
 </span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;usage: search string [string2 string3 ...]&quot;</span>
 </span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
 </span><span class='line'>    <span class="k">else</span>
-</span><span class='line'><span class="k">        for </span>i in <span class="s2">&quot;$@&quot;</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">            </span>find . -iname <span class="s2">&quot;*$i*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$i&quot;</span>
+</span><span class='line'>        <span class="k">for</span> i in <span class="s2">&quot;$@&quot;</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>            find . -iname <span class="s2">&quot;*$i*&quot;</span> -d <span class="p">|</span> sed <span class="s1">&#39;s/^..//&#39;</span> <span class="p">|</span> grep -i --color <span class="s2">&quot;$i&quot;</span>
 </span><span class='line'>            <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
 </span><span class='line'>        <span class="k">done</span>
-</span><span class='line'><span class="k">    fi</span>
+</span><span class='line'>    <span class="k">fi</span>
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
 

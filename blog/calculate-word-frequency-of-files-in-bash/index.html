@@ -130,7 +130,7 @@
 <span class='line-number'>20</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>word_frequency<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="k">function</span> word_frequency<span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>  awk <span class="s1">&#39;</span>
 </span><span class='line'><span class="s1">     BEGIN { FS=&quot;[^a-zA-Z]+&quot; }</span>
 </span><span class='line'>
@@ -145,7 +145,7 @@
 </span><span class='line'><span class="s1">         for (w in words)</span>
 </span><span class='line'><span class="s1">              printf(&quot;%3d %s\n&quot;, words[w], w)</span>
 </span><span class='line'><span class="s1">     }</span>
-</span><span class='line'><span class="s1"> &#39;</span> |
+</span><span class='line'><span class="s1"> &#39;</span> <span class="p">|</span>
 </span><span class='line'>  sort -rn
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -162,10 +162,10 @@
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Examples:</span>
 </span><span class='line'>
-</span><span class='line'>cat my_text_file.txt | word_frequency
+</span><span class='line'>cat my_text_file.txt <span class="p">|</span> word_frequency
 </span><span class='line'><span class="c"># Pipe the contents of a text file to the function using `cat`</span>
 </span><span class='line'>
-</span><span class='line'>curl -s https://github.com/humans.txt | word_frequency
+</span><span class='line'>curl -s https://github.com/humans.txt <span class="p">|</span> word_frequency
 </span><span class='line'><span class="c"># Get word frequency of a file on the internet</span>
 </span></code></pre></td></tr></table></div></figure>
 

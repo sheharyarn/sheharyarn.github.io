@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2015-05-12T15:56:52+05:00</updated>
+  <updated>2016-05-21T00:49:25+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -579,7 +579,7 @@ the argument.</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$1&quot;</span>
+</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d <span class="p">|</span> sed <span class="s1">&#39;s/^..//&#39;</span> <span class="p">|</span> grep -i --color <span class="s2">&quot;$1&quot;</span>
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -616,16 +616,16 @@ two characters of each line (they are <code>./</code>) to clean up the results. 
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq 0 <span class="o">]]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq <span class="m">0</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
 </span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;usage: search string [string2 string3 ...]&quot;</span>
 </span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
 </span><span class='line'>    <span class="k">else</span>
-</span><span class='line'><span class="k">        for </span>i in <span class="s2">&quot;$@&quot;</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">            </span>find . -iname <span class="s2">&quot;*$i*&quot;</span> -d | sed <span class="s1">&#39;s/^..//&#39;</span> | grep -i --color <span class="s2">&quot;$i&quot;</span>
+</span><span class='line'>        <span class="k">for</span> i in <span class="s2">&quot;$@&quot;</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>            find . -iname <span class="s2">&quot;*$i*&quot;</span> -d <span class="p">|</span> sed <span class="s1">&#39;s/^..//&#39;</span> <span class="p">|</span> grep -i --color <span class="s2">&quot;$i&quot;</span>
 </span><span class='line'>            <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
 </span><span class='line'>        <span class="k">done</span>
-</span><span class='line'><span class="k">    fi</span>
+</span><span class='line'>    <span class="k">fi</span>
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -783,7 +783,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <span class='line-number'>20</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">function </span>word_frequency<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'><span class="k">function</span> word_frequency<span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>  awk <span class="s1">&#39;</span>
 </span><span class='line'><span class="s1">     BEGIN { FS=&quot;[^a-zA-Z]+&quot; }</span>
 </span><span class='line'>
@@ -798,7 +798,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 </span><span class='line'><span class="s1">         for (w in words)</span>
 </span><span class='line'><span class="s1">              printf(&quot;%3d %s\n&quot;, words[w], w)</span>
 </span><span class='line'><span class="s1">     }</span>
-</span><span class='line'><span class="s1"> &#39;</span> |
+</span><span class='line'><span class="s1"> &#39;</span> <span class="p">|</span>
 </span><span class='line'>  sort -rn
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -815,10 +815,10 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Examples:</span>
 </span><span class='line'>
-</span><span class='line'>cat my_text_file.txt | word_frequency
+</span><span class='line'>cat my_text_file.txt <span class="p">|</span> word_frequency
 </span><span class='line'><span class="c"># Pipe the contents of a text file to the function using `cat`</span>
 </span><span class='line'>
-</span><span class='line'>curl -s https://github.com/humans.txt | word_frequency
+</span><span class='line'>curl -s https://github.com/humans.txt <span class="p">|</span> word_frequency
 </span><span class='line'><span class="c"># Get word frequency of a file on the internet</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -976,12 +976,12 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <span class='line-number'>8</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;github-trending&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:ruby</span>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:scala</span><span class="p">,</span> <span class="ss">:week</span>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:month</span>
+</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span>
+</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:ruby</span>
+</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:scala</span><span class="p">,</span> <span class="ss">:week</span>
+</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:month</span>
 </span><span class='line'>
-</span><span class='line'><span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">all_languages</span>
+</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">all_languages</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1005,7 +1005,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">js_repos</span> <span class="o">=</span> <span class="ss">Github</span><span class="p">:</span><span class="ss">:Trending</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:month</span><span class="p">)</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">js_repos</span> <span class="o">=</span> <span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:month</span><span class="p">)</span>
 </span><span class='line'><span class="c1"># Get top Javascript repos this month</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">js_repos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
@@ -1202,7 +1202,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <p>It&rsquo;ll create a new <code>Cron</code> file if you haven&rsquo;t already created one and open it. Enter this in a new line:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>00 00 * * * /bin/bash /home/username/scripts/mongo_backup.sh
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="m">00</span> <span class="m">00</span> * * * /bin/bash /home/username/scripts/mongo_backup.sh
 </span></code></pre></td></tr></table></div></figure>
 
 
