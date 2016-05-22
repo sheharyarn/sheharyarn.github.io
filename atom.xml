@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-05-23T00:56:40+05:00</updated>
+  <updated>2016-05-23T00:58:03+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -104,7 +104,7 @@ the end:</p>
 
 <p>Point your browser to <code>localhost:4000</code>, it should look like this:</p>
 
-<p><a href="http://i.imgur.com/xs9NLHH.png"><img src="http://i.imgur.com/xs9NLHH.png" alt="Phoenix Chat Markup Screenshot" /></a></p>
+<p><a href="https://i.imgur.com/xs9NLHH.png"><img src="https://i.imgur.com/xs9NLHH.png" alt="Phoenix Chat Markup Screenshot" /></a></p>
 
 <h2>Setting up a new Channel</h2>
 
@@ -228,7 +228,7 @@ enters a message, it&rsquo;s pushed on the channel and the text field is cleared
 there&rsquo;s an incoming message on the channel, its appended to the div we previously
 created and it&rsquo;s scrolled to the bottom.</p>
 
-<p><a href="http://i.imgur.com/51jlQIO.png"><img src="http://i.imgur.com/51jlQIO.png" alt="Chat app working" /></a></p>
+<p><a href="https://i.imgur.com/51jlQIO.png"><img src="https://i.imgur.com/51jlQIO.png" alt="Chat app working" /></a></p>
 
 <h2>Going from there</h2>
 
