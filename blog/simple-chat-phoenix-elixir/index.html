@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Building a Simple Chat App With Elixir and Phoenix - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="May 22nd, 2016 Building a Simple Chat App With Elixir and Phoenix In the past few years, more and more applications have been transitioning to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Building a Simple Chat App With Elixir and Phoenix - Sheharyar Naseer" />
+  <meta property="og:description" content="May 22nd, 2016 Building a Simple Chat App With Elixir and Phoenix In the past few years, more and more applications have been transitioning to &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/simple-chat-phoenix-elixir">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/simple-chat-phoenix-elixir/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-05-22T21:33:05+05:00" pubdate data-updated="true">May 22<span>nd</span>, 2016</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Building a Simple Chat App With Elixir and Phoenix
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>In the past few years, more and more applications have been transitioning to websockets
+for real-time communication, even forcing some frameworks to implement them (such as
+<a href="https://github.com/rails/rails/pull/22586">ActionCable in Rails 5</a>). The <a href="http://www.phoenixframework.org/docs/overview">Phoenix Framework</a> for Elixir implements it
+natively, without depending on any external programs.</p>
+
+<p>Today, we&rsquo;re going to build a super simple chat application in Elixir using the Phoenix
+Framework. We&rsquo;re going to ignore authentication, authorization and other features so we
+can quickly go over the basics, and get websockets in Elixir running.</p>
+
+<!-- more -->
+
+
+<h2>Getting Started</h2>
+
+<p>Start by installing <a href="http://elixir-lang.org/install.html">Elixir</a> and <a href="http://www.phoenixframework.org/docs/installation">Phoenix</a>. Optionally, check out my talk on
+<a href="/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>. Create a new phoenix project and call it whatever you
+like, and start the server so you can see the app in your browser:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Create a new Phoenix project called chatroom</span>
+</span><span class='line'><span class="nv">$ </span>mix phoenix.new chatroom
+</span><span class='line'>
+</span><span class='line'><span class="c"># Start the server</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>chatroom
+</span><span class='line'><span class="nv">$ </span>mix phoenix.server
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Create the View</h2>
+
+<p>Let&rsquo;s start with something easy by writing the markup and CSS for our chat app. Open
+<code>web/templates/page/index.html.eex</code>, and replace it&rsquo;s contents with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;message-list&#39;</span> <span class="na">class=</span><span class="s">&#39;row&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&#39;row form-group&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&#39;col-md-3&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&#39;text&#39;</span> <span class="na">id=</span><span class="s">&#39;name&#39;</span> <span class="na">class=</span><span class="s">&#39;form-control&#39;</span> <span class="na">placeholder=</span><span class="s">&#39;Name&#39;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&#39;col-md-9&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&#39;text&#39;</span> <span class="na">id=</span><span class="s">&#39;message&#39;</span> <span class="na">class=</span><span class="s">&#39;form-control&#39;</span> <span class="na">placeholder=</span><span class="s">&#39;Message&#39;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;ve created an empty <code>div</code> that will list all chat messages and two text fields (one
+for name and one for the message). Now open <code>web/static/css/app.css</code> and paste this at
+the end:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nf">#message-list</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#777</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">height</span><span class="o">:</span> <span class="m">400px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">50px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">overflow</span><span class="o">:</span> <span class="k">scroll</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Point your browser to <code>localhost:4000</code>, it should look like this:</p>
+
+<p><a href="http://i.imgur.com/xs9NLHH.png"><img src="http://i.imgur.com/xs9NLHH.png" alt="Phoenix Chat Markup Screenshot" /></a></p>
+
+<h2>Setting up a new Channel</h2>
+
+<p>Open up <code>web/channels/user_socket.ex</code> and add a new channel called <code>lobby</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">channel</span> <span class="s2">&quot;lobby&quot;</span><span class="p">,</span> <span class="nc">Chatroom.LobbyChannel</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now create a new file called <code>web/channels/lobby_channel.ex</code> and implement the
+functionality for your <code>lobby</code>. The <code>join</code> method always returns <code>{:ok, socket}</code>
+allowing all connection to the channel. The <code>handle_in</code> method is fired every
+time a new incoming message is received on the socket, which broadcasts that
+message to all other open sockets.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Chatroom.LobbyChannel</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Phoenix.Channel</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">join</span><span class="p">(</span><span class="s2">&quot;lobby&quot;</span><span class="p">,</span> <span class="n">_payload</span><span class="p">,</span> <span class="n">socket</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:ok</span><span class="p">,</span> <span class="n">socket</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">handle_in</span><span class="p">(</span><span class="s2">&quot;new_message&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">socket</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">broadcast!</span> <span class="n">socket</span><span class="p">,</span> <span class="s2">&quot;new_message&quot;</span><span class="p">,</span> <span class="n">payload</span>
+</span><span class='line'>    <span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span> <span class="n">socket</span><span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Handling the connections on Client-side</h2>
+
+<p>To make things easier, we&rsquo;ll start by adding <code>jQuery</code> to our
+<code>web/templates/layouts/app.html.eex</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;&lt;%= static_path(@conn, &quot;</span><span class="err">/</span><span class="na">js</span><span class="err">/</span><span class="na">app</span><span class="err">.</span><span class="na">js</span><span class="err">&quot;)</span> <span class="err">%</span><span class="nt">&gt;</span><span class="err">&quot;</span><span class="o">&gt;</span><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Phoenix comes packed with a simple javascript socket client, but it&rsquo;s disabled
+by default. Go into your <code>web/static/js/app.js</code> and uncomment the last line:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">socket</span> <span class="nx">from</span> <span class="s2">&quot;./socket&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go into your <code>web/static/js/socket.js</code> and paste in this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">let</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">socket</span><span class="p">.</span><span class="nx">channel</span><span class="p">(</span><span class="s2">&quot;lobby&quot;</span><span class="p">,</span> <span class="p">{});</span>
+</span><span class='line'><span class="kd">let</span> <span class="nx">list</span>    <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#message-list&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#message&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">let</span> <span class="nx">name</span>    <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#name&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">message</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;keypress&#39;</span><span class="p">,</span> <span class="nx">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">keyCode</span> <span class="o">==</span> <span class="mi">13</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;new_message&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="nx">name</span><span class="p">.</span><span class="nx">val</span><span class="p">(),</span> <span class="nx">message</span><span class="o">:</span> <span class="nx">message</span><span class="p">.</span><span class="nx">val</span><span class="p">()</span> <span class="p">});</span>
+</span><span class='line'>    <span class="nx">message</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">channel</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;new_message&#39;</span><span class="p">,</span> <span class="nx">payload</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">list</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="err">`</span><span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="nx">$</span><span class="p">{</span><span class="nx">payload</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s1">&#39;Anonymous&#39;</span><span class="p">}</span><span class="o">:&lt;</span><span class="err">/b&gt; ${payload.message}&lt;br&gt;`);</span>
+</span><span class='line'>  <span class="nx">list</span><span class="p">.</span><span class="nx">prop</span><span class="p">({</span><span class="nx">scrollTop</span><span class="o">:</span> <span class="nx">list</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;scrollHeight&quot;</span><span class="p">)});</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">channel</span><span class="p">.</span><span class="nx">join</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">receive</span><span class="p">(</span><span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="nx">resp</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Joined successfully&quot;</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">})</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">receive</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="nx">resp</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Unable to join&quot;</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We listen for an enter <code>keypress</code> event on the message text field. Whenever the user
+enters a message, it&rsquo;s pushed on the channel and the text field is cleared. When
+there&rsquo;s an incoming message on the channel, its appended to the div we previously
+created and it&rsquo;s scrolled to the bottom.</p>
+
+<p><a href="http://i.imgur.com/51jlQIO.png"><img src="http://i.imgur.com/51jlQIO.png" alt="Chat app working" /></a></p>
+
+<h2>Going from there</h2>
+
+<p>So far we&rsquo;ve implemented a super simple chat application in Elixir. It&rsquo;s obviously not
+perfect and there&rsquo;s alot of stuff missing. The next logical step would be to add some
+sort of authentication and authorization, and implement more one-on-one and private
+chat rooms.</p>
+
+<p>Here are some links you should check out:</p>
+
+<ul>
+<li>Source of <a href="https://github.com/sheharyarn/simple-phoenix-chat">Simple Phoenix Chat</a> on Github</li>
+<li><a href="http://www.phoenixframework.org/docs/channels">Guide on Channels</a> on the Official Phoenix website</li>
+<li><a href="https://youtu.be/RPs4SHpSThU">Video on Channels</a> by Chris Mccord</li>
+</ul>
+
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elixir/'>elixir,</a>, <a class='category' href='/blog/categories/phoenix/'>phoenix</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Talk: Introduction to Elixir" href="/blog/talk-introduction-to-elixir/">
+        ← Talk: Introduction to Elixir
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
