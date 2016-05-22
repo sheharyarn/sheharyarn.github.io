@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/rails/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-05-21T00:49:25+05:00</updated>
+  <updated>2016-05-22T21:21:39+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Talk: Introduction to Elixir]]></title>
+    <link href="https://sheharyar.me/blog/talk-introduction-to-elixir/"/>
+    <updated>2016-03-02T20:45:28+05:00</updated>
+    <id>https://sheharyar.me/blog/talk-introduction-to-elixir</id>
+    <content type="html"><![CDATA[<p>For the past 8+ months, I&rsquo;ve been tinkering with the <a href="http://elixir-lang.org/">Elixir Programming Language</a>
+and the <a href="http://www.phoenixframework.org/">Phoenix Framework</a>. This was my first experience with a &ldquo;real&rdquo; functional
+language and I learned a lot about the paradigm and the ecosystem.</p>
+
+<p>Last week, I had a chance to share my thoughts and experiences with other developers
+at the <a href="http://isloojs.com/">Islamabad.js</a> meetup. You can check out the slides below:</p>
+
+<!-- more -->
+
+
+
+
+<div class='video-container'>
+<div class='video-embed' style='width: 700px'>
+  <script async class="speakerdeck-embed" data-id="25fe787fe84544f0a3278d6af78fae3e" data-ratio="1.77777777777778" src="https://sheharyar.me//speakerdeck.com/assets/embed.js"></script>
+</div>
+</div>
+
+
+<p>I still don&rsquo;t consider myself a good elixir developer, much less an expert and still
+have a long way to go, but Saša Jurić&rsquo;s <a href="https://www.manning.com/books/elixir-in-action">Elixir in Action</a> and Josh Adam&rsquo;s
+<a href="http://elixirsips.com/">ElixirSips</a> were extremely helpful resources to get me here. Do check them out!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Google Analytics in Rails 4 With Turbolinks]]></title>
