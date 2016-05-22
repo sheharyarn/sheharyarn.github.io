@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Phoenix | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/phoenix/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-05-23T01:09:37+05:00</updated>
+  <updated>2016-05-23T01:19:40+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -18,10 +18,10 @@
     <link href="https://sheharyar.me/blog/simple-chat-phoenix-elixir/"/>
     <updated>2016-05-22T21:33:05+05:00</updated>
     <id>https://sheharyar.me/blog/simple-chat-phoenix-elixir</id>
-    <content type="html"><![CDATA[<p>In the past few years, more and more applications have been transitioning to websockets
+    <content type="html"><![CDATA[<p>The past few years, more and more applications have been transitioning to websockets
 for real-time communication, even forcing some frameworks to implement them (such as
 <a href="https://github.com/rails/rails/pull/22586">ActionCable in Rails 5</a>). The <a href="http://www.phoenixframework.org/docs/overview">Phoenix Framework</a> for Elixir implements it
-natively, without depending on any external programs.</p>
+natively, without depending on any external programs such as <code>Redis</code>.</p>
 
 <p>Today, we&rsquo;re going to build a super simple chat application in Elixir using the Phoenix
 Framework. We&rsquo;re going to ignore authentication, authorization and other features so we
@@ -51,7 +51,7 @@ $ mix phoenix.server
 <h2>Creating the View</h2>
 
 <p>Let&rsquo;s start with something easy by writing the markup and CSS for our chat app. Open
-<code>web/templates/page/index.html.eex</code>, and replace it&rsquo;s contents with:</p>
+<code>web/templates/page/index.html.eex</code>, and replace its contents with:</p>
 
 <p>```html</p>
 
@@ -74,8 +74,8 @@ $ mix phoenix.server
 <p>```</p>
 
 <p>We&rsquo;ve created an empty <code>div</code> that will list all chat messages and two text fields (one
-for name and one for the message). Now open <code>web/static/css/app.css</code> and paste this at
-the end:</p>
+for the user&rsquo;s name and one for the message). Now open <code>web/static/css/app.css</code> and
+paste this at the end:</p>
 
 <p>```css</p>
 
@@ -83,9 +83,9 @@ the end:</p>
 
 <p>  border: 1px solid #777;
   height: 400px;
-  margin-bottom: 50px;
   padding: 10px;
   overflow: scroll;
+  margin-bottom: 50px;
 }
 ```</p>
 
@@ -95,17 +95,18 @@ the end:</p>
 
 <h2>Setting up a new Channel</h2>
 
-<p>Open up <code>web/channels/user_socket.ex</code> and add a new channel called <code>lobby</code>:</p>
+<p>We&rsquo;re going to create a new channel called <code>lobby</code>. Open up <code>web/channels/user_socket.ex</code>
+and add this line:</p>
 
 <p><code>elixir
 channel "lobby", Chatroom.LobbyChannel
 </code></p>
 
-<p>Now create a new file called <code>web/channels/lobby_channel.ex</code> and implement the
-functionality for your <code>lobby</code>. The <code>join</code> method always returns <code>{:ok, socket}</code>
-allowing all connection to the channel. The <code>handle_in</code> method is fired every
-time a new incoming message is received on the socket, which broadcasts that
-message to all other open sockets.</p>
+<p>Create a new file called <code>web/channels/lobby_channel.ex</code> and implement the
+functionality for the new <code>lobby</code> channel. The <code>join</code> method here always returns
+<code>{:ok, socket}</code> to allow all connections to the channel. The <code>handle_in</code> method is
+fired every time a new incoming message is received on the socket, which broadcasts
+that message to all other open sockets.</p>
 
 <p>```elixir
 defmodule Chatroom.LobbyChannel do
@@ -183,10 +184,10 @@ message.val('');
 <p>// &hellip;
 ```</p>
 
-<p>We listen for an enter <code>keypress</code> event on the message text field. Whenever the user
+<p>Here, we listen for a <code>keypress</code> event on the message text field. Whenever the user
 enters a message, it&rsquo;s pushed on the channel and the text field is cleared. When
-there&rsquo;s an incoming message on the channel, its appended to the div we previously
-created and it&rsquo;s scrolled to the bottom.</p>
+there&rsquo;s an incoming message on the channel, it&rsquo;s appended to the div we previously
+created and scrolled to the bottom.</p>
 
 <p><a href="https://i.imgur.com/51jlQIO.png"><img src="https://i.imgur.com/51jlQIO.png" alt="Chat app working" /></a></p>
 
