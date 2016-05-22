@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Phoenix | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/phoenix/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-05-23T00:58:03+05:00</updated>
+  <updated>2016-05-23T01:09:37+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -48,7 +48,7 @@ like, and start the server so you can see the app in your browser:</p>
 $ mix phoenix.server
 ```</p>
 
-<h2>Create the View</h2>
+<h2>Creating the View</h2>
 
 <p>Let&rsquo;s start with something easy by writing the markup and CSS for our chat app. Open
 <code>web/templates/page/index.html.eex</code>, and replace it&rsquo;s contents with:</p>
