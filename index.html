@@ -14,7 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Building a Simple Chat App With Elixir and Phoenix The past few years, more and more applications have been transitioning to &hellip;">
+  <meta name="description" content="Freshly Pressed Using UUIDs With Postgres in Phoenix and Ecto Setting up Ecto to use UUIDs instead of the regular integer serial IDs
+with PostgreSQL &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +26,8 @@
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Building a Simple Chat App With Elixir and Phoenix The past few years, more and more applications have been transitioning to &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Using UUIDs With Postgres in Phoenix and Ecto Setting up Ecto to use UUIDs instead of the regular integer serial IDs
+with PostgreSQL &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me">
@@ -84,24 +86,23 @@
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/simple-chat-phoenix-elixir/">
-            Building a Simple Chat App With Elixir and Phoenix
+           <a href="/blog/postgres-uuids-phoenix-ecto/">
+            Using UUIDs With Postgres in Phoenix and Ecto
            </a>
         </h2>
         <div class="post_content">
-           <p>The past few years, more and more applications have been transitioning to websockets
-for real-time communication, even forcing some frameworks to implement them (such as
-<a href="https://github.com/rails/rails/pull/22586">ActionCable in Rails 5</a>). The <a href="http://www.phoenixframework.org/docs/overview">Phoenix Framework</a> for Elixir implements it
-natively, without depending on any external programs such as <code>Redis</code>.</p>
-
-<p>Today, we&rsquo;re going to build a super simple chat application in Elixir using the Phoenix
-Framework. We&rsquo;re going to ignore authentication, authorization and other features so we
-can quickly go over the basics, and get websockets in Elixir running.</p>
+           <p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
+with PostgreSQL in Phoenix has always been a hassle, as evident from
+the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
+<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
+can pass <code>--binary-id</code> when creating a new Phoenix project to
+automatically use UUIDs (or other binary IDs when using different
+databases and adapters).</p>
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/simple-chat-phoenix-elixir/">Continue →</a>
+              <a class="continue_link" href="/blog/postgres-uuids-phoenix-ecto/">Continue →</a>
            </p>
         </div>
      </article>
@@ -115,6 +116,15 @@ can quickly go over the basics, and get websockets in Elixir running.</p>
 
         <ul class="article_list">
           
+             
+          
+             
+
+                <li><a href="/blog/simple-chat-phoenix-elixir/">
+                  Building a Simple Chat App With Elixir and Phoenix
+                   →
+                </a></li>
+
              
           
              
@@ -157,15 +167,6 @@ can quickly go over the basics, and get websockets in Elixir running.</p>
 
                 <li><a href="/blog/what-i-learned-from-the-gnu-grep/">
                   What I Learned From the GNU Grep
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/mongosync-ruby-gem/">
-                  MongoSync Ruby Gem
                    →
                 </a></li>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Elixir, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/elixir/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T17:11:28+05:00</updated>
+  <updated>2016-09-22T20:24:43+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
+    <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
+    <updated>2016-09-22T17:54:06+05:00</updated>
+    <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
+    <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
+with PostgreSQL in Phoenix has always been a hassle, as evident from
+the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
+<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
+can pass <code>--binary-id</code> when creating a new Phoenix project to
+automatically use UUIDs (or other binary IDs when using different
+databases and adapters).</p>
+
+<!-- more -->
+
+
+<p>When creating a new project with <code>--binary-id</code>, it will automatically
+set appropriate values for <code>@primary_key</code> and <code>@foreign_key_type</code>
+in your <code>web/web.ex</code>. For Postgres, this means using <a href="https://hexdocs.pm/ecto/Ecto.UUID.html"><code>Ecto.UUID</code></a>
+at the back (Ecto handles this automatically):</p>
+
+<p>```elixir
+def model do
+  quote do</p>
+
+<pre><code>use Ecto.Schema
+
+import Ecto
+import Ecto.Changeset
+import Ecto.Query
+
+@primary_key {:id, :binary_id, autogenerate: true}
+@foreign_key_type :binary_id
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h2>Existing Applications</h2>
+
+<p>If you want to start using UUIDs in your existing Phoenix application,
+you need to specify <code>:binary_id</code> in your Ecto migration in addition to
+the <code>model</code> method above in <code>web/web.ex</code>:</p>
+
+<p><code>elixir
+create table(:posts, primary_key: false) do
+  add :id, :binary_id, primary_key: true
+end
+</code>
+For a more detailed solution for existing Phoenix apps, see the
+<a href="https://hexdocs.pm/ecto/Ecto.Schema.html#module-primary-keys">Ecto Schema Docs</a> or José&rsquo;s <a href="http://stackoverflow.com/a/30004834/1533054">answer on Stackoverflow</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Building a Simple Chat App With Elixir and Phoenix]]></title>

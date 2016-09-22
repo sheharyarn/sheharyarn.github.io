@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T17:11:28+05:00</updated>
+  <updated>2016-09-22T20:24:43+05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
+    <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
+    <updated>2016-09-22T17:54:06+05:00</updated>
+    <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
+    <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
+with PostgreSQL in Phoenix has always been a hassle, as evident from
+the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
+<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
+can pass <code>--binary-id</code> when creating a new Phoenix project to
+automatically use UUIDs (or other binary IDs when using different
+databases and adapters).</p>
+
+<!-- more -->
+
+
+<p>When creating a new project with <code>--binary-id</code>, it will automatically
+set appropriate values for <code>@primary_key</code> and <code>@foreign_key_type</code>
+in your <code>web/web.ex</code>. For Postgres, this means using <a href="https://hexdocs.pm/ecto/Ecto.UUID.html"><code>Ecto.UUID</code></a>
+at the back (Ecto handles this automatically):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">def</span> <span class="n">model</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">quote</span> <span class="k">do</span>
+</span><span class='line'>    <span class="kn">use</span> <span class="nc">Ecto.Schema</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kn">import</span> <span class="nc">Ecto</span>
+</span><span class='line'>    <span class="kn">import</span> <span class="nc">Ecto.Changeset</span>
+</span><span class='line'>    <span class="kn">import</span> <span class="nc">Ecto.Query</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="na">@primary_key</span> <span class="p">{</span><span class="ss">:id</span><span class="p">,</span> <span class="ss">:binary_id</span><span class="p">,</span> <span class="ss">autogenerate</span><span class="p">:</span> <span class="no">true</span><span class="p">}</span>
+</span><span class='line'>    <span class="na">@foreign_key_type</span> <span class="ss">:binary_id</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Existing Applications</h2>
+
+<p>If you want to start using UUIDs in your existing Phoenix application,
+you need to specify <code>:binary_id</code> in your Ecto migration in addition to
+the <code>model</code> method above in <code>web/web.ex</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">create</span> <span class="n">table</span><span class="p">(</span><span class="ss">:posts</span><span class="p">,</span> <span class="ss">primary_key</span><span class="p">:</span> <span class="no">false</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">add</span> <span class="ss">:id</span><span class="p">,</span> <span class="ss">:binary_id</span><span class="p">,</span> <span class="ss">primary_key</span><span class="p">:</span> <span class="no">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For a more detailed solution for existing Phoenix apps, see the
+<a href="https://hexdocs.pm/ecto/Ecto.Schema.html#module-primary-keys">Ecto Schema Docs</a> or José&rsquo;s <a href="http://stackoverflow.com/a/30004834/1533054">answer on Stackoverflow</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Building a Simple Chat App With Elixir and Phoenix]]></title>
@@ -1495,64 +1563,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <p>But this constant change never stops; Humanity&rsquo;s ultimate goal is to live, forever. Humanity cannot live forever though; not in this form. And so, we make machines. They <strong><em>will</em></strong> replace us, and I see no need to worry about it, for they will be made of the same stuff we are; they <strong><em>are</em></strong> us. As the creation myth goes, they will be created in our own image, to carry on our quest to become omnipotent, omnipresent and omniscient. They too, will be replaced by even better machines, and in the end, they will reach a point of existence where every variable is known, every element of physics is understood, every molecule in the universe is categorized and indexed. All conscious thought that has ever existed and will ever exist will exist simultaneously and infinitely within this all powerful being.</p>
 
 <p>Then the being will realize how empty, it&rsquo;s existence really is. It&rsquo;s only goal was to exist eternally and defy entropy. With entropy gone, it&rsquo;s only purpose has been fulfilled, and will destroy itself, so that it can live once more, and satisfy it&rsquo;s drive to defy the chaos it has, always has, and always will create, every time it wills itself out of meaningless existence into meaningful dissolution.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Search Methods of a Ruby Object]]></title>
-    <link href="https://sheharyar.me/blog/search-methods-of-a-ruby-object/"/>
-    <updated>2014-04-17T01:53:45+05:00</updated>
-    <id>https://sheharyar.me/blog/search-methods-of-a-ruby-object</id>
-    <content type="html"><![CDATA[<p>Sometimes, I&rsquo;m not so sure about the methods I can call on an Object in Ruby. Sure, I can call <code>.methods</code> on that object
-to get a list of all the functions, but it isn&rsquo;t always helpful because it can fill up your entire terminal with
-hundreds of methods you don&rsquo;t want to see. I wanted to be able to get a list of only those methods that match a certain
-string I provide. So I overrode Ruby&rsquo;s Object Class with a custom method called <code>search_methods</code>, it does exactly what it
-says; searches all methods of an object that match a certain criteria.</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Object</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">search_methods</span><span class="p">(</span><span class="n">qry</span><span class="p">)</span>
-</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">methods</span> <span class="o">&amp;</span> <span class="nb">self</span><span class="o">.</span><span class="n">methods</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">m</span><span class="o">|</span> <span class="n">m</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">qry</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can now call it on different objects like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">search_methods</span> <span class="s1">&#39;enum&#39;</span>
-</span><span class='line'><span class="c1"># =&gt; [:to_enum, :enum_for]</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Player</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">search_methods</span> <span class="ss">:trust</span>
-</span><span class='line'><span class="c1"># =&gt; [:untrust, :untrusted?, :trust]</span>
-</span><span class='line'>
-</span><span class='line'><span class="s2">&quot;hello&quot;</span><span class="o">.</span><span class="n">search_methods</span> <span class="s2">&quot;to_&quot;</span>
-</span><span class='line'><span class="c1"># =&gt; [:to_i, :to_f, :to_s, :to_str, :to_sym, :to_r, :to_c, :to_enum]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can see the <a href="https://gist.github.com/sheharyarn/10772579">Gist on Github</a>. I&rsquo;ve also added it to my <code>.irbrc</code> in my
-<a href="https://github.com/sheharyarn/dotfiles">~/.dotfiles</a> so this always gets preloaded whenever I run <code>irb</code> or <code>rails c</code>.
-You can see it in the <a href="https://github.com/sheharyarn/dotfiles/blob/master/Ruby/_class_overrides.rb#L7">Class Overrides of my .irbrc</a></p>
-
-<p><strong>Note:</strong> Post updated for <code>awesome_print</code> compatibility and <code>symbol</code> support.</p>
 ]]></content>
   </entry>
   
