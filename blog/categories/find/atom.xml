@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Find | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/find/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Quickly Search for Files in Unix Terminal]]></title>
     <link href="https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal/"/>
-    <updated>2015-01-30T05:38:42+05:00</updated>
+    <updated>2015-01-29T19:38:42-05:00</updated>
     <id>https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal</id>
     <content type="html"><![CDATA[<p><code>find</code> is a powerful command-line utility but most of the time I just really need to search for matching files
 and directories in the current directory. I also usually end up <code>grep</code>-ing the output and using wildcards around

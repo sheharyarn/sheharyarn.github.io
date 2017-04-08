@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ecto, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/ecto/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
     <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
-    <updated>2016-09-22T17:54:06+05:00</updated>
+    <updated>2016-09-22T08:54:06-04:00</updated>
     <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
     <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
 with PostgreSQL in Phoenix has always been a hassle, as evident from

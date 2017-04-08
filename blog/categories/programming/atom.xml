@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Programming, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/programming/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Talk: Introduction to Elixir]]></title>
     <link href="https://sheharyar.me/blog/talk-introduction-to-elixir/"/>
-    <updated>2016-03-02T20:45:28+05:00</updated>
+    <updated>2016-03-02T10:45:28-05:00</updated>
     <id>https://sheharyar.me/blog/talk-introduction-to-elixir</id>
     <content type="html"><![CDATA[<p>For the past 8+ months, I&rsquo;ve been tinkering with the <a href="http://elixir-lang.org/">Elixir Programming Language</a>
 and the <a href="http://www.phoenixframework.org/">Phoenix Framework</a>. This was my first experience with a &ldquo;real&rdquo; functional
@@ -46,7 +46,7 @@ have a long way to go, but Saša Jurić&rsquo;s <a href="https://www.manning.com
   <entry>
     <title type="html"><![CDATA[Imperative vs. Declarative]]></title>
     <link href="https://sheharyar.me/blog/imperative-vs-declarative/"/>
-    <updated>2015-03-20T02:27:44+05:00</updated>
+    <updated>2015-03-19T17:27:44-04:00</updated>
     <id>https://sheharyar.me/blog/imperative-vs-declarative</id>
     <content type="html"><![CDATA[<p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
 by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>

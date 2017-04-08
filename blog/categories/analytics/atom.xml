@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Analytics, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/analytics/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Using Google Analytics in Rails 4 With Turbolinks]]></title>
     <link href="https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks/"/>
-    <updated>2015-03-29T22:24:54+05:00</updated>
+    <updated>2015-03-29T13:24:54-04:00</updated>
     <id>https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks</id>
     <content type="html"><![CDATA[<p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
 So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new

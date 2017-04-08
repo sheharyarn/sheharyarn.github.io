@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Unix, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/unix/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[What I Learned From the GNU Grep]]></title>
     <link href="https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep/"/>
-    <updated>2015-03-06T04:27:12+05:00</updated>
+    <updated>2015-03-05T18:27:12-05:00</updated>
     <id>https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep</id>
     <content type="html"><![CDATA[<p>While going through my <a href="https://news.ycombinator.com/news">HackerNews</a> feed today, I came across this:
 <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">Why GNU Grep is Fast</a>. It&rsquo;s an archived
@@ -55,7 +55,7 @@ of the GNU Grep.</p>
   <entry>
     <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>
     <link href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/"/>
-    <updated>2015-02-15T06:50:44+05:00</updated>
+    <updated>2015-02-14T20:50:44-05:00</updated>
     <id>https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku</id>
     <content type="html"><![CDATA[<p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
 Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.

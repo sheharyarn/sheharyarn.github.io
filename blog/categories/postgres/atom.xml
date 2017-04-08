@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Postgres | Sheharyar Naseer]]></title>
+  <title><![CDATA[Category: Postgres, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/postgres/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,57 +14,145 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
-    <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
-    <updated>2016-09-22T17:54:06+05:00</updated>
-    <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
-    <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
-with PostgreSQL in Phoenix has always been a hassle, as evident from
-the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
-<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
-can pass <code>--binary-id</code> when creating a new Phoenix project to
-automatically use UUIDs (or other binary IDs when using different
-databases and adapters).</p>
+    <title type="html"><![CDATA[Polymorphic Paperclip Attachments With Partial ActiveRecord Index]]></title>
+    <link href="https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index/"/>
+    <updated>2016-12-15T06:44:06-05:00</updated>
+    <id>https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index</id>
+    <content type="html"><![CDATA[<p>A common pattern in Rails applications with Image Attachments is to create a
+separate model for the Image and use it in Polymorphic relationships with
+other models. Since more often than not an object has more than one image
+attached with a default one, the classic way of storing a <code>default_image_id</code>
+on the parent model can quickly result in code duplication and spaghetti
+through out the rails application.</p>
+
+<p>A better solution is to specify a <code>default</code> boolean on the Image model itself
+and use partial indexes for proper scoping.</p>
 
 <!-- more -->
 
 
-<p>When creating a new project with <code>--binary-id</code>, it will automatically
-set appropriate values for <code>@primary_key</code> and <code>@foreign_key_type</code>
-in your <code>web/web.ex</code>. For Postgres, this means using <a href="https://hexdocs.pm/ecto/Ecto.UUID.html"><code>Ecto.UUID</code></a>
-at the back (Ecto handles this automatically):</p>
+<p>To DRY up the code even further, we can use the Concern Model pattern.
+<a href="https://www.viget.com/articles/slimming-down-your-models-and-controllers">This Blog Post</a> on Viget is an excellent primer on using Concerns. I&rsquo;m
+using Rails 5, Postgres &amp; Paperclip and will use the class
+name <code>ImageAttachment</code> through out the article.</p>
 
-<p>```elixir
-def model do
-  quote do</p>
+<p>Start by creating a migration for your Image model:</p>
 
-<pre><code>use Ecto.Schema
+<p>```ruby</p>
 
-import Ecto
-import Ecto.Changeset
-import Ecto.Query
+<h1>db/migrations/xxxxxxxxxxxxxx_create_image_attachment.rb</h1>
 
-@primary_key {:id, :binary_id, autogenerate: true}
-@foreign_key_type :binary_id
+<p>class CreateImageAttachments &lt; ActiveRecord::Migration[5.0]
+  def change</p>
+
+<pre><code>create_table :image_attachments do |t|
+  t.belongs_to :imageable, polymorphic: true
+  t.attachment :data
+  t.boolean    :default, default: false
+
+  t.timestamps
+end
+
+add_index :image_attachments, [:imageable_id, :imageable_type, :default],
+  unique: true,
+  where:  '"default" = TRUE',
+  name:   :unique_on_imageable_default
 </code></pre>
 
 <p>  end
 end
 ```</p>
 
-<h2>Existing Applications</h2>
+<p>This creates an ordinary table with a Paperclip attachment and a <code>default</code>
+boolean field. But notice the specifics of the unique <code>index</code> above; it&rsquo;s a
+partial index only on the rows where the value of <code>default</code> is true. This
+validates that there is only one default image for any given object at a time.</p>
 
-<p>If you want to start using UUIDs in your existing Phoenix application,
-you need to specify <code>:binary_id</code> in your Ecto migration in addition to
-the <code>model</code> method above in <code>web/web.ex</code>:</p>
+<p>In the <code>ImageAttachment</code> model itself, we can set a conditional uniqueness
+on the <code>imageable</code> scope. This validates the same in the Rails application
+too:</p>
 
-<p><code>elixir
-create table(:posts, primary_key: false) do
-  add :id, :binary_id, primary_key: true
+<p>```ruby</p>
+
+<h1>app/models/image_attachment.rb</h1>
+
+<p>class ImageAttachment &lt; ApplicationRecord
+  belongs_to :imageable, polymorphic: true</p>
+
+<p>  has_attached_file :data,</p>
+
+<pre><code>styles:          { thumb:  '120x120#',            medium: '600x600&gt;'           },
+convert_options: { thumb:  '-quality 75 -strip',  medium: '-quality 90 -strip' }
+</code></pre>
+
+<p>  validates_attachment_presence     :data
+  validates_attachment_size         :data, less_than:    PAPERCLIP_IMAGE_SIZE_LIMIT
+  validates_attachment_content_type :data, content_type: PAPERCLIP_IMAGE_CONTENT_TYPE</p>
+
+<p>  # Conditional Uniqueness validation on the belongs_to scope
+  validates :default, uniqueness: { scope: :imageable }, if: :default?</p>
+
+<p>  # Methods to set/unset the default image
+  def undefault!</p>
+
+<pre><code>update(default: false)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def default!</p>
+
+<pre><code>imageable.default_image.undefault! if imageable.default_image
+update(default: true)
+</code></pre>
+
+<p>  end
 end
-</code>
-For a more detailed solution for existing Phoenix apps, see the
-<a href="https://hexdocs.pm/ecto/Ecto.Schema.html#module-primary-keys">Ecto Schema Docs</a> or José&rsquo;s <a href="http://stackoverflow.com/a/30004834/1533054">answer on Stackoverflow</a>.</p>
+```</p>
+
+<p>Finally, we create an <code>Imageable</code> concern, which defines the relationship
+with the <code>ImageAttachment</code> model and provides a <code>default_image</code> method:</p>
+
+<p>```ruby</p>
+
+<h1>app/models/concerns/imageable.rb</h1>
+
+<p>module Imageable
+  extend ActiveSupport::Concern</p>
+
+<p>  included do</p>
+
+<pre><code>has_many :image_attachments, as: :imageable, dependent: :destroy
+alias_attribute :images, :image_attachments
+</code></pre>
+
+<p>  end</p>
+
+<p>  def default_image</p>
+
+<pre><code>images.find_by(default: true) || images.first
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Now, to be able to &ldquo;attach images&rdquo; to any model, all you have to do is to
+<code>include Imageable</code>:</p>
+
+<p>```ruby
+class Post &lt; ApplicationRecord
+  include Imageable</p>
+
+<p>  # Other stuff
+end</p>
+
+<p>class Event &lt; ApplicationRecord
+  include Imageable</p>
+
+<p>  # Other stuff
+end
+```</p>
 ]]></content>
   </entry>
   

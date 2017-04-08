@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rails | Sheharyar Naseer]]></title>
+  <title><![CDATA[Category: Rails, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/rails/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,112 +14,145 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Talk: Introduction to Elixir]]></title>
-    <link href="https://sheharyar.me/blog/talk-introduction-to-elixir/"/>
-    <updated>2016-03-02T20:45:28+05:00</updated>
-    <id>https://sheharyar.me/blog/talk-introduction-to-elixir</id>
-    <content type="html"><![CDATA[<p>For the past 8+ months, I&rsquo;ve been tinkering with the <a href="http://elixir-lang.org/">Elixir Programming Language</a>
-and the <a href="http://www.phoenixframework.org/">Phoenix Framework</a>. This was my first experience with a &ldquo;real&rdquo; functional
-language and I learned a lot about the paradigm and the ecosystem.</p>
+    <title type="html"><![CDATA[Polymorphic Paperclip Attachments With Partial ActiveRecord Index]]></title>
+    <link href="https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index/"/>
+    <updated>2016-12-15T06:44:06-05:00</updated>
+    <id>https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index</id>
+    <content type="html"><![CDATA[<p>A common pattern in Rails applications with Image Attachments is to create a
+separate model for the Image and use it in Polymorphic relationships with
+other models. Since more often than not an object has more than one image
+attached with a default one, the classic way of storing a <code>default_image_id</code>
+on the parent model can quickly result in code duplication and spaghetti
+through out the rails application.</p>
 
-<p>Last week, I had a chance to share my thoughts and experiences with other developers
-at the <a href="http://isloojs.com/">Islamabad.js</a> meetup. You can check out the slides below:</p>
-
-<!-- more -->
-
-
-
-
-<div class='video-container'>
-<div class='video-embed' style='width: 700px'>
-  <script async class="speakerdeck-embed" data-id="25fe787fe84544f0a3278d6af78fae3e" data-ratio="1.77777777777778" src="https://sheharyar.me//speakerdeck.com/assets/embed.js"></script>
-</div>
-</div>
-
-
-<p>I still don&rsquo;t consider myself a great elixir developer, much less an expert and still
-have a long way to go, but Saša Jurić&rsquo;s <a href="https://www.manning.com/books/elixir-in-action">Elixir in Action</a> and Josh Adam&rsquo;s
-<a href="http://elixirsips.com/">ElixirSips</a> were extremely helpful resources to get me here. Do check them out!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Google Analytics in Rails 4 With Turbolinks]]></title>
-    <link href="https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks/"/>
-    <updated>2015-03-29T22:24:54+05:00</updated>
-    <id>https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks</id>
-    <content type="html"><![CDATA[<p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
-So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new
-<a href="https://support.google.com/analytics/answer/2817075">Google Universal Analytics</a>, and this guide uses the
-<a href="https://github.com/slim-template/slim/">Slim Templating Language</a> but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
+<p>A better solution is to specify a <code>default</code> boolean on the Image model itself
+and use partial indexes for proper scoping.</p>
 
 <!-- more -->
 
 
-<p>Create a <code>_google_analytics.html.slim</code> file in your <code>app/views/layouts</code> folder, and paste in the script you got from
-the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p>
+<p>To DRY up the code even further, we can use the Concern Model pattern.
+<a href="https://www.viget.com/articles/slimming-down-your-models-and-controllers">This Blog Post</a> on Viget is an excellent primer on using Concerns. I&rsquo;m
+using Rails 5, Postgres &amp; Paperclip and will use the class
+name <code>ImageAttachment</code> through out the article.</p>
 
-<p>```slim
-&ndash; if Rails.env.production?</p>
+<p>Start by creating a migration for your Image model:</p>
 
-<pre><code>javascript:
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<p>```ruby</p>
 
-    ga('create', 'UA-XXXXXXXX-X', 'auto');
-    ga('send', 'pageview');
+<h1>db/migrations/xxxxxxxxxxxxxx_create_image_attachment.rb</h1>
+
+<p>class CreateImageAttachments &lt; ActiveRecord::Migration[5.0]
+  def change</p>
+
+<pre><code>create_table :image_attachments do |t|
+  t.belongs_to :imageable, polymorphic: true
+  t.attachment :data
+  t.boolean    :default, default: false
+
+  t.timestamps
+end
+
+add_index :image_attachments, [:imageable_id, :imageable_type, :default],
+  unique: true,
+  where:  '"default" = TRUE',
+  name:   :unique_on_imageable_default
 </code></pre>
 
-<p>```</p>
-
-<p>Now, create a <code>google_analytics.coffee</code> file in your <code>app/assets/javascripts</code> directory, and paste in this:</p>
-
-<p>```coffee
-jQuery &ndash;>
-  $(document).on &lsquo;page:change&rsquo;, &ndash;></p>
-
-<pre><code>if window.ga?
-  ga('set',  'location', location.href.split('#')[0])
-  ga('send', 'pageview', { "title": document.title })
-</code></pre>
-
-<p>```</p>
-
-<p>This file will track the page again, whenever turbolinks loads a new page. In your <code>application.html.slim</code>, render the layout right before closing the <code>head</code> tag:</p>
-
-<p>```slim
-doctype html
-html
-  head</p>
-
-<pre><code>title My Rails App
-
-/ Some code...
-
-== stylesheet_link_tag 'application', params[:controller], media: 'all'
-== render 'layouts/google_analytics'
-</code></pre>
-
-<p>  body</p>
-
-<pre><code>/ Some more code...
-</code></pre>
-
-<p>```</p>
-
-<p>Finally, in your <code>application.js</code>, require the <code>coffee</code> file we previously created:</p>
-
-<p>```javascript
-//= require jquery
-//= require jquery_ujs
-//= require google_analytics</p>
-
-<p>var someJavascriptStuff = {};
+<p>  end
+end
 ```</p>
 
-<p>Now, you&rsquo;re good to go.</p>
+<p>This creates an ordinary table with a Paperclip attachment and a <code>default</code>
+boolean field. But notice the specifics of the unique <code>index</code> above; it&rsquo;s a
+partial index only on the rows where the value of <code>default</code> is true. This
+validates that there is only one default image for any given object at a time.</p>
+
+<p>In the <code>ImageAttachment</code> model itself, we can set a conditional uniqueness
+on the <code>imageable</code> scope. This validates the same in the Rails application
+too:</p>
+
+<p>```ruby</p>
+
+<h1>app/models/image_attachment.rb</h1>
+
+<p>class ImageAttachment &lt; ApplicationRecord
+  belongs_to :imageable, polymorphic: true</p>
+
+<p>  has_attached_file :data,</p>
+
+<pre><code>styles:          { thumb:  '120x120#',            medium: '600x600&gt;'           },
+convert_options: { thumb:  '-quality 75 -strip',  medium: '-quality 90 -strip' }
+</code></pre>
+
+<p>  validates_attachment_presence     :data
+  validates_attachment_size         :data, less_than:    PAPERCLIP_IMAGE_SIZE_LIMIT
+  validates_attachment_content_type :data, content_type: PAPERCLIP_IMAGE_CONTENT_TYPE</p>
+
+<p>  # Conditional Uniqueness validation on the belongs_to scope
+  validates :default, uniqueness: { scope: :imageable }, if: :default?</p>
+
+<p>  # Methods to set/unset the default image
+  def undefault!</p>
+
+<pre><code>update(default: false)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def default!</p>
+
+<pre><code>imageable.default_image.undefault! if imageable.default_image
+update(default: true)
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Finally, we create an <code>Imageable</code> concern, which defines the relationship
+with the <code>ImageAttachment</code> model and provides a <code>default_image</code> method:</p>
+
+<p>```ruby</p>
+
+<h1>app/models/concerns/imageable.rb</h1>
+
+<p>module Imageable
+  extend ActiveSupport::Concern</p>
+
+<p>  included do</p>
+
+<pre><code>has_many :image_attachments, as: :imageable, dependent: :destroy
+alias_attribute :images, :image_attachments
+</code></pre>
+
+<p>  end</p>
+
+<p>  def default_image</p>
+
+<pre><code>images.find_by(default: true) || images.first
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Now, to be able to &ldquo;attach images&rdquo; to any model, all you have to do is to
+<code>include Imageable</code>:</p>
+
+<p>```ruby
+class Post &lt; ApplicationRecord
+  include Imageable</p>
+
+<p>  # Other stuff
+end</p>
+
+<p>class Event &lt; ApplicationRecord
+  include Imageable</p>
+
+<p>  # Other stuff
+end
+```</p>
 ]]></content>
   </entry>
   

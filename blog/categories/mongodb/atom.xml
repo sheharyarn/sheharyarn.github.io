@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mongodb, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/mongodb/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[SQL vs NoSQL: MongoDB Is Web Scale!]]></title>
     <link href="https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale/"/>
-    <updated>2015-03-10T11:36:17+05:00</updated>
+    <updated>2015-03-10T02:36:17-04:00</updated>
     <id>https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale</id>
     <content type="html"><![CDATA[<p>While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome Video. Although it starts
 out slow, I can promise you it will change your stance on the SQL vs NoSQL debate.</p>
@@ -81,7 +81,7 @@ of branches and millions of customers, including hundreds of thousands of online
   <entry>
     <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>
     <link href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/"/>
-    <updated>2015-02-15T06:50:44+05:00</updated>
+    <updated>2015-02-14T20:50:44-05:00</updated>
     <id>https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku</id>
     <content type="html"><![CDATA[<p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
 Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.

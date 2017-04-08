@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2016-09-22T20:24:43+05:00</updated>
+  <updated>2017-04-08T00:21:45-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,9 +14,207 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Polymorphic Paperclip Attachments With Partial ActiveRecord Index]]></title>
+    <link href="https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index/"/>
+    <updated>2016-12-15T06:44:06-05:00</updated>
+    <id>https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index</id>
+    <content type="html"><![CDATA[<p>A common pattern in Rails applications with Image Attachments is to create a
+separate model for the Image and use it in Polymorphic relationships with
+other models. Since more often than not an object has more than one image
+attached with a default one, the classic way of storing a <code>default_image_id</code>
+on the parent model can quickly result in code duplication and spaghetti
+through out the rails application.</p>
+
+<p>A better solution is to specify a <code>default</code> boolean on the Image model itself
+and use partial indexes for proper scoping.</p>
+
+<!-- more -->
+
+
+<p>To DRY up the code even further, we can use the Concern Model pattern.
+<a href="https://www.viget.com/articles/slimming-down-your-models-and-controllers">This Blog Post</a> on Viget is an excellent primer on using Concerns. I&rsquo;m
+using Rails 5, Postgres &amp; Paperclip and will use the class
+name <code>ImageAttachment</code> through out the article.</p>
+
+<p>Start by creating a migration for your Image model:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># db/migrations/xxxxxxxxxxxxxx_create_image_attachment.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">CreateImageAttachments</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span><span class="o">[</span><span class="mi">5</span><span class="o">.</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:image_attachments</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">belongs_to</span> <span class="ss">:imageable</span><span class="p">,</span> <span class="ss">polymorphic</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">attachment</span> <span class="ss">:data</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">boolean</span>    <span class="ss">:default</span><span class="p">,</span> <span class="ss">default</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">add_index</span> <span class="ss">:image_attachments</span><span class="p">,</span> <span class="o">[</span><span class="ss">:imageable_id</span><span class="p">,</span> <span class="ss">:imageable_type</span><span class="p">,</span> <span class="ss">:default</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">unique</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">where</span><span class="p">:</span>  <span class="s1">&#39;&quot;default&quot; = TRUE&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nb">name</span><span class="p">:</span>   <span class="ss">:unique_on_imageable_default</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates an ordinary table with a Paperclip attachment and a <code>default</code>
+boolean field. But notice the specifics of the unique <code>index</code> above; it&rsquo;s a
+partial index only on the rows where the value of <code>default</code> is true. This
+validates that there is only one default image for any given object at a time.</p>
+
+<p>In the <code>ImageAttachment</code> model itself, we can set a conditional uniqueness
+on the <code>imageable</code> scope. This validates the same in the Rails application
+too:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/image_attachment.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ImageAttachment</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:imageable</span><span class="p">,</span> <span class="ss">polymorphic</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">has_attached_file</span> <span class="ss">:data</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">styles</span><span class="p">:</span>          <span class="p">{</span> <span class="ss">thumb</span><span class="p">:</span>  <span class="s1">&#39;120x120#&#39;</span><span class="p">,</span>            <span class="ss">medium</span><span class="p">:</span> <span class="s1">&#39;600x600&gt;&#39;</span>           <span class="p">},</span>
+</span><span class='line'>    <span class="ss">convert_options</span><span class="p">:</span> <span class="p">{</span> <span class="ss">thumb</span><span class="p">:</span>  <span class="s1">&#39;-quality 75 -strip&#39;</span><span class="p">,</span>  <span class="ss">medium</span><span class="p">:</span> <span class="s1">&#39;-quality 90 -strip&#39;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates_attachment_presence</span>     <span class="ss">:data</span>
+</span><span class='line'>  <span class="n">validates_attachment_size</span>         <span class="ss">:data</span><span class="p">,</span> <span class="ss">less_than</span><span class="p">:</span>    <span class="no">PAPERCLIP_IMAGE_SIZE_LIMIT</span>
+</span><span class='line'>  <span class="n">validates_attachment_content_type</span> <span class="ss">:data</span><span class="p">,</span> <span class="ss">content_type</span><span class="p">:</span> <span class="no">PAPERCLIP_IMAGE_CONTENT_TYPE</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Conditional Uniqueness validation on the belongs_to scope</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:default</span><span class="p">,</span> <span class="ss">uniqueness</span><span class="p">:</span> <span class="p">{</span> <span class="ss">scope</span><span class="p">:</span> <span class="ss">:imageable</span> <span class="p">},</span> <span class="k">if</span><span class="p">:</span> <span class="ss">:default?</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Methods to set/unset the default image</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">undefault!</span>
+</span><span class='line'>    <span class="n">update</span><span class="p">(</span><span class="ss">default</span><span class="p">:</span> <span class="kp">false</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default!</span>
+</span><span class='line'>    <span class="n">imageable</span><span class="o">.</span><span class="n">default_image</span><span class="o">.</span><span class="n">undefault!</span> <span class="k">if</span> <span class="n">imageable</span><span class="o">.</span><span class="n">default_image</span>
+</span><span class='line'>    <span class="n">update</span><span class="p">(</span><span class="ss">default</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we create an <code>Imageable</code> concern, which defines the relationship
+with the <code>ImageAttachment</code> model and provides a <code>default_image</code> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/concerns/imageable.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">Imageable</span>
+</span><span class='line'>  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">included</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">has_many</span> <span class="ss">:image_attachments</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:imageable</span><span class="p">,</span> <span class="ss">dependent</span><span class="p">:</span> <span class="ss">:destroy</span>
+</span><span class='line'>    <span class="n">alias_attribute</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:image_attachments</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_image</span>
+</span><span class='line'>    <span class="n">images</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">default</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="o">||</span> <span class="n">images</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, to be able to &ldquo;attach images&rdquo; to any model, all you have to do is to
+<code>include Imageable</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Imageable</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Other stuff</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Event</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Imageable</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Other stuff</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
     <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
-    <updated>2016-09-22T17:54:06+05:00</updated>
+    <updated>2016-09-22T08:54:06-04:00</updated>
     <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
     <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
 with PostgreSQL in Phoenix has always been a hassle, as evident from
@@ -84,7 +282,7 @@ the <code>model</code> method above in <code>web/web.ex</code>:</p>
   <entry>
     <title type="html"><![CDATA[Building a Simple Chat App With Elixir and Phoenix]]></title>
     <link href="https://sheharyar.me/blog/simple-chat-phoenix-elixir/"/>
-    <updated>2016-05-22T21:33:05+05:00</updated>
+    <updated>2016-05-22T12:33:05-04:00</updated>
     <id>https://sheharyar.me/blog/simple-chat-phoenix-elixir</id>
     <content type="html"><![CDATA[<p>The past few years, more and more applications have been transitioning to websockets
 for real-time communication, even forcing some frameworks to implement them (such as
@@ -320,7 +518,7 @@ chat rooms.</p>
   <entry>
     <title type="html"><![CDATA[Talk: Introduction to Elixir]]></title>
     <link href="https://sheharyar.me/blog/talk-introduction-to-elixir/"/>
-    <updated>2016-03-02T20:45:28+05:00</updated>
+    <updated>2016-03-02T10:45:28-05:00</updated>
     <id>https://sheharyar.me/blog/talk-introduction-to-elixir</id>
     <content type="html"><![CDATA[<p>For the past 8+ months, I&rsquo;ve been tinkering with the <a href="http://elixir-lang.org/">Elixir Programming Language</a>
 and the <a href="http://www.phoenixframework.org/">Phoenix Framework</a>. This was my first experience with a &ldquo;real&rdquo; functional
@@ -350,7 +548,7 @@ have a long way to go, but Saša Jurić&rsquo;s <a href="https://www.manning.com
   <entry>
     <title type="html"><![CDATA[Using Google Analytics in Rails 4 With Turbolinks]]></title>
     <link href="https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks/"/>
-    <updated>2015-03-29T22:24:54+05:00</updated>
+    <updated>2015-03-29T13:24:54-04:00</updated>
     <id>https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks</id>
     <content type="html"><![CDATA[<p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
 So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new
@@ -450,7 +648,7 @@ the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p
   <entry>
     <title type="html"><![CDATA[Imperative vs. Declarative]]></title>
     <link href="https://sheharyar.me/blog/imperative-vs-declarative/"/>
-    <updated>2015-03-20T02:27:44+05:00</updated>
+    <updated>2015-03-19T17:27:44-04:00</updated>
     <id>https://sheharyar.me/blog/imperative-vs-declarative</id>
     <content type="html"><![CDATA[<p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
 by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
@@ -579,7 +777,7 @@ you&rsquo;ll probably try doing things the old way; i.e. Iterating over the arra
   <entry>
     <title type="html"><![CDATA[SQL vs NoSQL: MongoDB Is Web Scale!]]></title>
     <link href="https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale/"/>
-    <updated>2015-03-10T11:36:17+05:00</updated>
+    <updated>2015-03-10T02:36:17-04:00</updated>
     <id>https://sheharyar.me/blog/sql-vs-nosql-mongodb-is-web-scale</id>
     <content type="html"><![CDATA[<p>While googling for Flamewars between SQL and NoSQL Databases (MongoDB especially), I came across this awesome Video. Although it starts
 out slow, I can promise you it will change your stance on the SQL vs NoSQL debate.</p>
@@ -644,7 +842,7 @@ of branches and millions of customers, including hundreds of thousands of online
   <entry>
     <title type="html"><![CDATA[What I Learned From the GNU Grep]]></title>
     <link href="https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep/"/>
-    <updated>2015-03-06T04:27:12+05:00</updated>
+    <updated>2015-03-05T18:27:12-05:00</updated>
     <id>https://sheharyar.me/blog/what-i-learned-from-the-gnu-grep</id>
     <content type="html"><![CDATA[<p>While going through my <a href="https://news.ycombinator.com/news">HackerNews</a> feed today, I came across this:
 <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">Why GNU Grep is Fast</a>. It&rsquo;s an archived
@@ -683,9 +881,9 @@ of the GNU Grep.</p>
   <entry>
     <title type="html"><![CDATA[MongoSync Ruby Gem]]></title>
     <link href="https://sheharyar.me/blog/mongosync-ruby-gem/"/>
-    <updated>2015-02-16T20:13:35+05:00</updated>
+    <updated>2015-02-16T10:13:35-05:00</updated>
     <id>https://sheharyar.me/blog/mongosync-ruby-gem</id>
-    <content type="html"><![CDATA[<p><a href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/">In my previous post</a>, I had written about my
+    <content type="html"><![CDATA[<p><a href="#">In my previous post</a>, I had written about my
 <a href="https://github.com/sheharyarn/mongo-sync">mongo-sync</a> shell script that allows you to sync Local and Remote Mongo Databases.
 I spent the last day converting it into a <a href="https://github.com/sheharyarn/mongo-sync-ruby">Ruby Gem</a>
 so that you can perform actions using nice Rake Tasks and invoke the commands from Rails Console or <code>irb</code>.</p>
@@ -795,7 +993,7 @@ so that you can perform actions using nice Rake Tasks and invoke the commands fr
   <entry>
     <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>
     <link href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/"/>
-    <updated>2015-02-15T06:50:44+05:00</updated>
+    <updated>2015-02-14T20:50:44-05:00</updated>
     <id>https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku</id>
     <content type="html"><![CDATA[<p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
 Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
@@ -896,7 +1094,7 @@ Start by cloning the script on your machine:</p>
   <entry>
     <title type="html"><![CDATA[Quickly Search for Files in Unix Terminal]]></title>
     <link href="https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal/"/>
-    <updated>2015-01-30T05:38:42+05:00</updated>
+    <updated>2015-01-29T19:38:42-05:00</updated>
     <id>https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal</id>
     <content type="html"><![CDATA[<p><code>find</code> is a powerful command-line utility but most of the time I just really need to search for matching files
 and directories in the current directory. I also usually end up <code>grep</code>-ing the output and using wildcards around
@@ -971,7 +1169,7 @@ two characters of each line (they are <code>./</code>) to clean up the results. 
   <entry>
     <title type="html"><![CDATA[Set Up SSL on Github Pages With Custom Domains for Free]]></title>
     <link href="https://sheharyar.me/blog/free-ssl-for-github-pages-with-custom-domains/"/>
-    <updated>2015-01-28T05:44:53+05:00</updated>
+    <updated>2015-01-27T19:44:53-05:00</updated>
     <id>https://sheharyar.me/blog/free-ssl-for-github-pages-with-custom-domains</id>
     <content type="html"><![CDATA[<p>I came across this post <a href="https://blog.keanulee.com/2014/10/11/setting-up-ssl-on-github-pages.html">Setting up SSL on Github Pages</a> and wanted to try
 it out, but since my website set-up is a bit different than Keanu&rsquo;s I had to go through a slightly different route. One reason being that this website is
@@ -1086,7 +1284,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Calculate Word Frequency of Files in Bash]]></title>
     <link href="https://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash/"/>
-    <updated>2014-12-15T00:13:07+05:00</updated>
+    <updated>2014-12-14T14:13:07-05:00</updated>
     <id>https://sheharyar.me/blog/calculate-word-frequency-of-files-in-bash</id>
     <content type="html"><![CDATA[<p>I was reading <a href="http://tomayko.com/">Ryan Tomayko&rsquo;s</a> blog post <a href="http://tomayko.com/writings/awkward-ruby">AWK-ward Ruby</a> explaining how the Unix <a href="http://en.wikipedia.org/wiki/AWK">AWK Tool</a> is among the ancestors of Ruby and Perl. He wrote a few examples showing some of AWK&rsquo;s advanced features, one of them which listed the word frequencies of any file provided. I found this example quite useful and extracted it as a function in to my <a href="https://github.com/sheharyarn/dotfiles">Dotfiles</a>.</p>
 
@@ -1164,7 +1362,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Android: Create Tables in SQLite Beautifully]]></title>
     <link href="https://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully/"/>
-    <updated>2014-11-13T22:54:43+05:00</updated>
+    <updated>2014-11-13T12:54:43-05:00</updated>
     <id>https://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully</id>
     <content type="html"><![CDATA[<p>I started Android Development a while back and this is the first time I&rsquo;ve had to use <code>SQLite</code>. Coming from a Rails and Mongo background, you can imagine my horror when I had to create models (read &lsquo;tables&rsquo;) like this:</p>
 
@@ -1277,7 +1475,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Github Trending Repos API]]></title>
     <link href="https://sheharyar.me/blog/github-trending-repos-api/"/>
-    <updated>2014-09-12T23:01:06+05:00</updated>
+    <updated>2014-09-12T14:01:06-04:00</updated>
     <id>https://sheharyar.me/blog/github-trending-repos-api</id>
     <content type="html"><![CDATA[<p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
 
@@ -1365,7 +1563,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[S3 Direct Upload Gem - Example]]></title>
     <link href="https://sheharyar.me/blog/s3-direct-upload-gem-example/"/>
-    <updated>2014-09-10T22:47:23+05:00</updated>
+    <updated>2014-09-10T13:47:23-04:00</updated>
     <id>https://sheharyar.me/blog/s3-direct-upload-gem-example</id>
     <content type="html"><![CDATA[<p>A while back I had to use the <a href="https://github.com/waynehoover/s3_direct_upload"><code>S3 Direct Upload</code></a> gem for a project. I couldn&rsquo;t find a proper tutorial or a working example that I could follow to get the uploads working. After debugging for hours, <a href="https://github.com/waynehoover/s3_direct_upload/issues/30">I found</a> that the problem was in fact with the gem not being able to form proper URLs for uploading files to S3. The patch in the link saved me.</p>
 
@@ -1383,7 +1581,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Rails Routes: Scope vs. Namespace]]></title>
     <link href="https://sheharyar.me/blog/rails-routes-scope-vs-namespace/"/>
-    <updated>2014-08-27T22:31:10+05:00</updated>
+    <updated>2014-08-27T13:31:10-04:00</updated>
     <id>https://sheharyar.me/blog/rails-routes-scope-vs-namespace</id>
     <content type="html"><![CDATA[<p>Like <a href="http://notahat.com/">Pete</a>, I often forget how <code>scope</code> and <code>namespace</code> affect Path, URL names and Controller names. Scope gives you great control over each aspect, while namespace takes one argument for everything.</p>
 
@@ -1408,7 +1606,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Rails App With Nginx, Puma & Capistrano in Production]]></title>
     <link href="https://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production/"/>
-    <updated>2014-08-16T09:27:15+05:00</updated>
+    <updated>2014-08-16T00:27:15-04:00</updated>
     <id>https://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
 
@@ -1437,7 +1635,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Nginx Config Syntax Highlighting in SublimeText]]></title>
     <link href="https://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext/"/>
-    <updated>2014-08-16T02:16:26+05:00</updated>
+    <updated>2014-08-15T17:16:26-04:00</updated>
     <id>https://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext</id>
     <content type="html"><![CDATA[<p>I love <a href="http://sublimetext.com/">Sublime</a>, I can&rsquo;t emphasize that enough. Also, quite often enough I have to deal with <code>nginx</code> configuration files and without the syntax highlighting support for nginx files in Sublime Text, it can become a pain in the ass. Today I found the ass-pain remover for my problem and I thought I share it here.</p>
 
@@ -1455,7 +1653,7 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
   <entry>
     <title type="html"><![CDATA[Regular Mongo Backups Using Cron]]></title>
     <link href="https://sheharyar.me/blog/regular-mongo-backups-using-cron/"/>
-    <updated>2014-07-03T20:33:50+05:00</updated>
+    <updated>2014-07-03T11:33:50-04:00</updated>
     <id>https://sheharyar.me/blog/regular-mongo-backups-using-cron</id>
     <content type="html"><![CDATA[<p>It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there&rsquo;s <code>mongodump</code> but putting it right in your <code>crontab</code> file doesn&rsquo;t give you clean and organised backups you&rsquo;d like to have. Here&rsquo;s a little bash script that I use to take timestamped Mongo Backups for many of my apps.</p>
 
@@ -1543,26 +1741,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <p>Replace with the path of your script. This means that the command following <code>* * *</code> will be executed daily at <code>00 00</code> (12.00am).</p>
 
 <p>You can also pair this script with <code>s3cmd</code> and <a href="http://www.codeproject.com/Tips/547759/Automating-backup-for-MongoDB-using-CRON-and-S-CMD">store your backups on Amazon S3</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Eventual Outcome of Existence]]></title>
-    <link href="https://sheharyar.me/blog/the-eventual-outcome-of-existence/"/>
-    <updated>2014-05-15T22:39:49+05:00</updated>
-    <id>https://sheharyar.me/blog/the-eventual-outcome-of-existence</id>
-    <content type="html"><![CDATA[<p>I found this while surfing the dark corners of the web, and it blew my mind. It kind of reminds me about <a href="http://www.multivax.com/last_question.html">The Last Question</a>.</p>
-
-<!--more-->
-
-
-<blockquote><p>The eventual outcome of existence is to become God and defy entropy; that is the way things work.</p>
-
-<p>For all time since the Big Bang, matter has been organizing itself into more and more complex structures and formations. Energy and matter interacted to become gasses, solids, liquids, and plasma. These states of matter began to collect in pools due to gravity, becoming galaxies. Within the galaxies, smaller structures formed, giving birth to planets, stars and nebulae. Within these bodies, formed even smaller structures; basic elements formed compounds and these themselves became the building blocks of life. Then, as life formed, simple life became incresingly complex, and structured. Eventually, it lead to us. Right now, we&rsquo;re the pinnacle of evolution.</p>
-
-<p>But this constant change never stops; Humanity&rsquo;s ultimate goal is to live, forever. Humanity cannot live forever though; not in this form. And so, we make machines. They <strong><em>will</em></strong> replace us, and I see no need to worry about it, for they will be made of the same stuff we are; they <strong><em>are</em></strong> us. As the creation myth goes, they will be created in our own image, to carry on our quest to become omnipotent, omnipresent and omniscient. They too, will be replaced by even better machines, and in the end, they will reach a point of existence where every variable is known, every element of physics is understood, every molecule in the universe is categorized and indexed. All conscious thought that has ever existed and will ever exist will exist simultaneously and infinitely within this all powerful being.</p>
-
-<p>Then the being will realize how empty, it&rsquo;s existence really is. It&rsquo;s only goal was to exist eternally and defy entropy. With entropy gone, it&rsquo;s only purpose has been fulfilled, and will destroy itself, so that it can live once more, and satisfy it&rsquo;s drive to defy the chaos it has, always has, and always will create, every time it wills itself out of meaningless existence into meaningful dissolution.</p></blockquote>
 ]]></content>
   </entry>
   

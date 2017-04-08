@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Polymorphic Paperclip Attachments With Partial ActiveRecord Index - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Dec 15th, 2016 Polymorphic Paperclip Attachments With Partial ActiveRecord Index A common pattern in Rails applications with Image Attachments is to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Polymorphic Paperclip Attachments With Partial ActiveRecord Index - Sheharyar Naseer" />
+  <meta property="og:description" content="Dec 15th, 2016 Polymorphic Paperclip Attachments With Partial ActiveRecord Index A common pattern in Rails applications with Image Attachments is to &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-12-15T06:44:06-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2016</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Polymorphic Paperclip Attachments With Partial ActiveRecord Index
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>A common pattern in Rails applications with Image Attachments is to create a
+separate model for the Image and use it in Polymorphic relationships with
+other models. Since more often than not an object has more than one image
+attached with a default one, the classic way of storing a <code>default_image_id</code>
+on the parent model can quickly result in code duplication and spaghetti
+through out the rails application.</p>
+
+<p>A better solution is to specify a <code>default</code> boolean on the Image model itself
+and use partial indexes for proper scoping.</p>
+
+<!-- more -->
+
+
+<p>To DRY up the code even further, we can use the Concern Model pattern.
+<a href="https://www.viget.com/articles/slimming-down-your-models-and-controllers">This Blog Post</a> on Viget is an excellent primer on using Concerns. I&rsquo;m
+using Rails 5, Postgres &amp; Paperclip and will use the class
+name <code>ImageAttachment</code> through out the article.</p>
+
+<p>Start by creating a migration for your Image model:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># db/migrations/xxxxxxxxxxxxxx_create_image_attachment.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">CreateImageAttachments</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span><span class="o">[</span><span class="mi">5</span><span class="o">.</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:image_attachments</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">belongs_to</span> <span class="ss">:imageable</span><span class="p">,</span> <span class="ss">polymorphic</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">attachment</span> <span class="ss">:data</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">boolean</span>    <span class="ss">:default</span><span class="p">,</span> <span class="ss">default</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">add_index</span> <span class="ss">:image_attachments</span><span class="p">,</span> <span class="o">[</span><span class="ss">:imageable_id</span><span class="p">,</span> <span class="ss">:imageable_type</span><span class="p">,</span> <span class="ss">:default</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">unique</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">where</span><span class="p">:</span>  <span class="s1">&#39;&quot;default&quot; = TRUE&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nb">name</span><span class="p">:</span>   <span class="ss">:unique_on_imageable_default</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates an ordinary table with a Paperclip attachment and a <code>default</code>
+boolean field. But notice the specifics of the unique <code>index</code> above; it&rsquo;s a
+partial index only on the rows where the value of <code>default</code> is true. This
+validates that there is only one default image for any given object at a time.</p>
+
+<p>In the <code>ImageAttachment</code> model itself, we can set a conditional uniqueness
+on the <code>imageable</code> scope. This validates the same in the Rails application
+too:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/image_attachment.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ImageAttachment</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:imageable</span><span class="p">,</span> <span class="ss">polymorphic</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">has_attached_file</span> <span class="ss">:data</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">styles</span><span class="p">:</span>          <span class="p">{</span> <span class="ss">thumb</span><span class="p">:</span>  <span class="s1">&#39;120x120#&#39;</span><span class="p">,</span>            <span class="ss">medium</span><span class="p">:</span> <span class="s1">&#39;600x600&gt;&#39;</span>           <span class="p">},</span>
+</span><span class='line'>    <span class="ss">convert_options</span><span class="p">:</span> <span class="p">{</span> <span class="ss">thumb</span><span class="p">:</span>  <span class="s1">&#39;-quality 75 -strip&#39;</span><span class="p">,</span>  <span class="ss">medium</span><span class="p">:</span> <span class="s1">&#39;-quality 90 -strip&#39;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">validates_attachment_presence</span>     <span class="ss">:data</span>
+</span><span class='line'>  <span class="n">validates_attachment_size</span>         <span class="ss">:data</span><span class="p">,</span> <span class="ss">less_than</span><span class="p">:</span>    <span class="no">PAPERCLIP_IMAGE_SIZE_LIMIT</span>
+</span><span class='line'>  <span class="n">validates_attachment_content_type</span> <span class="ss">:data</span><span class="p">,</span> <span class="ss">content_type</span><span class="p">:</span> <span class="no">PAPERCLIP_IMAGE_CONTENT_TYPE</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Conditional Uniqueness validation on the belongs_to scope</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:default</span><span class="p">,</span> <span class="ss">uniqueness</span><span class="p">:</span> <span class="p">{</span> <span class="ss">scope</span><span class="p">:</span> <span class="ss">:imageable</span> <span class="p">},</span> <span class="k">if</span><span class="p">:</span> <span class="ss">:default?</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Methods to set/unset the default image</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">undefault!</span>
+</span><span class='line'>    <span class="n">update</span><span class="p">(</span><span class="ss">default</span><span class="p">:</span> <span class="kp">false</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default!</span>
+</span><span class='line'>    <span class="n">imageable</span><span class="o">.</span><span class="n">default_image</span><span class="o">.</span><span class="n">undefault!</span> <span class="k">if</span> <span class="n">imageable</span><span class="o">.</span><span class="n">default_image</span>
+</span><span class='line'>    <span class="n">update</span><span class="p">(</span><span class="ss">default</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we create an <code>Imageable</code> concern, which defines the relationship
+with the <code>ImageAttachment</code> model and provides a <code>default_image</code> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/concerns/imageable.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">Imageable</span>
+</span><span class='line'>  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">included</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">has_many</span> <span class="ss">:image_attachments</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:imageable</span><span class="p">,</span> <span class="ss">dependent</span><span class="p">:</span> <span class="ss">:destroy</span>
+</span><span class='line'>    <span class="n">alias_attribute</span> <span class="ss">:images</span><span class="p">,</span> <span class="ss">:image_attachments</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">default_image</span>
+</span><span class='line'>    <span class="n">images</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">default</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="o">||</span> <span class="n">images</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, to be able to &ldquo;attach images&rdquo; to any model, all you have to do is to
+<code>include Imageable</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Imageable</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Other stuff</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Event</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Imageable</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Other stuff</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/activerecord/'>activerecord,</a>, <a class='category' href='/blog/categories/paperclip/'>paperclip</a>, <a class='category' href='/blog/categories/postgres/'>postgres,</a>, <a class='category' href='/blog/categories/rails/'>rails,</a>, <a class='category' href='/blog/categories/ruby/'>ruby,</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Using UUIDs with Postgres in Phoenix and Ecto" href="/blog/postgres-uuids-phoenix-ecto/">
+        ← Using UUIDs with Postgres in Phoenix and Ecto
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
