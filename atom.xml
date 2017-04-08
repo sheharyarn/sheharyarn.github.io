@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T00:21:45-04:00</updated>
+  <updated>2017-04-08T01:10:47-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,248 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Axios for Network Requests in React]]></title>
+    <link href="https://sheharyar.me/blog/using-axios-for-requests-in-react/"/>
+    <updated>2017-01-17T09:27:52-05:00</updated>
+    <id>https://sheharyar.me/blog/using-axios-for-requests-in-react</id>
+    <content type="html"><![CDATA[<p>Before jumping ship to React, I had been working on Angular for a long time
+and really enjoyed building great SPAs in the <a href="https://toddmotto.com/killing-it-with-angular-directives-structure-and-mvvm/">MVVM Pattern</a>. One of my
+favorite things was the services architecture of making requests. I&rsquo;ve tried
+to recreate the pattern using <a href="https://github.com/mzabriskie/axios">Axios</a>, which you can use in React or any
+other frontend framework.</p>
+
+<!-- more -->
+
+
+<p>First, let&rsquo;s define a custom wrapper around <code>Axios</code> for our application. This
+can contain our global configuration such as the base API url, header defaults
+and more:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">import</span> <span class="nx">axios</span>     <span class="nx">from</span> <span class="s1">&#39;axios&#39;</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">constants</span> <span class="nx">from</span> <span class="s1">&#39;shared/constants&#39;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Create an Axios Client with defaults</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">baseURL</span><span class="o">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">api</span><span class="p">.</span><span class="nx">url</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Request Wrapper with default success/error actions</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">onSuccess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s1">&#39;Request Successful!&#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">onError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Request Failed:&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Request was made but server responded with something</span>
+</span><span class='line'>      <span class="c1">// other than 2xx</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Status:&#39;</span><span class="p">,</span>  <span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Data:&#39;</span><span class="p">,</span>    <span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Headers:&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Something else happened while setting up the request</span>
+</span><span class='line'>      <span class="c1">// triggered the error</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Error Message:&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">response</span> <span class="o">||</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">client</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onSuccess</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">onError</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">request</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Making Requests using Services</h2>
+
+<p>To make a simple request, we can use something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">import</span> <span class="nx">request</span> <span class="nx">from</span> <span class="s1">&#39;shared/lib/request&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">request</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/path/&#39;</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">resp</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">resp</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But the ideal way to use it is to create a separate <code>service</code> for each resource
+that should be responsible for handling all API calls of that model. For example,
+for a <code>Message</code> class, we can create a <code>MessageService</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// services/api/message.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">import</span> <span class="nx">request</span> <span class="nx">from</span> <span class="s1">&#39;shared/lib/request&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">get</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">request</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">url</span><span class="o">:</span>    <span class="err">`</span><span class="o">/</span><span class="nx">message</span><span class="o">/</span><span class="nx">$</span><span class="p">{</span><span class="nx">id</span><span class="p">}</span><span class="err">`</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">create</span><span class="p">({</span><span class="nx">subject</span><span class="p">,</span> <span class="nx">content</span><span class="p">})</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">request</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">url</span><span class="o">:</span>    <span class="s1">&#39;/message/create&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">data</span><span class="o">:</span>   <span class="p">{</span>
+</span><span class='line'>      <span class="nx">subject</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">content</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">MessageService</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">get</span><span class="p">,</span> <span class="nx">create</span> <span class="c1">//, update, delete, etc. ...</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">MessageService</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can then call these methods from any other module/view/component:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">MessageService</span> <span class="nx">from</span> <span class="s1">&#39;services/api/message&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">class</span> <span class="nx">Message</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">handleSubmit</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="p">{</span><span class="nx">subject</span><span class="p">,</span> <span class="nx">message</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">MessageService</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="nx">subject</span><span class="p">,</span> <span class="nx">message</span><span class="p">})</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="err">`</span><span class="nx">New</span> <span class="nx">Message</span> <span class="kd">with</span> <span class="nx">id</span> <span class="nx">$</span><span class="p">{</span><span class="nx">response</span><span class="p">.</span><span class="nx">id</span><span class="p">}</span> <span class="nx">created</span><span class="o">!</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Other stuff...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Polymorphic Paperclip Attachments With Partial ActiveRecord Index]]></title>
@@ -1647,100 +1889,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 <p><img src="https://i.imgur.com/Ykt61xx.png" alt="Nginx Syntax Highlighting" /></p>
 
 <p><strong><em>To install</em></strong>, simply download the <a href="https://github.com/brandonwamboldt/sublime-nginx">source</a> and place it in your Packages Directory or better yet, if you have Package Control installed in Sublime, look for the <em>Nginx</em> package by <em>Brandon Wamboldt</em> and install it via the package manager right in Sublime.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Regular Mongo Backups Using Cron]]></title>
-    <link href="https://sheharyar.me/blog/regular-mongo-backups-using-cron/"/>
-    <updated>2014-07-03T11:33:50-04:00</updated>
-    <id>https://sheharyar.me/blog/regular-mongo-backups-using-cron</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s a pain configuring Cron Jobs for Database Backups of multiple apps on the same server. Sure there&rsquo;s <code>mongodump</code> but putting it right in your <code>crontab</code> file doesn&rsquo;t give you clean and organised backups you&rsquo;d like to have. Here&rsquo;s a little bash script that I use to take timestamped Mongo Backups for many of my apps.</p>
-
-<!--more-->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">MONGO_DATABASE</span><span class="o">=</span><span class="s2">&quot;your_db_name&quot;</span>
-</span><span class='line'><span class="nv">APP_NAME</span><span class="o">=</span><span class="s2">&quot;your_app_name&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">MONGO_HOST</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span>
-</span><span class='line'><span class="nv">MONGO_PORT</span><span class="o">=</span><span class="s2">&quot;27017&quot;</span>
-</span><span class='line'><span class="nv">TIMESTAMP</span><span class="o">=</span><span class="sb">`</span>date +%F-%H%M<span class="sb">`</span>
-</span><span class='line'><span class="nv">MONGODUMP_PATH</span><span class="o">=</span><span class="s2">&quot;/usr/bin/mongodump&quot;</span>
-</span><span class='line'><span class="nv">BACKUPS_DIR</span><span class="o">=</span><span class="s2">&quot;/home/username/backups/$APP_NAME&quot;</span>
-</span><span class='line'><span class="nv">BACKUP_NAME</span><span class="o">=</span><span class="s2">&quot;$APP_NAME-$TIMESTAMP&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncLock())&quot;</span>
-</span><span class='line'><span class="c"># $MONGODUMP_PATH -h $MONGO_HOST:$MONGO_PORT -d $MONGO_DATABASE</span>
-</span><span class='line'><span class="nv">$MONGODUMP_PATH</span> -d <span class="nv">$MONGO_DATABASE</span>
-</span><span class='line'><span class="c"># mongo admin --eval &quot;printjson(db.fsyncUnlock())&quot;</span>
-</span><span class='line'>
-</span><span class='line'>mkdir -p <span class="nv">$BACKUPS_DIR</span>
-</span><span class='line'>mv dump <span class="nv">$BACKUP_NAME</span>
-</span><span class='line'>tar -zcvf <span class="nv">$BACKUPS_DIR</span>/<span class="nv">$BACKUP_NAME</span>.tgz <span class="nv">$BACKUP_NAME</span>
-</span><span class='line'>rm -rf <span class="nv">$BACKUP_NAME</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h6><a href="https://gist.github.com/sheharyarn/0f04c1ba18462cddaaf5">View Gist on Github</a></h6>
-
-<p>First, you need to specify the name of the Database as well as your App in the <code>MONGO_DATABASE</code> and <code>APP_NAME</code> parameters.</p>
-
-<p>You can also set the default storage location of the backups in the <code>BACKUPS_DIR</code> parameter. If you are taking backups remotely, add the details in the <code>HOST</code> and <code>PORT</code> parameters and comment/uncomment the appropriate lines. If you&rsquo;d like, you can also uncomment the <code>fsyncLock</code> and <code>fsyncUnlock</code> lines, this doesn&rsquo;t let the database update while the backup is being made.</p>
-
-<p>After putting in values for the parameters, test if the script is working, but before that, you need to make it executable. Save it as <code>mongo_backup.sh</code> and run:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x mongo_backup.sh
-</span><span class='line'>bash mongo_backup.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you get an error saying <code>locale::facet::_S_create_c_locale name not valid</code> or something else related to Locales, you need to <a href="http://askubuntu.com/questions/162391/how-do-i-fix-my-locale-issue">configure them</a>. If the backups are being stored in the specified directory, it&rsquo;s now time to set up Cron. To do that, run:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo su
-</span><span class='line'>crontab -e
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&rsquo;ll create a new <code>Cron</code> file if you haven&rsquo;t already created one and open it. Enter this in a new line:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="m">00</span> <span class="m">00</span> * * * /bin/bash /home/username/scripts/mongo_backup.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Replace with the path of your script. This means that the command following <code>* * *</code> will be executed daily at <code>00 00</code> (12.00am).</p>
-
-<p>You can also pair this script with <code>s3cmd</code> and <a href="http://www.codeproject.com/Tips/547759/Automating-backup-for-MongoDB-using-CRON-and-S-CMD">store your backups on Amazon S3</a>.</p>
 ]]></content>
   </entry>
   

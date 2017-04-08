@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Javascript, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2017-04-08T01:10:47-04:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Axios for Network Requests in React]]></title>
+    <link href="https://sheharyar.me/blog/using-axios-for-requests-in-react/"/>
+    <updated>2017-01-17T09:27:52-05:00</updated>
+    <id>https://sheharyar.me/blog/using-axios-for-requests-in-react</id>
+    <content type="html"><![CDATA[<p>Before jumping ship to React, I had been working on Angular for a long time
+and really enjoyed building great SPAs in the <a href="https://toddmotto.com/killing-it-with-angular-directives-structure-and-mvvm/">MVVM Pattern</a>. One of my
+favorite things was the services architecture of making requests. I&rsquo;ve tried
+to recreate the pattern using <a href="https://github.com/mzabriskie/axios">Axios</a>, which you can use in React or any
+other frontend framework.</p>
+
+<!-- more -->
+
+
+<p>First, let&rsquo;s define a custom wrapper around <code>Axios</code> for our application. This
+can contain our global configuration such as the base API url, header defaults
+and more:</p>
+
+<p>```js
+import axios     from &lsquo;axios&rsquo;
+import constants from &lsquo;shared/constants&rsquo;</p>
+
+<p>/<em>*
+ * Create an Axios Client with defaults
+ </em>/
+const client = axios.create({
+  baseURL: constants.api.url
+});</p>
+
+<p>/<em>*
+ * Request Wrapper with default success/error actions
+ </em>/
+const request = function(options) {
+  const onSuccess = function(response) {</p>
+
+<pre><code>console.debug('Request Successful!', response);
+return response.data;
+</code></pre>
+
+<p>  }</p>
+
+<p>  const onError = function(error) {</p>
+
+<pre><code>console.error('Request Failed:', error.config);
+
+if (error.response) {
+  // Request was made but server responded with something
+  // other than 2xx
+  console.error('Status:',  error.response.status);
+  console.error('Data:',    error.response.data);
+  console.error('Headers:', error.response.headers);
+
+} else {
+  // Something else happened while setting up the request
+  // triggered the error
+  console.error('Error Message:', error.message);
+}
+
+return Promise.reject(error.response || error.message);
+</code></pre>
+
+<p>  }</p>
+
+<p>  return client(options)</p>
+
+<pre><code>        .then(onSuccess)
+        .catch(onError);
+</code></pre>
+
+<p>}</p>
+
+<p>export default request;
+```</p>
+
+<h2>Making Requests using Services</h2>
+
+<p>To make a simple request, we can use something like this:</p>
+
+<p>```js
+import request from &lsquo;shared/lib/request&rsquo;</p>
+
+<p>request({
+  method: &lsquo;get&rsquo;,
+  url: &lsquo;/path/&rsquo;
+}).then((resp) => {
+  console.log(resp);
+})
+```</p>
+
+<p>But the ideal way to use it is to create a separate <code>service</code> for each resource
+that should be responsible for handling all API calls of that model. For example,
+for a <code>Message</code> class, we can create a <code>MessageService</code>:</p>
+
+<p>```js
+// services/api/message.js</p>
+
+<p>import request from &lsquo;shared/lib/request&rsquo;</p>
+
+<p>function get(id) {
+  return request({</p>
+
+<pre><code>url:    `/message/${id}`,
+method: 'GET'
+</code></pre>
+
+<p>  });
+}</p>
+
+<p>function create({subject, content}) {
+  return request({</p>
+
+<pre><code>url:    '/message/create',
+method: 'POST',
+data:   {
+  subject,
+  content
+}
+</code></pre>
+
+<p>  });
+}</p>
+
+<p>const MessageService = {
+  get, create //, update, delete, etc. &hellip;
+}</p>
+
+<p>export default MessageService;
+```</p>
+
+<p>You can then call these methods from any other module/view/component:</p>
+
+<p>```js
+import React from &lsquo;react&rsquo;
+import MessageService from &lsquo;services/api/message&rsquo;</p>
+
+<p>class Message extends React.Component {
+  handleSubmit() {</p>
+
+<pre><code>const {subject, message} = this.state;
+
+MessageService
+  .create({subject, message})
+  .then((response) =&gt; {
+    alert(`New Message with id ${response.id} created!`);
+  });
+</code></pre>
+
+<p>  }</p>
+
+<p>  // Other stuff&hellip;
+}
+```</p>
+]]></content>
+  </entry>
+  
+</feed>
