@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>EctoRut - Simple Ecto Shortcuts to Make Your Life Easier - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Mar 5th, 2017 EctoRut - Simple Ecto Shortcuts to Make Your Life Easier A few months back, I published an Elixir package called Ecto.Rut.
+Ecto.Rut &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="EctoRut - Simple Ecto Shortcuts to Make Your Life Easier - Sheharyar Naseer" />
+  <meta property="og:description" content="Mar 5th, 2017 EctoRut - Simple Ecto Shortcuts to Make Your Life Easier A few months back, I published an Elixir package called Ecto.Rut.
+Ecto.Rut &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-03-05T07:31:22-05:00" pubdate data-updated="true">Mar 5<span>th</span>, 2017</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          EctoRut - Simple Ecto Shortcuts to Make Your Life Easier
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>A few months back, I published an Elixir package called <a href="https://github.com/sheharyarn/ecto_rut"><code>Ecto.Rut</code></a>.
+Ecto.Rut lets you call <code>Ecto.Repo</code> methods directly on the Model itself instead
+of passing your Model as an argument to each <code>Repo</code> method call.</p>
+
+<p>While the project&rsquo;s Readme and <a href="https://hexdocs.pm/ecto_rut/Ecto.Rut.html">Documentation</a> are self-sufficient in
+getting you started, I wanted to write about my motivation for creating the
+package in the first place.</p>
+
+<!-- more -->
+
+
+<h2>Quick Introduction</h2>
+
+<p>Ecto.Rut is simply a wrapper around <code>Ecto.Repo</code>, so it can let you do awesome
+things like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">all</span>
+</span><span class='line'><span class="c1"># instead of YourApp.Repo.all(Post)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># instead of YourApp.Repo.get(Post, 2)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># instead of YourApp.Repo.delete(Post, 5)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Awesome Post&quot;</span><span class="p">,</span> <span class="ss">slug</span><span class="p">:</span> <span class="s2">&quot;awesome-post&quot;</span><span class="p">,</span> <span class="ss">category_id</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># instead of:</span>
+</span><span class='line'><span class="c1"># changeset = Post.changeset(%Post{}, %{title: &quot;Awesome Post&quot;, slug: &quot;awesome-post&quot;, category_id: 3})</span>
+</span><span class='line'><span class="c1"># YourApp.Repo.insert(changeset)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Well, you get the idea</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Motivation</h2>
+
+<p>As I improved my Elixir skills, I needed to be better familiar with <code>Macros</code> and
+Metaprogramming in general (see my talk on <a href="/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>),
+and it all started with random experiments in Elixir Macros. At the same time,
+working on my Phoenix applications, I grew tired of calling <code>Repo</code> methods for
+even the simplest database queries on my models and missed the <em>Rails-y</em> way of
+calling <code>Model.find</code>, <code>Model.update</code>, etc. I saw that (some) other developers
+on the Elixir Forum felt the same way too.</p>
+
+<p>I took this as an opportunity to publish my first Hex Package, while refining
+my Elixir skills at the same time. The goal of the project here is to not to
+fully replace <code>Ecto.Repo</code> calls in your app, but to reduce code repetition
+and simplify and speed up development.</p>
+
+<p>For complex queries, it&rsquo;s highly recommended that you use the original <code>Ecto.Repo</code>
+calls and not this package.</p>
+
+<h2>Implementation</h2>
+
+<p>Ecto.Rut is implemented as a simple <code>behaviour</code> using Macros that can be activated
+by calling the <code>use</code> construct. The basic structure of the code looks something
+like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Ecto.Rut</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">defmacro</span> <span class="n">__using__</span><span class="p">(</span><span class="n">opts</span> <span class="p">\\</span> <span class="p">[])</span> <span class="k">do</span>
+</span><span class='line'>    <span class="k">quote</span> <span class="ss">bind_quoted</span><span class="p">:</span> <span class="p">[</span><span class="ss">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">]</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">def</span> <span class="n">all</span><span class="p">,</span>              <span class="ss">do</span><span class="p">:</span> <span class="n">call</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>    <span class="p">[</span><span class="na">@model</span><span class="p">])</span>
+</span><span class='line'>      <span class="kd">def</span> <span class="n">get</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>          <span class="ss">do</span><span class="p">:</span> <span class="n">call</span><span class="p">(</span><span class="ss">:get</span><span class="p">,</span>    <span class="p">[</span><span class="na">@model</span><span class="p">,</span> <span class="n">id</span><span class="p">])</span>
+</span><span class='line'>      <span class="kd">def</span> <span class="n">delete</span><span class="p">(</span><span class="n">struct</span><span class="p">),</span>   <span class="ss">do</span><span class="p">:</span> <span class="n">call</span><span class="p">(</span><span class="ss">:delete</span><span class="p">,</span> <span class="p">[</span><span class="n">struct</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">defp</span> <span class="n">call</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">args</span> <span class="p">\\</span> <span class="p">[])</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">apply</span><span class="p">(</span><span class="na">@repo</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The gist above is just an example, not the <a href="https://github.com/sheharyarn/ecto_rut">full code</a>. But it does convey
+how  powerful Macros in Elixir truly are. Abstraction over abstraction leads to
+beautifully simple code without comprimising any of the performance and giving
+rise to creative solutions at the same time.</p>
+
+<p>I don&rsquo;t have much else to say about the topic, but the beauty and flexibility of the
+Elixir language keeps surprising me every now and then.</p>
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ecto/'>ecto</a>, <a class='category' href='/blog/categories/elixir/'>elixir,</a>, <a class='category' href='/blog/categories/phoenix/'>phoenix,</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Talk: Remote Access Trojans" href="/blog/talk-remote-access-trojans/">
+        ← Talk: Remote Access Trojans
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/‎">Ruby</a>,
+    <a href="http://nodejs.org/">Node</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>. 
+ </div>
+</footer>
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

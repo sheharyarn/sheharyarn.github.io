@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Elixir, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/elixir/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T01:39:17-04:00</updated>
+  <updated>2017-04-08T02:32:32-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[EctoRut - Simple Ecto Shortcuts to Make Your Life Easier]]></title>
+    <link href="https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts/"/>
+    <updated>2017-03-05T07:31:22-05:00</updated>
+    <id>https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts</id>
+    <content type="html"><![CDATA[<p>A few months back, I published an Elixir package called <a href="https://github.com/sheharyarn/ecto_rut"><code>Ecto.Rut</code></a>.
+Ecto.Rut lets you call <code>Ecto.Repo</code> methods directly on the Model itself instead
+of passing your Model as an argument to each <code>Repo</code> method call.</p>
+
+<p>While the project&rsquo;s Readme and <a href="https://hexdocs.pm/ecto_rut/Ecto.Rut.html">Documentation</a> are self-sufficient in
+getting you started, I wanted to write about my motivation for creating the
+package in the first place.</p>
+
+<!-- more -->
+
+
+<h2>Quick Introduction</h2>
+
+<p>Ecto.Rut is simply a wrapper around <code>Ecto.Repo</code>, so it can let you do awesome
+things like this:</p>
+
+<p>```elixir
+Post.all</p>
+
+<h1>instead of YourApp.Repo.all(Post)</h1>
+
+<p>Post.get(2)</p>
+
+<h1>instead of YourApp.Repo.get(Post, 2)</h1>
+
+<p>Post.delete(5)</p>
+
+<h1>instead of YourApp.Repo.delete(Post, 5)</h1>
+
+<p>Post.insert(title: &ldquo;Awesome Post&rdquo;, slug: &ldquo;awesome-post&rdquo;, category_id: 3)</p>
+
+<h1>instead of:</h1>
+
+<h1>changeset = Post.changeset(%Post{}, %{title: &ldquo;Awesome Post&rdquo;, slug: &ldquo;awesome-post&rdquo;, category_id: 3})</h1>
+
+<h1>YourApp.Repo.insert(changeset)</h1>
+
+<h1>Well, you get the idea</h1>
+
+<p>```</p>
+
+<h2>Motivation</h2>
+
+<p>As I improved my Elixir skills, I needed to be better familiar with <code>Macros</code> and
+Metaprogramming in general (see my talk on <a href="/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>),
+and it all started with random experiments in Elixir Macros. At the same time,
+working on my Phoenix applications, I grew tired of calling <code>Repo</code> methods for
+even the simplest database queries on my models and missed the <em>Rails-y</em> way of
+calling <code>Model.find</code>, <code>Model.update</code>, etc. I saw that (some) other developers
+on the Elixir Forum felt the same way too.</p>
+
+<p>I took this as an opportunity to publish my first Hex Package, while refining
+my Elixir skills at the same time. The goal of the project here is to not to
+fully replace <code>Ecto.Repo</code> calls in your app, but to reduce code repetition
+and simplify and speed up development.</p>
+
+<p>For complex queries, it&rsquo;s highly recommended that you use the original <code>Ecto.Repo</code>
+calls and not this package.</p>
+
+<h2>Implementation</h2>
+
+<p>Ecto.Rut is implemented as a simple <code>behaviour</code> using Macros that can be activated
+by calling the <code>use</code> construct. The basic structure of the code looks something
+like this:</p>
+
+<p>```elixir
+defmodule Ecto.Rut do
+  defmacro <strong>using</strong>(opts \ []) do</p>
+
+<pre><code>quote bind_quoted: [opts: opts] do
+
+  def all,              do: call(:all,    [@model])
+  def get(id),          do: call(:get,    [@model, id])
+  def delete(struct),   do: call(:delete, [struct])
+
+  defp call(method, args \\ []) do
+    apply(@repo, method, args)
+  end
+
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>The gist above is just an example, not the <a href="https://github.com/sheharyarn/ecto_rut">full code</a>. But it does convey
+how  powerful Macros in Elixir truly are. Abstraction over abstraction leads to
+beautifully simple code without comprimising any of the performance and giving
+rise to creative solutions at the same time.</p>
+
+<p>I don&rsquo;t have much else to say about the topic, but the beauty and flexibility of the
+Elixir language keeps surprising me every now and then.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ecto, | Sheharyar Naseer]]></title>
+  <title><![CDATA[Category: Ecto | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/ecto/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T01:39:17-04:00</updated>
+  <updated>2017-04-08T02:32:32-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,57 +14,103 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
-    <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
-    <updated>2016-09-22T08:54:06-04:00</updated>
-    <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
-    <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
-with PostgreSQL in Phoenix has always been a hassle, as evident from
-the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
-<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
-can pass <code>--binary-id</code> when creating a new Phoenix project to
-automatically use UUIDs (or other binary IDs when using different
-databases and adapters).</p>
+    <title type="html"><![CDATA[EctoRut - Simple Ecto Shortcuts to Make Your Life Easier]]></title>
+    <link href="https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts/"/>
+    <updated>2017-03-05T07:31:22-05:00</updated>
+    <id>https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts</id>
+    <content type="html"><![CDATA[<p>A few months back, I published an Elixir package called <a href="https://github.com/sheharyarn/ecto_rut"><code>Ecto.Rut</code></a>.
+Ecto.Rut lets you call <code>Ecto.Repo</code> methods directly on the Model itself instead
+of passing your Model as an argument to each <code>Repo</code> method call.</p>
+
+<p>While the project&rsquo;s Readme and <a href="https://hexdocs.pm/ecto_rut/Ecto.Rut.html">Documentation</a> are self-sufficient in
+getting you started, I wanted to write about my motivation for creating the
+package in the first place.</p>
 
 <!-- more -->
 
 
-<p>When creating a new project with <code>--binary-id</code>, it will automatically
-set appropriate values for <code>@primary_key</code> and <code>@foreign_key_type</code>
-in your <code>web/web.ex</code>. For Postgres, this means using <a href="https://hexdocs.pm/ecto/Ecto.UUID.html"><code>Ecto.UUID</code></a>
-at the back (Ecto handles this automatically):</p>
+<h2>Quick Introduction</h2>
+
+<p>Ecto.Rut is simply a wrapper around <code>Ecto.Repo</code>, so it can let you do awesome
+things like this:</p>
 
 <p>```elixir
-def model do
-  quote do</p>
+Post.all</p>
 
-<pre><code>use Ecto.Schema
+<h1>instead of YourApp.Repo.all(Post)</h1>
 
-import Ecto
-import Ecto.Changeset
-import Ecto.Query
+<p>Post.get(2)</p>
 
-@primary_key {:id, :binary_id, autogenerate: true}
-@foreign_key_type :binary_id
+<h1>instead of YourApp.Repo.get(Post, 2)</h1>
+
+<p>Post.delete(5)</p>
+
+<h1>instead of YourApp.Repo.delete(Post, 5)</h1>
+
+<p>Post.insert(title: &ldquo;Awesome Post&rdquo;, slug: &ldquo;awesome-post&rdquo;, category_id: 3)</p>
+
+<h1>instead of:</h1>
+
+<h1>changeset = Post.changeset(%Post{}, %{title: &ldquo;Awesome Post&rdquo;, slug: &ldquo;awesome-post&rdquo;, category_id: 3})</h1>
+
+<h1>YourApp.Repo.insert(changeset)</h1>
+
+<h1>Well, you get the idea</h1>
+
+<p>```</p>
+
+<h2>Motivation</h2>
+
+<p>As I improved my Elixir skills, I needed to be better familiar with <code>Macros</code> and
+Metaprogramming in general (see my talk on <a href="/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>),
+and it all started with random experiments in Elixir Macros. At the same time,
+working on my Phoenix applications, I grew tired of calling <code>Repo</code> methods for
+even the simplest database queries on my models and missed the <em>Rails-y</em> way of
+calling <code>Model.find</code>, <code>Model.update</code>, etc. I saw that (some) other developers
+on the Elixir Forum felt the same way too.</p>
+
+<p>I took this as an opportunity to publish my first Hex Package, while refining
+my Elixir skills at the same time. The goal of the project here is to not to
+fully replace <code>Ecto.Repo</code> calls in your app, but to reduce code repetition
+and simplify and speed up development.</p>
+
+<p>For complex queries, it&rsquo;s highly recommended that you use the original <code>Ecto.Repo</code>
+calls and not this package.</p>
+
+<h2>Implementation</h2>
+
+<p>Ecto.Rut is implemented as a simple <code>behaviour</code> using Macros that can be activated
+by calling the <code>use</code> construct. The basic structure of the code looks something
+like this:</p>
+
+<p>```elixir
+defmodule Ecto.Rut do
+  defmacro <strong>using</strong>(opts \ []) do</p>
+
+<pre><code>quote bind_quoted: [opts: opts] do
+
+  def all,              do: call(:all,    [@model])
+  def get(id),          do: call(:get,    [@model, id])
+  def delete(struct),   do: call(:delete, [struct])
+
+  defp call(method, args \\ []) do
+    apply(@repo, method, args)
+  end
+
+end
 </code></pre>
 
 <p>  end
 end
 ```</p>
 
-<h2>Existing Applications</h2>
+<p>The gist above is just an example, not the <a href="https://github.com/sheharyarn/ecto_rut">full code</a>. But it does convey
+how  powerful Macros in Elixir truly are. Abstraction over abstraction leads to
+beautifully simple code without comprimising any of the performance and giving
+rise to creative solutions at the same time.</p>
 
-<p>If you want to start using UUIDs in your existing Phoenix application,
-you need to specify <code>:binary_id</code> in your Ecto migration in addition to
-the <code>model</code> method above in <code>web/web.ex</code>:</p>
-
-<p><code>elixir
-create table(:posts, primary_key: false) do
-  add :id, :binary_id, primary_key: true
-end
-</code>
-For a more detailed solution for existing Phoenix apps, see the
-<a href="https://hexdocs.pm/ecto/Ecto.Schema.html#module-primary-keys">Ecto Schema Docs</a> or José&rsquo;s <a href="http://stackoverflow.com/a/30004834/1533054">answer on Stackoverflow</a>.</p>
+<p>I don&rsquo;t have much else to say about the topic, but the beauty and flexibility of the
+Elixir language keeps surprising me every now and then.</p>
 ]]></content>
   </entry>
   

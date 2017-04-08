@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T01:39:17-04:00</updated>
+  <updated>2017-04-08T02:32:32-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[EctoRut - Simple Ecto Shortcuts to Make Your Life Easier]]></title>
+    <link href="https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts/"/>
+    <updated>2017-03-05T07:31:22-05:00</updated>
+    <id>https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts</id>
+    <content type="html"><![CDATA[<p>A few months back, I published an Elixir package called <a href="https://github.com/sheharyarn/ecto_rut"><code>Ecto.Rut</code></a>.
+Ecto.Rut lets you call <code>Ecto.Repo</code> methods directly on the Model itself instead
+of passing your Model as an argument to each <code>Repo</code> method call.</p>
+
+<p>While the project&rsquo;s Readme and <a href="https://hexdocs.pm/ecto_rut/Ecto.Rut.html">Documentation</a> are self-sufficient in
+getting you started, I wanted to write about my motivation for creating the
+package in the first place.</p>
+
+<!-- more -->
+
+
+<h2>Quick Introduction</h2>
+
+<p>Ecto.Rut is simply a wrapper around <code>Ecto.Repo</code>, so it can let you do awesome
+things like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">all</span>
+</span><span class='line'><span class="c1"># instead of YourApp.Repo.all(Post)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># instead of YourApp.Repo.get(Post, 2)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># instead of YourApp.Repo.delete(Post, 5)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">Post</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;Awesome Post&quot;</span><span class="p">,</span> <span class="ss">slug</span><span class="p">:</span> <span class="s2">&quot;awesome-post&quot;</span><span class="p">,</span> <span class="ss">category_id</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># instead of:</span>
+</span><span class='line'><span class="c1"># changeset = Post.changeset(%Post{}, %{title: &quot;Awesome Post&quot;, slug: &quot;awesome-post&quot;, category_id: 3})</span>
+</span><span class='line'><span class="c1"># YourApp.Repo.insert(changeset)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Well, you get the idea</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Motivation</h2>
+
+<p>As I improved my Elixir skills, I needed to be better familiar with <code>Macros</code> and
+Metaprogramming in general (see my talk on <a href="https://sheharyar.me/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>),
+and it all started with random experiments in Elixir Macros. At the same time,
+working on my Phoenix applications, I grew tired of calling <code>Repo</code> methods for
+even the simplest database queries on my models and missed the <em>Rails-y</em> way of
+calling <code>Model.find</code>, <code>Model.update</code>, etc. I saw that (some) other developers
+on the Elixir Forum felt the same way too.</p>
+
+<p>I took this as an opportunity to publish my first Hex Package, while refining
+my Elixir skills at the same time. The goal of the project here is to not to
+fully replace <code>Ecto.Repo</code> calls in your app, but to reduce code repetition
+and simplify and speed up development.</p>
+
+<p>For complex queries, it&rsquo;s highly recommended that you use the original <code>Ecto.Repo</code>
+calls and not this package.</p>
+
+<h2>Implementation</h2>
+
+<p>Ecto.Rut is implemented as a simple <code>behaviour</code> using Macros that can be activated
+by calling the <code>use</code> construct. The basic structure of the code looks something
+like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Ecto.Rut</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">defmacro</span> <span class="n">__using__</span><span class="p">(</span><span class="n">opts</span> <span class="p">\\</span> <span class="p">[])</span> <span class="k">do</span>
+</span><span class='line'>    <span class="k">quote</span> <span class="ss">bind_quoted</span><span class="p">:</span> <span class="p">[</span><span class="ss">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">]</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">def</span> <span class="n">all</span><span class="p">,</span>              <span class="ss">do</span><span class="p">:</span> <span class="n">call</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span>    <span class="p">[</span><span class="na">@model</span><span class="p">])</span>
+</span><span class='line'>      <span class="kd">def</span> <span class="n">get</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>          <span class="ss">do</span><span class="p">:</span> <span class="n">call</span><span class="p">(</span><span class="ss">:get</span><span class="p">,</span>    <span class="p">[</span><span class="na">@model</span><span class="p">,</span> <span class="n">id</span><span class="p">])</span>
+</span><span class='line'>      <span class="kd">def</span> <span class="n">delete</span><span class="p">(</span><span class="n">struct</span><span class="p">),</span>   <span class="ss">do</span><span class="p">:</span> <span class="n">call</span><span class="p">(</span><span class="ss">:delete</span><span class="p">,</span> <span class="p">[</span><span class="n">struct</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">defp</span> <span class="n">call</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">args</span> <span class="p">\\</span> <span class="p">[])</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">apply</span><span class="p">(</span><span class="na">@repo</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The gist above is just an example, not the <a href="https://github.com/sheharyarn/ecto_rut">full code</a>. But it does convey
+how  powerful Macros in Elixir truly are. Abstraction over abstraction leads to
+beautifully simple code without comprimising any of the performance and giving
+rise to creative solutions at the same time.</p>
+
+<p>I don&rsquo;t have much else to say about the topic, but the beauty and flexibility of the
+Elixir language keeps surprising me every now and then.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Talk: Remote Access Trojans]]></title>
@@ -1873,35 +1994,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
 
 <p>See his post, <a href="http://notahat.com/2014/02/05/scoping-rails-routes.html">Scoping Rails Routes</a> for detailed explanation with examples.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails App With Nginx, Puma & Capistrano in Production]]></title>
-    <link href="https://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production/"/>
-    <updated>2014-08-16T00:27:15-04:00</updated>
-    <id>https://sheharyar.me/blog/rails-with-nginx-puma-capistrano-in-production</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve used <a href="https://coderwall.com/p/yz8cha">James Dullaghan&rsquo;s guide for Nginx + Unicorn + Capistrano deployments</a> countless times now, but recently, I had to use <code>Puma</code> instead of <code>Unicorn</code> for a client. I googled for hours, but couldn&rsquo;t find a guide as comprehensive and easy-to-follow as James&#8217;.</p>
-
-<p>After going through countless articles and spending hours after hours fixing the bugs and issues I encountered while implementing what was written in those articles, I was able to compile a guide similar to the Unicorn one.</p>
-
-<!--more-->
-
-
-<h1>See it: <a href="https://coderwall.com/p/ttrhow">Deploying Rails app using Nginx, Puma and Capistrano</a></h1>
-
-<p>I made this guide for myself and since this was my first time with <code>puma</code> there are bound to be tons of issues. It uses and was tested with:</p>
-
-<ul>
-<li>Ruby 2.1</li>
-<li>Rails 4.1.2</li>
-<li>Capistrano 3.2.1</li>
-<li>Ubuntu 14.04 LTS x64</li>
-<li>Only &lsquo;approved&rsquo; gems and plugins mentioned on the official <code>capistrano</code> and <code>puma</code> wikis</li>
-</ul>
-
-
-<p><strong>Request:</strong> If I&rsquo;ve missed something, or if there&rsquo;s something that can be done in a better way in the guide, please comment and let me know.</p>
 ]]></content>
   </entry>
   
