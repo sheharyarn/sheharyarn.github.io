@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T01:12:31-04:00</updated>
+  <updated>2017-04-08T01:39:17-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Talk: Remote Access Trojans]]></title>
+    <link href="https://sheharyar.me/blog/talk-remote-access-trojans/"/>
+    <updated>2017-02-25T11:34:48-05:00</updated>
+    <id>https://sheharyar.me/blog/talk-remote-access-trojans</id>
+    <content type="html"><![CDATA[<p>A few days back, I gave a talk to a relatively non-technical audience on the topic of
+Remote Access Trojans, to help them better understand some of the serious security and
+privacy threats out there. I decided to go with RATs because of their serious exploitative
+nature and the relatable consequences of being lax with the security of your personal
+systems.</p>
+
+<!-- more -->
+
+
+
+
+<div class='video-container'>
+<div class='video-embed' style='width: 700px'>
+  <script async class="speakerdeck-embed" data-id="d738c37ac86a45ce933023b9a9f27f42" data-ratio="1.77777777777778" src="https://sheharyar.me//speakerdeck.com/assets/embed.js"></script>
+</div>
+</div>
+
+
+<p>I&rsquo;ve intentionally left a lot of topics out of the presentation and casually mentioned
+or ignored some things that would outrage security professionals. If you feel the same
+way while going through the presentation, then this is clearly not for you. I&rsquo;ve tried
+my best to convey these concepts in simple manner and demo it along with it, while being
+simply a computer security enthusiast.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Axios for Network Requests in React]]></title>
@@ -1871,24 +1902,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
 
 <p><strong>Request:</strong> If I&rsquo;ve missed something, or if there&rsquo;s something that can be done in a better way in the guide, please comment and let me know.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Nginx Config Syntax Highlighting in SublimeText]]></title>
-    <link href="https://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext/"/>
-    <updated>2014-08-15T17:16:26-04:00</updated>
-    <id>https://sheharyar.me/blog/nginx-config-syntax-highlighting-in-sublimetext</id>
-    <content type="html"><![CDATA[<p>I love <a href="http://sublimetext.com/">Sublime</a>, I can&rsquo;t emphasize that enough. Also, quite often enough I have to deal with <code>nginx</code> configuration files and without the syntax highlighting support for nginx files in Sublime Text, it can become a pain in the ass. Today I found the ass-pain remover for my problem and I thought I share it here.</p>
-
-<!--more-->
-
-
-<p>Introducing the Awesome <a href="https://sublime.wbond.net/packages/nginx">Nginx Syntax Highlighting Plugin</a> by <a href="http://brandonwamboldt.ca/nginx-syntax-highlighting-for-sublime-1422/">Brandon Wamboldt</a>. It automatically recognizes <code>*.conf</code>, <code>*.conf.erb</code>, <code>nginx.conf</code> and other relevant extensions &amp; file names and also offers tons of completions within nginx files.</p>
-
-<p><img src="https://i.imgur.com/Ykt61xx.png" alt="Nginx Syntax Highlighting" /></p>
-
-<p><strong><em>To install</em></strong>, simply download the <a href="https://github.com/brandonwamboldt/sublime-nginx">source</a> and place it in your Packages Directory or better yet, if you have Package Control installed in Sublime, look for the <em>Nginx</em> package by <em>Brandon Wamboldt</em> and install it via the package manager right in Sublime.</p>
 ]]></content>
   </entry>
   
