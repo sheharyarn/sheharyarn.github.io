@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T01:10:47-04:00</updated>
+  <updated>2017-04-08T01:12:31-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Axios for Network Requests in React]]></title>
-    <link href="https://sheharyar.me/blog/using-axios-for-requests-in-react/"/>
+    <link href="https://sheharyar.me/blog/axios-with-react-for-making-requests/"/>
     <updated>2017-01-17T09:27:52-05:00</updated>
-    <id>https://sheharyar.me/blog/using-axios-for-requests-in-react</id>
+    <id>https://sheharyar.me/blog/axios-with-react-for-making-requests</id>
     <content type="html"><![CDATA[<p>Before jumping ship to React, I had been working on Angular for a long time
 and really enjoyed building great SPAs in the <a href="https://toddmotto.com/killing-it-with-angular-directives-structure-and-mvvm/">MVVM Pattern</a>. One of my
 favorite things was the services architecture of making requests. I&rsquo;ve tried
