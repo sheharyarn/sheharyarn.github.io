@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Happiness | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/happiness/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2018-02-09T23:27:20-05:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Crossing 25k Reputation on StackOverflow]]></title>
+    <link href="https://sheharyar.me/blog/crossing-25k-reputation-stackoverflow/"/>
+    <updated>2017-03-05T12:47:12-05:00</updated>
+    <id>https://sheharyar.me/blog/crossing-25k-reputation-stackoverflow</id>
+    <content type="html"><![CDATA[<p>I have always loved contributing back to the developer community in any
+way I can. And that&rsquo;s why I spend so much time open-sourcing projects,
+organizing developer conferences &amp; hackathons, writing blog posts and
+even answering questions on StackOverflow.</p>
+
+<p>This week I got a pleasant surprise when I noticed that I gained the
+highest possible privilege level on the site (i.e. access to private
+Stackoverflow analytics), after crossing <a href="https://stackoverflow.com/users/1533054/sheharyar">25,000 in reputation
+points</a>.</p>
+
+<!-- more -->
+
+
+<p><a href="https://stackoverflow.com/users/1533054/sheharyar"><img src="https://stackexchange.com/users/flair/1665580.png" width="208" height="58" alt="profile for Sheharyar on Stack Exchange, a network of free, community-driven Q&amp;A sites" title="profile for Sheharyar on Stack Exchange, a network of free, community-driven Q&amp;A sites" /></a></p>
+
+<p><a href="https://stackoverflow.com/users/1533054/sheharyar"><img src="https://stackoverflow.com/users/flair/1533054.png" width="208" height="58" alt="profile for Sheharyar at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for Sheharyar at Stack Overflow, Q&amp;A for professional and enthusiast programmers"></a></p>
+
+<p>Yep, you read that right! 25,000 points! With over 55+ questions, 180+
+answers, 3500+ votes cast, 100+ edits and a reach of over 1.5 million
+people, it took me a long time getting here since I first created my
+profile back in July 2012. (Admittedly, I tried to game the system in
+the beginning, but was quickly caught and reprimanded – I&rsquo;ve since
+focused on only asking questions for things I didn&rsquo;t know, and answering
+them for which I did). Nothing says happiness like Fake Internet Points™;
+just look at this glorius graph showing my journey on the StackExchange
+network:</p>
+
+<p><a href="https://stackexchange.com/users/1665580/sheharyar?tab=reputation"><img src="https://i.imgur.com/LwMCkTL.png" alt="Reputation Graph" /></a></p>
+
+<p>As a side note, I&rsquo;m also currently fluctuating around the 10th position
+in the <a href="http://data.stackexchange.com/stackoverflow/query/370021/top-100-users-from-pakistan">Top 100 users from Pakistan</a> list on StackExchange Data.
+I hope that I would continue helping developers out in the future, using
+amazing platforms like StackOverflow!</p>
+]]></content>
+  </entry>
+  
+</feed>

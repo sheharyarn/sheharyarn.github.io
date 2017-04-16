@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Phoenix, | Sheharyar Naseer]]></title>
+  <title><![CDATA[Category: Phoenix | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/phoenix/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T02:44:21-04:00</updated>
+  <updated>2018-02-09T23:27:20-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,158 +14,198 @@
 
   
   <entry>
-    <title type="html"><![CDATA[EctoRut - Simple Ecto Shortcuts to Make Your Life Easier]]></title>
-    <link href="https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts/"/>
-    <updated>2017-03-05T07:31:22-05:00</updated>
-    <id>https://sheharyar.me/blog/ecto-rut-simple-model-shortcuts</id>
-    <content type="html"><![CDATA[<p>A few months back, I published an Elixir package called <a href="https://github.com/sheharyarn/ecto_rut"><code>Ecto.Rut</code></a>.
-Ecto.Rut lets you call <code>Ecto.Repo</code> methods directly on the Model itself instead
-of passing your Model as an argument to each <code>Repo</code> method call.</p>
+    <title type="html"><![CDATA[Building a Simple Chat App With Elixir and Phoenix]]></title>
+    <link href="https://sheharyar.me/blog/simple-chat-phoenix-elixir/"/>
+    <updated>2016-05-22T12:33:05-04:00</updated>
+    <id>https://sheharyar.me/blog/simple-chat-phoenix-elixir</id>
+    <content type="html"><![CDATA[<p>The past few years, more and more applications have been transitioning to websockets
+for real-time communication, even forcing some frameworks to implement them (such as
+<a href="https://github.com/rails/rails/pull/22586">ActionCable in Rails 5</a>). The <a href="http://www.phoenixframework.org/docs/overview">Phoenix Framework</a> for Elixir implements it
+natively, without depending on any external programs such as <code>Redis</code>.</p>
 
-<p>While the project&rsquo;s Readme and <a href="https://hexdocs.pm/ecto_rut/Ecto.Rut.html">Documentation</a> are self-sufficient in
-getting you started, I wanted to write about my motivation for creating the
-package in the first place.</p>
+<p>Today, we&rsquo;re going to build a super simple chat application in Elixir using the Phoenix
+Framework. We&rsquo;re going to ignore authentication, authorization and other features so we
+can quickly go over the basics, and get websockets in Elixir running.</p>
 
 <!-- more -->
 
 
-<h2>Quick Introduction</h2>
+<h2>Getting Started</h2>
 
-<p>Ecto.Rut is simply a wrapper around <code>Ecto.Repo</code>, so it can let you do awesome
-things like this:</p>
+<p>Start by installing <a href="http://elixir-lang.org/install.html">Elixir</a> and <a href="http://www.phoenixframework.org/docs/installation">Phoenix</a>. Optionally, check out my talk on
+<a href="/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>. Create a new phoenix project and call it whatever you
+like, and start the server so you can see the app in your browser:</p>
 
-<p>```elixir
-Post.all</p>
+<p>```bash</p>
 
-<h1>instead of YourApp.Repo.all(Post)</h1>
+<h1>Create a new Phoenix project called chatroom</h1>
 
-<p>Post.get(2)</p>
+<p>$ mix phoenix.new chatroom</p>
 
-<h1>instead of YourApp.Repo.get(Post, 2)</h1>
+<h1>Start the server</h1>
 
-<p>Post.delete(5)</p>
+<p>$ cd chatroom
+$ mix phoenix.server
+```</p>
 
-<h1>instead of YourApp.Repo.delete(Post, 5)</h1>
+<h2>Creating the View</h2>
 
-<p>Post.insert(title: &ldquo;Awesome Post&rdquo;, slug: &ldquo;awesome-post&rdquo;, category_id: 3)</p>
+<p>Let&rsquo;s start with something easy by writing the markup and CSS for our chat app. Open
+<code>web/templates/page/index.html.eex</code>, and replace its contents with:</p>
 
-<h1>instead of:</h1>
+<p>```html</p>
 
-<h1>changeset = Post.changeset(%Post{}, %{title: &ldquo;Awesome Post&rdquo;, slug: &ldquo;awesome-post&rdquo;, category_id: 3})</h1>
+<div id='message-list' class='row'>
+</div>
 
-<h1>YourApp.Repo.insert(changeset)</h1>
 
-<h1>Well, you get the idea</h1>
+
+
+<div class='row form-group'>
+  <div class='col-md-3'>
+    <input type='text' id='name' class='form-control' placeholder='Name' />
+  </div>
+  <div class='col-md-9'>
+    <input type='text' id='message' class='form-control' placeholder='Message' />
+  </div>
+</div>
+
 
 <p>```</p>
 
-<h2>Motivation</h2>
+<p>We&rsquo;ve created an empty <code>div</code> that will list all chat messages and two text fields (one
+for the user&rsquo;s name and one for the message). Now open <code>web/static/css/app.css</code> and
+paste this at the end:</p>
 
-<p>As I improved my Elixir skills, I needed to be better familiar with <code>Macros</code> and
-Metaprogramming in general (see my talk on <a href="/blog/talk-introduction-to-elixir/">Introduction to Elixir</a>),
-and it all started with random experiments in Elixir Macros. At the same time,
-working on my Phoenix applications, I grew tired of calling <code>Repo</code> methods for
-even the simplest database queries on my models and missed the <em>Rails-y</em> way of
-calling <code>Model.find</code>, <code>Model.update</code>, etc. I saw that (some) other developers
-on the Elixir Forum felt the same way too.</p>
+<p>```css</p>
 
-<p>I took this as an opportunity to publish my first Hex Package, while refining
-my Elixir skills at the same time. The goal of the project here is to not to
-fully replace <code>Ecto.Repo</code> calls in your app, but to reduce code repetition
-and simplify and speed up development.</p>
+<h1>message-list {</h1>
 
-<p>For complex queries, it&rsquo;s highly recommended that you use the original <code>Ecto.Repo</code>
-calls and not this package.</p>
-
-<h2>Implementation</h2>
-
-<p>Ecto.Rut is implemented as a simple <code>behaviour</code> using Macros that can be activated
-by calling the <code>use</code> construct. The basic structure of the code looks something
-like this:</p>
-
-<p>```elixir
-defmodule Ecto.Rut do
-  defmacro <strong>using</strong>(opts \ []) do</p>
-
-<pre><code>quote bind_quoted: [opts: opts] do
-
-  def all,              do: call(:all,    [@model])
-  def get(id),          do: call(:get,    [@model, id])
-  def delete(struct),   do: call(:delete, [struct])
-
-  defp call(method, args \\ []) do
-    apply(@repo, method, args)
-  end
-
-end
-</code></pre>
-
-<p>  end
-end
+<p>  border: 1px solid #777;
+  height: 400px;
+  padding: 10px;
+  overflow: scroll;
+  margin-bottom: 50px;
+}
 ```</p>
 
-<p>The gist above is just an example, not the <a href="https://github.com/sheharyarn/ecto_rut">full code</a>. But it does convey
-how  powerful Macros in Elixir truly are. Abstraction over abstraction leads to
-beautifully simple code without comprimising any of the performance and giving
-rise to creative solutions at the same time.</p>
+<p>Point your browser to <code>localhost:4000</code>, it should look like this:</p>
 
-<p>I don&rsquo;t have much else to say about the topic, but the beauty and flexibility of the
-Elixir language keeps surprising me every now and then.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using UUIDs With Postgres in Phoenix and Ecto]]></title>
-    <link href="https://sheharyar.me/blog/postgres-uuids-phoenix-ecto/"/>
-    <updated>2016-09-22T08:54:06-04:00</updated>
-    <id>https://sheharyar.me/blog/postgres-uuids-phoenix-ecto</id>
-    <content type="html"><![CDATA[<p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
-with PostgreSQL in Phoenix has always been a hassle, as evident from
-the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
-<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
-can pass <code>--binary-id</code> when creating a new Phoenix project to
-automatically use UUIDs (or other binary IDs when using different
-databases and adapters).</p>
+<p><a href="https://i.imgur.com/xs9NLHH.png"><img src="https://i.imgur.com/xs9NLHH.png" alt="Phoenix Chat Markup Screenshot" /></a></p>
 
-<!-- more -->
+<h2>Setting up a new Channel</h2>
 
-
-<p>When creating a new project with <code>--binary-id</code>, it will automatically
-set appropriate values for <code>@primary_key</code> and <code>@foreign_key_type</code>
-in your <code>web/web.ex</code>. For Postgres, this means using <a href="https://hexdocs.pm/ecto/Ecto.UUID.html"><code>Ecto.UUID</code></a>
-at the back (Ecto handles this automatically):</p>
-
-<p>```elixir
-def model do
-  quote do</p>
-
-<pre><code>use Ecto.Schema
-
-import Ecto
-import Ecto.Changeset
-import Ecto.Query
-
-@primary_key {:id, :binary_id, autogenerate: true}
-@foreign_key_type :binary_id
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<h2>Existing Applications</h2>
-
-<p>If you want to start using UUIDs in your existing Phoenix application,
-you need to specify <code>:binary_id</code> in your Ecto migration in addition to
-the <code>model</code> method above in <code>web/web.ex</code>:</p>
+<p>We&rsquo;re going to create a new channel called <code>lobby</code>. Open up <code>web/channels/user_socket.ex</code>
+and add this line:</p>
 
 <p><code>elixir
-create table(:posts, primary_key: false) do
-  add :id, :binary_id, primary_key: true
+channel "lobby", Chatroom.LobbyChannel
+</code></p>
+
+<p>Create a new file called <code>web/channels/lobby_channel.ex</code> and implement the
+functionality for the new <code>lobby</code> channel. The <code>join</code> method here always returns
+<code>{:ok, socket}</code> to allow all connections to the channel. The <code>handle_in</code> method is
+fired every time a new incoming message is received on the socket, which broadcasts
+that message to all other open sockets.</p>
+
+<p>```elixir
+defmodule Chatroom.LobbyChannel do
+  use Phoenix.Channel</p>
+
+<p>  def join(&ldquo;lobby&rdquo;, _payload, socket) do</p>
+
+<pre><code>{:ok, socket}
+</code></pre>
+
+<p>  end</p>
+
+<p>  def handle_in(&ldquo;new_message&rdquo;, payload, socket) do</p>
+
+<pre><code>broadcast! socket, "new_message", payload
+{:noreply, socket}
+</code></pre>
+
+<p>  end
 end
-</code>
-For a more detailed solution for existing Phoenix apps, see the
-<a href="https://hexdocs.pm/ecto/Ecto.Schema.html#module-primary-keys">Ecto Schema Docs</a> or José&rsquo;s <a href="http://stackoverflow.com/a/30004834/1533054">answer on Stackoverflow</a>.</p>
+```</p>
+
+<h2>Handling the connections on Client-side</h2>
+
+<p>To make things easier, we&rsquo;ll start by adding <code>jQuery</code> to our
+<code>web/templates/layouts/app.html.eex</code>:</p>
+
+<p>```html</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+
+<script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+
+
+<p>```</p>
+
+<p>Phoenix comes packed with a simple javascript socket client, but it&rsquo;s disabled
+by default. Go into your <code>web/static/js/app.js</code> and uncomment the last line:</p>
+
+<p><code>javascript
+// ...
+import socket from "./socket"
+</code></p>
+
+<p>Go into your <code>web/static/js/socket.js</code> and paste in this:</p>
+
+<p>```javascript
+// &hellip;</p>
+
+<p>let channel = socket.channel(&ldquo;lobby&rdquo;, {});
+let list    = $(&lsquo;#message-list&rsquo;);
+let message = $(&lsquo;#message&rsquo;);
+let name    = $(&lsquo;#name&rsquo;);</p>
+
+<p>message.on(&lsquo;keypress&rsquo;, event => {
+  if (event.keyCode == 13) {</p>
+
+<pre><code>channel.push('new_message', { name: name.val(), message: message.val() });
+message.val('');
+</code></pre>
+
+<p>  }
+});</p>
+
+<p>channel.on(&lsquo;new_message&rsquo;, payload => {
+  list.append(<code>&lt;b&gt;${payload.name || 'Anonymous'}:&lt;/b&gt; ${payload.message}&lt;br&gt;</code>);
+  list.prop({scrollTop: list.prop(&ldquo;scrollHeight&rdquo;)});
+});</p>
+
+<p>channel.join()
+  .receive(&ldquo;ok&rdquo;, resp => { console.log(&ldquo;Joined successfully&rdquo;, resp) })
+  .receive(&ldquo;error&rdquo;, resp => { console.log(&ldquo;Unable to join&rdquo;, resp) })</p>
+
+<p>// &hellip;
+```</p>
+
+<p>Here, we listen for a <code>keypress</code> event on the message text field. Whenever the user
+enters a message, it&rsquo;s pushed on the channel and the text field is cleared. When
+there&rsquo;s an incoming message on the channel, it&rsquo;s appended to the div we previously
+created and scrolled to the bottom.</p>
+
+<p><a href="https://i.imgur.com/51jlQIO.png"><img src="https://i.imgur.com/51jlQIO.png" alt="Chat app working" /></a></p>
+
+<h2>Going from there</h2>
+
+<p>So far we&rsquo;ve implemented a super simple chat application in Elixir. It&rsquo;s obviously not
+perfect and there&rsquo;s alot of stuff missing. The next logical step would be to add some
+sort of authentication and authorization, and implement more one-on-one and private
+chat rooms.</p>
+
+<p>Here are some links you should check out:</p>
+
+<ul>
+<li>Source of <a href="https://github.com/sheharyarn/simple-phoenix-chat">Simple Phoenix Chat</a> on Github</li>
+<li><a href="http://www.phoenixframework.org/docs/channels">Guide on Channels</a> on the Official Phoenix website</li>
+<li><a href="https://youtu.be/RPs4SHpSThU">Video on Channels</a> by Chris Mccord</li>
+</ul>
+
 ]]></content>
   </entry>
   

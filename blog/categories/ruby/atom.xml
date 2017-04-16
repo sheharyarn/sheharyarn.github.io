@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ruby, | Sheharyar Naseer]]></title>
+  <title><![CDATA[Category: Ruby | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2017-04-08T02:44:21-04:00</updated>
+  <updated>2018-02-09T23:27:20-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -14,225 +14,111 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Polymorphic Paperclip Attachments With Partial ActiveRecord Index]]></title>
-    <link href="https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index/"/>
-    <updated>2016-12-15T06:44:06-05:00</updated>
-    <id>https://sheharyar.me/blog/polymorphic-paperclip-attachments-partial-index</id>
-    <content type="html"><![CDATA[<p>A common pattern in Rails applications with Image Attachments is to create a
-separate model for the Image and use it in Polymorphic relationships with
-other models. Since more often than not an object has more than one image
-attached with a default one, the classic way of storing a <code>default_image_id</code>
-on the parent model can quickly result in code duplication and spaghetti
-through out the rails application.</p>
-
-<p>A better solution is to specify a <code>default</code> boolean on the Image model itself
-and use partial indexes for proper scoping.</p>
+    <title type="html"><![CDATA[Imperative vs. Declarative]]></title>
+    <link href="https://sheharyar.me/blog/imperative-vs-declarative/"/>
+    <updated>2015-03-19T17:27:44-04:00</updated>
+    <id>https://sheharyar.me/blog/imperative-vs-declarative</id>
+    <content type="html"><![CDATA[<p>I came across this beautifully detailed post, <a href="http://latentflip.com/imperative-vs-declarative/">Imperative vs. Declarative</a>
+by <em>Philip Roberts</em>, and wanted to share my thoughts on the Ruby-way of things (and hopefully get it right).</p>
 
 <!-- more -->
 
 
-<p>To DRY up the code even further, we can use the Concern Model pattern.
-<a href="https://www.viget.com/articles/slimming-down-your-models-and-controllers">This Blog Post</a> on Viget is an excellent primer on using Concerns. I&rsquo;m
-using Rails 5, Postgres &amp; Paperclip and will use the class
-name <code>ImageAttachment</code> through out the article.</p>
+<p>So as Philip explains it:</p>
 
-<p>Start by creating a migration for your Image model:</p>
+<blockquote><ul>
+<li><strong>Imperative Programming:</strong> Telling the &ldquo;machine&rdquo; how to do something, and as a result what you want to happen will happen</li>
+<li><strong>Declarative Programming:</strong> Telling the &ldquo;machine&rdquo; what you would like to happen, and let the computer figure out how to do it</li>
+</ul>
+</blockquote>
 
-<p>```ruby</p>
+<p>(Where &lsquo;Machine&rsquo; is Computer/database/programming language/etc)</p>
 
-<h1>db/migrations/xxxxxxxxxxxxxx_create_image_attachment.rb</h1>
+<br />
 
-<p>class CreateImageAttachments &lt; ActiveRecord::Migration[5.0]
-  def change</p>
 
-<pre><code>create_table :image_attachments do |t|
-  t.belongs_to :imageable, polymorphic: true
-  t.attachment :data
-  t.boolean    :default, default: false
+<h1>Imperative</h1>
 
-  t.timestamps
-end
-
-add_index :image_attachments, [:imageable_id, :imageable_type, :default],
-  unique: true,
-  where:  '"default" = TRUE',
-  name:   :unique_on_imageable_default
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>This creates an ordinary table with a Paperclip attachment and a <code>default</code>
-boolean field. But notice the specifics of the unique <code>index</code> above; it&rsquo;s a
-partial index only on the rows where the value of <code>default</code> is true. This
-validates that there is only one default image for any given object at a time.</p>
-
-<p>In the <code>ImageAttachment</code> model itself, we can set a conditional uniqueness
-on the <code>imageable</code> scope. This validates the same in the Rails application
-too:</p>
-
-<p>```ruby</p>
-
-<h1>app/models/image_attachment.rb</h1>
-
-<p>class ImageAttachment &lt; ApplicationRecord
-  belongs_to :imageable, polymorphic: true</p>
-
-<p>  has_attached_file :data,</p>
-
-<pre><code>styles:          { thumb:  '120x120#',            medium: '600x600&gt;'           },
-convert_options: { thumb:  '-quality 75 -strip',  medium: '-quality 90 -strip' }
-</code></pre>
-
-<p>  validates_attachment_presence     :data
-  validates_attachment_size         :data, less_than:    PAPERCLIP_IMAGE_SIZE_LIMIT
-  validates_attachment_content_type :data, content_type: PAPERCLIP_IMAGE_CONTENT_TYPE</p>
-
-<p>  # Conditional Uniqueness validation on the belongs_to scope
-  validates :default, uniqueness: { scope: :imageable }, if: :default?</p>
-
-<p>  # Methods to set/unset the default image
-  def undefault!</p>
-
-<pre><code>update(default: false)
-</code></pre>
-
-<p>  end</p>
-
-<p>  def default!</p>
-
-<pre><code>imageable.default_image.undefault! if imageable.default_image
-update(default: true)
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>Finally, we create an <code>Imageable</code> concern, which defines the relationship
-with the <code>ImageAttachment</code> model and provides a <code>default_image</code> method:</p>
-
-<p>```ruby</p>
-
-<h1>app/models/concerns/imageable.rb</h1>
-
-<p>module Imageable
-  extend ActiveSupport::Concern</p>
-
-<p>  included do</p>
-
-<pre><code>has_many :image_attachments, as: :imageable, dependent: :destroy
-alias_attribute :images, :image_attachments
-</code></pre>
-
-<p>  end</p>
-
-<p>  def default_image</p>
-
-<pre><code>images.find_by(default: true) || images.first
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>Now, to be able to &ldquo;attach images&rdquo; to any model, all you have to do is to
-<code>include Imageable</code>:</p>
+<p>Suppose, you have an array of numbers and you want to double every value. If you have recently started Ruby,
+you&rsquo;ll probably try doing things the old way; i.e. Iterating over the array, and doubling each value:</p>
 
 <p>```ruby
-class Post &lt; ApplicationRecord
-  include Imageable</p>
+nums = [1,2,3,4,5]
+dubs = []</p>
 
-<p>  # Other stuff
-end</p>
+<p>for n in nums</p>
 
-<p>class Event &lt; ApplicationRecord
-  include Imageable</p>
+<pre><code>dubs &lt;&lt; n * 2
+</code></pre>
 
-<p>  # Other stuff
+<p>end
+```</p>
+
+<p>or maybe if you already know about <code>each</code>, you&rsquo;ll go about doing it this way:</p>
+
+<p>```ruby
+nums = [1,2,3,4,5]
+dubs = []</p>
+
+<p>nums.each do |n|</p>
+
+<pre><code>dubs &lt;&lt; n * 2
+</code></pre>
+
+<p>end
+```</p>
+
+<br />
+
+
+<h1>Declarative (The Ruby Way)</h1>
+
+<p>Now, the Ruby way of doing things is different (which also happens to be Declarative BTW):</p>
+
+<p><code>ruby
+nums = [1,2,3,4,5]
+dubs = nums.map { |n| n * 2  }
+</code></p>
+
+<p>I on the other hand would take this a level higher to show how cool I am:</p>
+
+<p>```ruby
+class Integer</p>
+
+<pre><code>def double
+    self * 2
 end
-```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Google Analytics in Rails 4 With Turbolinks]]></title>
-    <link href="https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks/"/>
-    <updated>2015-03-29T13:24:54-04:00</updated>
-    <id>https://sheharyar.me/blog/using-google-analytics-in-rails-4-with-turbolinks</id>
-    <content type="html"><![CDATA[<p>There doesn&rsquo;t seem to be a proper way of using Google Analytics in a Rails 4 app when Turbolinks are involved.
-So I&rsquo;m just writing here what works for me. I&rsquo;ve written this for the new
-<a href="https://support.google.com/analytics/answer/2817075">Google Universal Analytics</a>, and this guide uses the
-<a href="https://github.com/slim-template/slim/">Slim Templating Language</a> but you can just as easily use it with <code>erb</code> or <code>haml</code>.</p>
-
-<!-- more -->
-
-
-<p>Create a <code>_google_analytics.html.slim</code> file in your <code>app/views/layouts</code> folder, and paste in the script you got from
-the <a href="http://google.com/analytics">Google Analytics</a> website as is:</p>
-
-<p>```slim
-&ndash; if Rails.env.production?</p>
-
-<pre><code>javascript:
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-XXXXXXXX-X', 'auto');
-    ga('send', 'pageview');
 </code></pre>
 
-<p>```</p>
+<p>end</p>
 
-<p>Now, create a <code>google_analytics.coffee</code> file in your <code>app/assets/javascripts</code> directory, and paste in this:</p>
-
-<p>```coffee
-jQuery &ndash;>
-  $(document).on &lsquo;page:change&rsquo;, &ndash;></p>
-
-<pre><code>if window.ga?
-  ga('set',  'location', location.href.split('#')[0])
-  ga('send', 'pageview', { "title": document.title })
-</code></pre>
-
-<p>```</p>
-
-<p>This file will track the page again, whenever turbolinks loads a new page. In your <code>application.html.slim</code>, render the layout right before closing the <code>head</code> tag:</p>
-
-<p>```slim
-doctype html
-html
-  head</p>
-
-<pre><code>title My Rails App
-
-/ Some code...
-
-== stylesheet_link_tag 'application', params[:controller], media: 'all'
-== render 'layouts/google_analytics'
-</code></pre>
-
-<p>  body</p>
-
-<pre><code>/ Some more code...
-</code></pre>
-
-<p>```</p>
-
-<p>Finally, in your <code>application.js</code>, require the <code>coffee</code> file we previously created:</p>
-
-<p>```javascript
-//= require jquery
-//= require jquery_ujs
-//= require google_analytics</p>
-
-<p>var someJavascriptStuff = {};
+<p>nums = [1,2,3,4,5]
+dubs = nums.map(&amp;:double)
 ```</p>
 
-<p>Now, you&rsquo;re good to go.</p>
+<br />
+
+
+<h1>Conclusion</h1>
+
+<blockquote><ul>
+<li>Loops are Imperative</li>
+<li>Map is Declarative</li>
+</ul>
+</blockquote>
+
+<p><code>
+Ruby ROOLZ, Java DROOLZ
+</code></p>
+
+<p>Also this:</p>
+
+<p class='video-container'>
+<iframe style='width: 100%; height: auto; min-height: 360px;' src='http://yplay.sheharyar.me/embed/5GpOfwbFRcs' scrolling='NO' frameborder='0' style='overflow:hidden; border: 0px;'  webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe>
+</p>
+
+
+
 ]]></content>
   </entry>
   
