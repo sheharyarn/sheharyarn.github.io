@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-02-09T23:27:20-05:00</updated>
+  <updated>2018-02-10T00:35:34-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Background Job Processing in Elixir With Que]]></title>
+    <link href="https://sheharyar.me/blog/elixir-job-processing-with-que/"/>
+    <updated>2017-07-16T19:54:07-04:00</updated>
+    <id>https://sheharyar.me/blog/elixir-job-processing-with-que</id>
+    <content type="html"><![CDATA[<p>Elixir and Erlang provide a simple yet powerful set of features for data sharing,
+reliability and fault-tolerance, commonly known together as OTP. These consist of
+modules and behaviors such as GenServers and Supervisors among many others,
+providing an easy and efficient way to design reliable background processes
+without too much work.</p>
+
+<p>There already are excellent background job processing libraries for Elixir, such
+as <a href="https://github.com/akira/exq">Exq</a> and <a href="https://github.com/joakimk/toniq">Toniq</a>, that make use of them to provide an interface
+for working with background job workers, to developers unfamiliar with OTP. But
+all of these libraries are either excessively complicated, have dependence on
+external programs and binaries such as Redis, or both.</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/sheharyarn/que"><img src='https://i.imgur.com/Eec71eh.png' alt='Que' width='200px' /></a></p>
+
+<p>Why would you lock yourself in with an external service, when Erlang itself ships
+with an extremely fast, distributed real-time datastore, called <code>Mnesia</code>? So,
+after a few months of hard work and testing it in multiple Elixir applications in
+production, I am proud to announce <a href="https://github.com/sheharyarn/que">Que</a>. Que is an extemely easy to use
+background job processing library for Elixir, that&rsquo;s backed by Mnesia. Taking
+inspiration from intuitive job processing libraries in Ruby, Que&rsquo;s complete
+setup takes less than a minute, and you can start writing job workers with almost
+zero boilerplate or gibberish:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">App.Workers.ImageConverter</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Que.Worker</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">perform</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">ImageTool</span><span class="p">.</span><span class="n">save_resized_copy!</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="ss">:thumbnail</span><span class="p">)</span>
+</span><span class='line'>    <span class="nc">ImageTool</span><span class="p">.</span><span class="n">save_resized_copy!</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="ss">:medium</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Adding support for concurrency is also easy-as-pie, one argument and you&rsquo;re done:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kn">use</span> <span class="nc">Que.Worker</span><span class="p">,</span> <span class="ss">concurrency</span><span class="p">:</span> <span class="mi">4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Que makes use of powerful Elixir and OTP features, such as:</p>
+
+<ul>
+<li>Pattern Matching</li>
+<li>Worker Supervision</li>
+<li>Job Success Callbacks</li>
+<li>Failure Recovery and Callback</li>
+<li>Concurrency</li>
+<li>In-Memory and On-Disk storage</li>
+</ul>
+
+
+<p>By default, Que automatically configures the application to store all jobs in
+memory, but you can persist them across application restarts using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mix que.setup
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check out the project on <a href="https://github.com/sheharyarn/que">Github</a> and <a href="https://hexdocs.pm/que">Hexdocs</a> for more details.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Crossing 25k Reputation on StackOverflow]]></title>
@@ -1992,24 +2073,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 </span><span class='line'><span class="c1"># ...</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[S3 Direct Upload Gem - Example]]></title>
-    <link href="https://sheharyar.me/blog/s3-direct-upload-gem-example/"/>
-    <updated>2014-09-10T13:47:23-04:00</updated>
-    <id>https://sheharyar.me/blog/s3-direct-upload-gem-example</id>
-    <content type="html"><![CDATA[<p>A while back I had to use the <a href="https://github.com/waynehoover/s3_direct_upload"><code>S3 Direct Upload</code></a> gem for a project. I couldn&rsquo;t find a proper tutorial or a working example that I could follow to get the uploads working. After debugging for hours, <a href="https://github.com/waynehoover/s3_direct_upload/issues/30">I found</a> that the problem was in fact with the gem not being able to form proper URLs for uploading files to S3. The patch in the link saved me.</p>
-
-<!--more-->
-
-
-<p>Anyways, it&rsquo;s been a while since I made this example rails application, that works with your S3 buckets out of the box. All you need to do is export your AWS creds. Check it out:</p>
-
-<h1>sheharyarn / <a href="https://github.com/sheharyarn/s3_direct_upload_example">s3_direct_upload_example</a></h1>
-
-<p>It already includes the patch, and is meant to be just an example so you can test if your uploads are working they way they&rsquo;re supposed to be. Just follow the instructions on the Github Repo, and you&rsquo;re good to go.</p>
 ]]></content>
   </entry>
   

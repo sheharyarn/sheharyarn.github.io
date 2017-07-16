@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Background Job Processing in Elixir With Que - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Jul 16th, 2017 Background Job Processing in Elixir With Que Elixir and Erlang provide a simple yet powerful set of features for data sharing, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Background Job Processing in Elixir With Que - Sheharyar Naseer" />
+  <meta property="og:description" content="Jul 16th, 2017 Background Job Processing in Elixir With Que Elixir and Erlang provide a simple yet powerful set of features for data sharing, &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/elixir-job-processing-with-que">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/elixir-job-processing-with-que/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-07-16T19:54:07-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2017</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Background Job Processing in Elixir With Que
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>Elixir and Erlang provide a simple yet powerful set of features for data sharing,
+reliability and fault-tolerance, commonly known together as OTP. These consist of
+modules and behaviors such as GenServers and Supervisors among many others,
+providing an easy and efficient way to design reliable background processes
+without too much work.</p>
+
+<p>There already are excellent background job processing libraries for Elixir, such
+as <a href="https://github.com/akira/exq">Exq</a> and <a href="https://github.com/joakimk/toniq">Toniq</a>, that make use of them to provide an interface
+for working with background job workers, to developers unfamiliar with OTP. But
+all of these libraries are either excessively complicated, have dependence on
+external programs and binaries such as Redis, or both.</p>
+
+<!-- more -->
+
+
+<p><a href="https://github.com/sheharyarn/que"><img src='https://i.imgur.com/Eec71eh.png' alt='Que' width='200px' /></a></p>
+
+<p>Why would you lock yourself in with an external service, when Erlang itself ships
+with an extremely fast, distributed real-time datastore, called <code>Mnesia</code>? So,
+after a few months of hard work and testing it in multiple Elixir applications in
+production, I am proud to announce <a href="https://github.com/sheharyarn/que">Que</a>. Que is an extemely easy to use
+background job processing library for Elixir, that&rsquo;s backed by Mnesia. Taking
+inspiration from intuitive job processing libraries in Ruby, Que&rsquo;s complete
+setup takes less than a minute, and you can start writing job workers with almost
+zero boilerplate or gibberish:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">App.Workers.ImageConverter</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Que.Worker</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">perform</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">ImageTool</span><span class="p">.</span><span class="n">save_resized_copy!</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="ss">:thumbnail</span><span class="p">)</span>
+</span><span class='line'>    <span class="nc">ImageTool</span><span class="p">.</span><span class="n">save_resized_copy!</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="ss">:medium</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Adding support for concurrency is also easy-as-pie, one argument and you&rsquo;re done:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kn">use</span> <span class="nc">Que.Worker</span><span class="p">,</span> <span class="ss">concurrency</span><span class="p">:</span> <span class="mi">4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Que makes use of powerful Elixir and OTP features, such as:</p>
+
+<ul>
+<li>Pattern Matching</li>
+<li>Worker Supervision</li>
+<li>Job Success Callbacks</li>
+<li>Failure Recovery and Callback</li>
+<li>Concurrency</li>
+<li>In-Memory and On-Disk storage</li>
+</ul>
+
+
+<p>By default, Que automatically configures the application to store all jobs in
+memory, but you can persist them across application restarts using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mix que.setup
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check out the project on <a href="https://github.com/sheharyarn/que">Github</a> and <a href="https://hexdocs.pm/que">Hexdocs</a> for more details.</p>
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elixir/'>elixir</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Crossing 25k Reputation on StackOverflow" href="/blog/crossing-25k-reputation-stackoverflow/">
+        ← Crossing 25k Reputation on StackOverflow
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/">Ruby</a>,
+    <a href="http://elixir-lang.org/">Elixir</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>.
+ </div>
+</footer>
+
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
