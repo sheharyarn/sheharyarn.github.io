@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Plug, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/plug/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2018-02-10T01:15:26-05:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Clean Atom Parameters in Phoenix]]></title>
+    <link href="https://sheharyar.me/blog/cleaner-request-params-elixir-web-apps/"/>
+    <updated>2017-09-05T22:09:43-04:00</updated>
+    <id>https://sheharyar.me/blog/cleaner-request-params-elixir-web-apps</id>
+    <content type="html"><![CDATA[<p>One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
+use strings to reference web request parameters in controllers. To any other
+developer, this might sound silly or even insane, but to my OCD-riddled brain,
+this is pure agony:</p>
+
+<p>```elixir</p>
+
+<h1>web/controllers/some_controller.ex</h1>
+
+<p>def show(conn, %{&ldquo;id&rdquo; => id}) do
+  # do something
+end
+```</p>
+
+<!-- more -->
+
+
+<p>I guess I would&rsquo;ve never even thought about using Atoms for parameters if I
+wasn&rsquo;t already used to symbols in Rails:</p>
+
+<p><code>ruby
+params[:post][:title]
+</code></p>
+
+<p>To solve this &ldquo;problem&rdquo;, I&rsquo;ve been using a custom plug in my Elixir applications
+for the past few months, that essentially symbolizes (or &ldquo;atomizes&rdquo;) all keys in
+the <code>params</code> map in controllers. After some input from other Elixir developers,
+and major security improvements, I published it as a <a href="https://github.com/sheharyarn/better_params">package on Hex</a>,
+called <code>BetterParams</code>, allowing you to do this:</p>
+
+<p><code>elixir
+def create(conn, %{id: id, post: %{title: title, body: body}}) do
+  # or this: params[:post][:title]
+end
+</code></p>
+
+<p>Implementation uses <a href="https://hexdocs.pm/elixir/String.html#to_existing_atom/1"><code>String.to_existing_atom</code></a> to <a href="https://engineering.klarna.com/monitoring-erlang-atoms-c1d6a741328e">prevent against
+Erlang atom table DoS attacks</a>, and keeps the existing String keys
+so you can continue to use them if you want.</p>
+
+<p>Check out the project on <a href="https://github.com/sheharyarn/better_params">Github</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

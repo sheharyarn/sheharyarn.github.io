@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Clean Atom Parameters in Phoenix - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Sep 5th, 2017 Clean Atom Parameters in Phoenix One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
+use strings &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Clean Atom Parameters in Phoenix - Sheharyar Naseer" />
+  <meta property="og:description" content="Sep 5th, 2017 Clean Atom Parameters in Phoenix One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
+use strings &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/cleaner-request-params-elixir-web-apps">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/cleaner-request-params-elixir-web-apps/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-09-05T22:09:43-04:00" pubdate data-updated="true">Sep 5<span>th</span>, 2017</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Clean Atom Parameters in Phoenix
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
+use strings to reference web request parameters in controllers. To any other
+developer, this might sound silly or even insane, but to my OCD-riddled brain,
+this is pure agony:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="c1"># web/controllers/some_controller.ex</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">def</span> <span class="n">show</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="p">%{</span><span class="s2">&quot;id&quot;</span> <span class="p">=&gt;</span> <span class="n">id</span><span class="p">})</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># do something</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>I guess I would&rsquo;ve never even thought about using Atoms for parameters if I
+wasn&rsquo;t already used to symbols in Rails:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">params</span><span class="o">[</span><span class="ss">:post</span><span class="o">][</span><span class="ss">:title</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To solve this &ldquo;problem&rdquo;, I&rsquo;ve been using a custom plug in my Elixir applications
+for the past few months, that essentially symbolizes (or &ldquo;atomizes&rdquo;) all keys in
+the <code>params</code> map in controllers. After some input from other Elixir developers,
+and major security improvements, I published it as a <a href="https://github.com/sheharyarn/better_params">package on Hex</a>,
+called <code>BetterParams</code>, allowing you to do this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">def</span> <span class="n">create</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="p">%{</span><span class="ss">id</span><span class="p">:</span> <span class="n">id</span><span class="p">,</span> <span class="ss">post</span><span class="p">:</span> <span class="p">%{</span><span class="ss">title</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="n">body</span><span class="p">}})</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># or this: params[:post][:title]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Implementation uses <a href="https://hexdocs.pm/elixir/String.html#to_existing_atom/1"><code>String.to_existing_atom</code></a> to <a href="https://engineering.klarna.com/monitoring-erlang-atoms-c1d6a741328e">prevent against
+Erlang atom table DoS attacks</a>, and keeps the existing String keys
+so you can continue to use them if you want.</p>
+
+<p>Check out the project on <a href="https://github.com/sheharyarn/better_params">Github</a>.</p>
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elixir/'>elixir,</a>, <a class='category' href='/blog/categories/ocd/'>ocd</a>, <a class='category' href='/blog/categories/phoenix/'>phoenix,</a>, <a class='category' href='/blog/categories/plug/'>plug,</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Background Job Processing in Elixir with Que" href="/blog/elixir-job-processing-with-que/">
+        ← Background Job Processing in Elixir with Que
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/">Ruby</a>,
+    <a href="http://elixir-lang.org/">Elixir</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>.
+ </div>
+</footer>
+
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

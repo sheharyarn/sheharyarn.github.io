@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-02-10T00:35:34-05:00</updated>
+  <updated>2018-02-10T01:15:26-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clean Atom Parameters in Phoenix]]></title>
+    <link href="https://sheharyar.me/blog/cleaner-request-params-elixir-web-apps/"/>
+    <updated>2017-09-05T22:09:43-04:00</updated>
+    <id>https://sheharyar.me/blog/cleaner-request-params-elixir-web-apps</id>
+    <content type="html"><![CDATA[<p>One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
+use strings to reference web request parameters in controllers. To any other
+developer, this might sound silly or even insane, but to my OCD-riddled brain,
+this is pure agony:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="c1"># web/controllers/some_controller.ex</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">def</span> <span class="n">show</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="p">%{</span><span class="s2">&quot;id&quot;</span> <span class="p">=&gt;</span> <span class="n">id</span><span class="p">})</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># do something</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>I guess I would&rsquo;ve never even thought about using Atoms for parameters if I
+wasn&rsquo;t already used to symbols in Rails:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">params</span><span class="o">[</span><span class="ss">:post</span><span class="o">][</span><span class="ss">:title</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To solve this &ldquo;problem&rdquo;, I&rsquo;ve been using a custom plug in my Elixir applications
+for the past few months, that essentially symbolizes (or &ldquo;atomizes&rdquo;) all keys in
+the <code>params</code> map in controllers. After some input from other Elixir developers,
+and major security improvements, I published it as a <a href="https://github.com/sheharyarn/better_params">package on Hex</a>,
+called <code>BetterParams</code>, allowing you to do this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">def</span> <span class="n">create</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="p">%{</span><span class="ss">id</span><span class="p">:</span> <span class="n">id</span><span class="p">,</span> <span class="ss">post</span><span class="p">:</span> <span class="p">%{</span><span class="ss">title</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="n">body</span><span class="p">}})</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># or this: params[:post][:title]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Implementation uses <a href="https://hexdocs.pm/elixir/String.html#to_existing_atom/1"><code>String.to_existing_atom</code></a> to <a href="https://engineering.klarna.com/monitoring-erlang-atoms-c1d6a741328e">prevent against
+Erlang atom table DoS attacks</a>, and keeps the existing String keys
+so you can continue to use them if you want.</p>
+
+<p>Check out the project on <a href="https://github.com/sheharyarn/better_params">Github</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Background Job Processing in Elixir With Que]]></title>
@@ -1983,94 +2042,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// ...</span>
 </span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Github Trending Repos API]]></title>
-    <link href="https://sheharyar.me/blog/github-trending-repos-api/"/>
-    <updated>2014-09-12T14:01:06-04:00</updated>
-    <id>https://sheharyar.me/blog/github-trending-repos-api</id>
-    <content type="html"><![CDATA[<p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
-
-<!--more-->
-
-
-<p>So before finally giving up and writing my own scraper, I came across this awesome command-line utility <a href="https://github.com/rochefort/git-trend">git-trend</a> that lists top repos. I extracted most of the functionality and turned it into a gem. You can view it&rsquo;s <a href="https://github.com/sheharyarn/github-trending">Source on Github</a>. To use, add this to your <code>Gemfile</code> and <code>bundle</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;github-trending&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Or, you can install via:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install github-trending
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Some things that you can do with it are:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;github-trending&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span>
-</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:ruby</span>
-</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span> <span class="ss">:scala</span><span class="p">,</span> <span class="ss">:week</span>
-</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span> <span class="kp">nil</span><span class="p">,</span> <span class="ss">:month</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">all_languages</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Example Usage</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">js_repos</span> <span class="o">=</span> <span class="no">Github</span><span class="o">::</span><span class="no">Trending</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:javascript</span><span class="p">,</span> <span class="ss">:month</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># Get top Javascript repos this month</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">js_repos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">star_count</span><span class="si">}</span><span class="s2"> stargazers)&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;--- </span><span class="si">#{</span><span class="n">r</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># MrSwitch/hello.js (393 stargazers)</span>
-</span><span class='line'><span class="c1"># --- A Javascript RESTFUL API library for connecting with OAuth2 services</span>
-</span><span class='line'><span class="c1"># </span>
-</span><span class='line'><span class="c1"># mrflix/dimensions (151 stargazers)</span>
-</span><span class='line'><span class="c1"># --- A tool for designers to measure screen dimensions.</span>
-</span><span class='line'><span class="c1"># </span>
-</span><span class='line'><span class="c1"># jmdobry/angular-data (107 stargazers)</span>
-</span><span class='line'><span class="c1"># --- Data store for Angular.js.</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># ...</span>
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>

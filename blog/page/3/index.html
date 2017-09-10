@@ -14,7 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Sync MongoDB Data Between Development and Production Databases For a recent project of mine, I had to constantly copy my local &hellip;">
+  <meta name="description" content="Freshly Pressed MongoSync Ruby Gem In my previous post, I had written about my
+mongo-sync shell script that allows you to sync Local and Remote &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +26,8 @@
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Sync MongoDB Data Between Development and Production Databases For a recent project of mine, I had to constantly copy my local &hellip;" />
+  <meta property="og:description" content="Freshly Pressed MongoSync Ruby Gem In my previous post, I had written about my
+mongo-sync shell script that allows you to sync Local and Remote &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog/page/3">
@@ -84,22 +86,20 @@
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/sync-mongodb-local-and-production-heroku/">
-            Sync MongoDB Data Between Development and Production Databases
+           <a href="/blog/mongosync-ruby-gem/">
+            MongoSync Ruby Gem
            </a>
         </h2>
         <div class="post_content">
-           <p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
-Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
-I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">heroku-mongo-sync</a>, but it is now deprecated in favor of
-<a href="https://github.com/marcofognog/heroku-mongo-sync">marcofognog&rsquo;s fork</a>. Sadly, neither of them worked for me.</p>
-
-<p>So I decided to write my own. Meet <a href="https://github.com/sheharyarn/mongo-sync"><strong>mongo-sync</strong></a>.</p>
+           <p><a href="#">In my previous post</a>, I had written about my
+<a href="https://github.com/sheharyarn/mongo-sync">mongo-sync</a> shell script that allows you to sync Local and Remote Mongo Databases.
+I spent the last day converting it into a <a href="https://github.com/sheharyarn/mongo-sync-ruby">Ruby Gem</a>
+so that you can perform actions using nice Rake Tasks and invoke the commands from Rails Console or <code>irb</code>.</p>
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/sync-mongodb-local-and-production-heroku/">Continue →</a>
+              <a class="continue_link" href="/blog/mongosync-ruby-gem/">Continue →</a>
            </p>
         </div>
      </article>
@@ -113,6 +113,15 @@ I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">herok
 
         <ul class="article_list">
           
+             
+          
+             
+
+                <li><a href="/blog/sync-mongodb-local-and-production-heroku/">
+                  Sync MongoDB Data Between Development and Production Databases
+                   →
+                </a></li>
+
              
           
              
@@ -155,15 +164,6 @@ I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">herok
 
                 <li><a href="/blog/github-trending-repos-api/">
                   Github Trending Repos API
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/s3-direct-upload-gem-example/">
-                  S3 Direct Upload Gem - Example
                    →
                 </a></li>
 
