@@ -14,8 +14,8 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Clean Atom Parameters in Phoenix One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
-use strings &hellip;">
+  <meta name="description" content="Freshly Pressed Working With GenStage in Elixir GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,8 +26,8 @@ use strings &hellip;">
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Clean Atom Parameters in Phoenix One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
-use strings &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Working With GenStage in Elixir GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me">
@@ -86,35 +86,21 @@ use strings &hellip;" />
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/cleaner-request-params-elixir-web-apps/">
-            Clean Atom Parameters in Phoenix
+           <a href="/blog/working-with-genstage-elixir/">
+            Working With GenStage in Elixir
            </a>
         </h2>
         <div class="post_content">
-           <p>One thing I&rsquo;ve always hated about working with Phoenix is the fact that I have to
-use strings to reference web request parameters in controllers. To any other
-developer, this might sound silly or even insane, but to my OCD-riddled brain,
-this is pure agony:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="c1"># web/controllers/some_controller.ex</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">def</span> <span class="n">show</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="p">%{</span><span class="s2">&quot;id&quot;</span> <span class="p">=&gt;</span> <span class="n">id</span><span class="p">})</span> <span class="k">do</span>
-</span><span class='line'>  <span class="c1"># do something</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
+           <p>GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily in Elixir. But working with multiple sets of GenServers together and exchanging data
+between them has always been a hassle. <a href="https://hexdocs.pm/elixir/GenEvent.html">GenEvent</a> solved these problems to some
+extent, but it did not provide support for backpressure or concurrency. This is where
+<a href="https://github.com/elixir-lang/gen_stage">GenStage</a> comes in.</p>
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/cleaner-request-params-elixir-web-apps/">Continue →</a>
+              <a class="continue_link" href="/blog/working-with-genstage-elixir/">Continue →</a>
            </p>
         </div>
      </article>
@@ -128,6 +114,15 @@ this is pure agony:</p>
 
         <ul class="article_list">
           
+             
+          
+             
+
+                <li><a href="/blog/cleaner-request-params-elixir-web-apps/">
+                  Clean Atom Parameters in Phoenix
+                   →
+                </a></li>
+
              
           
              
@@ -170,15 +165,6 @@ this is pure agony:</p>
 
                 <li><a href="/blog/axios-with-react-for-making-requests/">
                   Using Axios for Network Requests in React
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/polymorphic-paperclip-attachments-partial-index/">
-                  Polymorphic Paperclip Attachments With Partial ActiveRecord Index
                    →
                 </a></li>
 

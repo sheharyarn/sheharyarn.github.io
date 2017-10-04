@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-02-10T01:15:26-05:00</updated>
+  <updated>2018-02-10T04:52:05-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Working With GenStage in Elixir]]></title>
+    <link href="https://sheharyar.me/blog/working-with-genstage-elixir/"/>
+    <updated>2017-10-03T18:20:13-04:00</updated>
+    <id>https://sheharyar.me/blog/working-with-genstage-elixir</id>
+    <content type="html"><![CDATA[<p>GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily in Elixir. But working with multiple sets of GenServers together and exchanging data
+between them has always been a hassle. <a href="https://hexdocs.pm/elixir/GenEvent.html">GenEvent</a> solved these problems to some
+extent, but it did not provide support for backpressure or concurrency. This is where
+<a href="https://github.com/elixir-lang/gen_stage">GenStage</a> comes in.</p>
+
+<!-- more -->
+
+
+<p>Last year <a href="https://elixir-lang.org/blog/2016/07/14/announcing-genstage/">announced on the official Elixir blog</a>, GenStage is a new behaviour
+in the OTP family, built on top of GenServers. It is described as:</p>
+
+<blockquote><p>GenStage is a specification for exchanging events with back-pressure between Elixir
+producers and consumers</p></blockquote>
+
+<p>but that doesn&rsquo;t convey its full power. The name hides the real meaning; instead of simple
+producers and consumers, imagine concurrent stages in a pipeline that takes an arbitrary
+number of input events, perform some operations on them and send them to the next stage.
+Each stage can consume and produce many events at once, with multiple instances of each
+stage running at the same time. The producers can produce as many events as they want, and
+the consumers can consume them according to their demand with ease, with the behavior
+handling the bulk of the logic.</p>
+
+<p>A simple use-case of GenStage would look like a straight-forward pipeline like this:</p>
+
+<p><img src="https://i.imgur.com/4RvaWBU.png" alt="GenStage Simple Use-case" /></p>
+
+<p>But that doesn&rsquo;t do it justice, instead you should think about each stage having many
+concurrent instances like this:</p>
+
+<p><img src="https://i.imgur.com/ddCa8kP.png" alt="GenStage Concurrent Instances" /></p>
+
+<p>This is possible due to another behavior shipped with the library, called <code>ConsumerSupervisor</code>.
+ConsumerSupervisors allow, well, supervision of multiple consumers or producer-consumers
+for better reliability and fault-tolerance. For code examples, I would suggest you check
+out the project on <a href="https://github.com/elixir-lang/gen_stage">Github</a>, the excellent documentation on <a href="https://hexdocs.pm/gen_stage/GenStage.html">Hexdocs</a> or
+the <a href="https://github.com/elixir-lang/flow">Flow</a> library (which is an amazing implementation of GenStage!). But there are
+some things you should take care of when working with GenStages in Elixir (that I had to
+learn the hard way):</p>
+
+<ul>
+<li>Don&rsquo;t excessively produce events when there is no demand</li>
+<li>If a long-running producer yields zero events when there is consumer demand, you have to
+explicitly retry producing events again. Otherwise, it would just stop. A common case where
+this would happen is, integration with external message queues</li>
+<li>Use <code>Supervisor</code> for simple pipelines, and <code>ConsumerSupervisor</code> when dealing with concurrent
+instances of a GenStage</li>
+<li>Try to define explicit demands for consumers</li>
+<li>Start the stages in order, and immediately subscribe to the previous stage for <code>consumers</code>
+and <code>producer_consumers</code>, preferably in the <code>init/1</code> callback</li>
+<li>Maintining overall demand in a producers&#8217; internal state is a good idea</li>
+</ul>
+
+
+<p>Here are some other excellent posts on the topic:</p>
+
+<ul>
+<li><a href="https://elixirschool.com/en/lessons/advanced/gen-stage/">Elixir School: GenStage</a></li>
+<li><a href="https://engineering.spreedly.com/blog/how-do-i-genstage.html">How do I GenStage?</a></li>
+<li><a href="https://alexgaribay.com/2017/04/25/using-genstage-for-a-batching-pipeline/">Using GenStage for Batch Processing</a></li>
+<li><a href="http://tomasztomczyk.com/2017/01/17/genstage-for-processing-jobs.html">GenStage for Processing Jobs</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clean Atom Parameters in Phoenix]]></title>
@@ -1931,119 +2002,6 @@ an Octopress blog with a Custom Domain hosted through Github Pages, but this sho
 
 
 <p>Looking forward to using AWK more and more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Android: Create Tables in SQLite Beautifully]]></title>
-    <link href="https://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully/"/>
-    <updated>2014-11-13T12:54:43-05:00</updated>
-    <id>https://sheharyar.me/blog/android-create-tables-in-sqlite-beautifully</id>
-    <content type="html"><![CDATA[<p>I started Android Development a while back and this is the first time I&rsquo;ve had to use <code>SQLite</code>. Coming from a Rails and Mongo background, you can imagine my horror when I had to create models (read &lsquo;tables&rsquo;) like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="c1">// SQL statement to create book table</span>
-</span><span class='line'>    <span class="n">String</span> <span class="n">CREATE_BOOK_TABLE</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE books ( &quot;</span> <span class="o">+</span>
-</span><span class='line'>            <span class="s">&quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot;</span> <span class="o">+</span>
-</span><span class='line'>            <span class="s">&quot;title TEXT, &quot;</span> <span class="o">+</span>
-</span><span class='line'>            <span class="s">&quot;author TEXT, &quot;</span> <span class="o">+</span>
-</span><span class='line'>            <span class="s">&quot;sales INTEGER )&quot;</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// create books table</span>
-</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">CREATE_BOOK_TABLE</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!--more-->
-
-
-<p>Okay, I know it&rsquo;s not that bad. But what if you have to create multiple tables at a time? Or when there are a lot of fields? It can get confusing, and looks dirty. Code should be beautiful. So, I wrote a function so you could do something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">createTable</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="n">TABLE_NAME</span><span class="o">,</span> <span class="n">TABLE_FIELDS</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Beautiful, right? You just need to copy the <code>createTable</code> function in your <code>SQLiteHelper.java</code> and pass the <code>db</code> instance, a String of the table name and a <code>HashMap</code> of all your fields. Check it out:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SQLiteHelper</span> <span class="kd">extends</span> <span class="n">SQLiteOpenHelper</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">BOOK_FIELDS</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;title&quot;</span><span class="o">,</span>     <span class="s">&quot;TEXT&quot;</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;author&quot;</span><span class="o">,</span>    <span class="s">&quot;TEXT&quot;</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">put</span><span class="o">(</span><span class="s">&quot;sales&quot;</span><span class="o">,</span>  <span class="s">&quot;INTEGER&quot;</span><span class="o">);</span>                          <span class="c1">// Neatly write fields and their types</span>
-</span><span class='line'>    <span class="o">}};</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// ...</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">createTable</span><span class="o">(</span><span class="n">db</span><span class="o">,</span> <span class="s">&quot;books&quot;</span><span class="o">,</span> <span class="n">BOOK_FIELDS</span><span class="o">);</span>          <span class="c1">// Create the table in a single, beautiful line.</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// This function does all the dirty work</span>
-</span><span class='line'>    <span class="kd">static</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createTable</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">,</span> <span class="n">String</span> <span class="n">tableName</span><span class="o">,</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">fields</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">String</span> <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE &quot;</span> <span class="o">+</span> <span class="n">tableName</span> <span class="o">+</span> <span class="s">&quot; ( id INTEGER PRIMARY KEY AUTOINCREMENT&quot;</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">fields</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span>
-</span><span class='line'>            <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s">&quot; )&quot;</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">command</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// ...</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

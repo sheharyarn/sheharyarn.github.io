@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Otp, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/otp/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2018-02-10T04:52:05-05:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Working With GenStage in Elixir]]></title>
+    <link href="https://sheharyar.me/blog/working-with-genstage-elixir/"/>
+    <updated>2017-10-03T18:20:13-04:00</updated>
+    <id>https://sheharyar.me/blog/working-with-genstage-elixir</id>
+    <content type="html"><![CDATA[<p>GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily in Elixir. But working with multiple sets of GenServers together and exchanging data
+between them has always been a hassle. <a href="https://hexdocs.pm/elixir/GenEvent.html">GenEvent</a> solved these problems to some
+extent, but it did not provide support for backpressure or concurrency. This is where
+<a href="https://github.com/elixir-lang/gen_stage">GenStage</a> comes in.</p>
+
+<!-- more -->
+
+
+<p>Last year <a href="https://elixir-lang.org/blog/2016/07/14/announcing-genstage/">announced on the official Elixir blog</a>, GenStage is a new behaviour
+in the OTP family, built on top of GenServers. It is described as:</p>
+
+<blockquote><p>GenStage is a specification for exchanging events with back-pressure between Elixir
+producers and consumers</p></blockquote>
+
+<p>but that doesn&rsquo;t convey its full power. The name hides the real meaning; instead of simple
+producers and consumers, imagine concurrent stages in a pipeline that takes an arbitrary
+number of input events, perform some operations on them and send them to the next stage.
+Each stage can consume and produce many events at once, with multiple instances of each
+stage running at the same time. The producers can produce as many events as they want, and
+the consumers can consume them according to their demand with ease, with the behavior
+handling the bulk of the logic.</p>
+
+<p>A simple use-case of GenStage would look like a straight-forward pipeline like this:</p>
+
+<p><img src="https://i.imgur.com/4RvaWBU.png" alt="GenStage Simple Use-case" /></p>
+
+<p>But that doesn&rsquo;t do it justice, instead you should think about each stage having many
+concurrent instances like this:</p>
+
+<p><img src="https://i.imgur.com/ddCa8kP.png" alt="GenStage Concurrent Instances" /></p>
+
+<p>This is possible due to another behavior shipped with the library, called <code>ConsumerSupervisor</code>.
+ConsumerSupervisors allow, well, supervision of multiple consumers or producer-consumers
+for better reliability and fault-tolerance. For code examples, I would suggest you check
+out the project on <a href="https://github.com/elixir-lang/gen_stage">Github</a>, the excellent documentation on <a href="https://hexdocs.pm/gen_stage/GenStage.html">Hexdocs</a> or
+the <a href="https://github.com/elixir-lang/flow">Flow</a> library (which is an amazing implementation of GenStage!). But there are
+some things you should take care of when working with GenStages in Elixir (that I had to
+learn the hard way):</p>
+
+<ul>
+<li>Don&rsquo;t excessively produce events when there is no demand</li>
+<li>If a long-running producer yields zero events when there is consumer demand, you have to
+explicitly retry producing events again. Otherwise, it would just stop. A common case where
+this would happen is, integration with external message queues</li>
+<li>Use <code>Supervisor</code> for simple pipelines, and <code>ConsumerSupervisor</code> when dealing with concurrent
+instances of a GenStage</li>
+<li>Try to define explicit demands for consumers</li>
+<li>Start the stages in order, and immediately subscribe to the previous stage for <code>consumers</code>
+and <code>producer_consumers</code>, preferably in the <code>init/1</code> callback</li>
+<li>Maintining overall demand in a producers' internal state is a good idea</li>
+</ul>
+
+
+<p>Here are some other excellent posts on the topic:</p>
+
+<ul>
+<li><a href="https://elixirschool.com/en/lessons/advanced/gen-stage/">Elixir School: GenStage</a></li>
+<li><a href="https://engineering.spreedly.com/blog/how-do-i-genstage.html">How do I GenStage?</a></li>
+<li><a href="https://alexgaribay.com/2017/04/25/using-genstage-for-a-batching-pipeline/">Using GenStage for Batch Processing</a></li>
+<li><a href="http://tomasztomczyk.com/2017/01/17/genstage-for-processing-jobs.html">GenStage for Processing Jobs</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Working With GenStage in Elixir - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Oct 3rd, 2017 Working With GenStage in Elixir GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Working With GenStage in Elixir - Sheharyar Naseer" />
+  <meta property="og:description" content="Oct 3rd, 2017 Working With GenStage in Elixir GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/working-with-genstage-elixir">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/working-with-genstage-elixir/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-10-03T18:20:13-04:00" pubdate data-updated="true">Oct 3<span>rd</span>, 2017</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Working With GenStage in Elixir
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>GenServers are an amazing part of the OTP ecosystem, helping solve a lot of complicated tasks
+easily in Elixir. But working with multiple sets of GenServers together and exchanging data
+between them has always been a hassle. <a href="https://hexdocs.pm/elixir/GenEvent.html">GenEvent</a> solved these problems to some
+extent, but it did not provide support for backpressure or concurrency. This is where
+<a href="https://github.com/elixir-lang/gen_stage">GenStage</a> comes in.</p>
+
+<!-- more -->
+
+
+<p>Last year <a href="https://elixir-lang.org/blog/2016/07/14/announcing-genstage/">announced on the official Elixir blog</a>, GenStage is a new behaviour
+in the OTP family, built on top of GenServers. It is described as:</p>
+
+<blockquote><p>GenStage is a specification for exchanging events with back-pressure between Elixir
+producers and consumers</p></blockquote>
+
+<p>but that doesn&rsquo;t convey its full power. The name hides the real meaning; instead of simple
+producers and consumers, imagine concurrent stages in a pipeline that takes an arbitrary
+number of input events, perform some operations on them and send them to the next stage.
+Each stage can consume and produce many events at once, with multiple instances of each
+stage running at the same time. The producers can produce as many events as they want, and
+the consumers can consume them according to their demand with ease, with the behavior
+handling the bulk of the logic.</p>
+
+<p>A simple use-case of GenStage would look like a straight-forward pipeline like this:</p>
+
+<p><img src="https://i.imgur.com/4RvaWBU.png" alt="GenStage Simple Use-case" /></p>
+
+<p>But that doesn&rsquo;t do it justice, instead you should think about each stage having many
+concurrent instances like this:</p>
+
+<p><img src="https://i.imgur.com/ddCa8kP.png" alt="GenStage Concurrent Instances" /></p>
+
+<p>This is possible due to another behavior shipped with the library, called <code>ConsumerSupervisor</code>.
+ConsumerSupervisors allow, well, supervision of multiple consumers or producer-consumers
+for better reliability and fault-tolerance. For code examples, I would suggest you check
+out the project on <a href="https://github.com/elixir-lang/gen_stage">Github</a>, the excellent documentation on <a href="https://hexdocs.pm/gen_stage/GenStage.html">Hexdocs</a> or
+the <a href="https://github.com/elixir-lang/flow">Flow</a> library (which is an amazing implementation of GenStage!). But there are
+some things you should take care of when working with GenStages in Elixir (that I had to
+learn the hard way):</p>
+
+<ul>
+<li>Don&rsquo;t excessively produce events when there is no demand</li>
+<li>If a long-running producer yields zero events when there is consumer demand, you have to
+explicitly retry producing events again. Otherwise, it would just stop. A common case where
+this would happen is, integration with external message queues</li>
+<li>Use <code>Supervisor</code> for simple pipelines, and <code>ConsumerSupervisor</code> when dealing with concurrent
+instances of a GenStage</li>
+<li>Try to define explicit demands for consumers</li>
+<li>Start the stages in order, and immediately subscribe to the previous stage for <code>consumers</code>
+and <code>producer_consumers</code>, preferably in the <code>init/1</code> callback</li>
+<li>Maintining overall demand in a producers&#8217; internal state is a good idea</li>
+</ul>
+
+
+<p>Here are some other excellent posts on the topic:</p>
+
+<ul>
+<li><a href="https://elixirschool.com/en/lessons/advanced/gen-stage/">Elixir School: GenStage</a></li>
+<li><a href="https://engineering.spreedly.com/blog/how-do-i-genstage.html">How do I GenStage?</a></li>
+<li><a href="https://alexgaribay.com/2017/04/25/using-genstage-for-a-batching-pipeline/">Using GenStage for Batch Processing</a></li>
+<li><a href="http://tomasztomczyk.com/2017/01/17/genstage-for-processing-jobs.html">GenStage for Processing Jobs</a></li>
+</ul>
+
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elixir/'>elixir,</a>, <a class='category' href='/blog/categories/genstage/'>genstage</a>, <a class='category' href='/blog/categories/otp/'>otp,</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Clean Atom parameters in Phoenix" href="/blog/cleaner-request-params-elixir-web-apps/">
+        ← Clean Atom parameters in Phoenix
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/">Ruby</a>,
+    <a href="http://elixir-lang.org/">Elixir</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>.
+ </div>
+</footer>
+
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

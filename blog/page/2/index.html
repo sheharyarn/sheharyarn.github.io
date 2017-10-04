@@ -14,8 +14,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Using UUIDs With Postgres in Phoenix and Ecto Setting up Ecto to use UUIDs instead of the regular integer serial IDs
-with PostgreSQL &hellip;">
+  <meta name="description" content="Freshly Pressed Polymorphic Paperclip Attachments With Partial ActiveRecord Index A common pattern in Rails applications with Image Attachments is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,8 +25,7 @@ with PostgreSQL &hellip;">
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Using UUIDs With Postgres in Phoenix and Ecto Setting up Ecto to use UUIDs instead of the regular integer serial IDs
-with PostgreSQL &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Polymorphic Paperclip Attachments With Partial ActiveRecord Index A common pattern in Rails applications with Image Attachments is &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog/page/2">
@@ -86,23 +84,25 @@ with PostgreSQL &hellip;" />
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/postgres-uuids-phoenix-ecto/">
-            Using UUIDs With Postgres in Phoenix and Ecto
+           <a href="/blog/polymorphic-paperclip-attachments-partial-index/">
+            Polymorphic Paperclip Attachments With Partial ActiveRecord Index
            </a>
         </h2>
         <div class="post_content">
-           <p>Setting up Ecto to use UUIDs instead of the regular integer serial IDs
-with PostgreSQL in Phoenix has always been a hassle, as evident from
-the numerous blog posts and Stackoverflow questions (<a href="http://terrcin.io/2016/01/17/postgres-uuid-primary-keys-in-phoenix/">1</a>, <a href="https://groups.google.com/forum/#!topic/phoenix-talk/OZaL2nSWUTE">2</a>,
-<a href="http://stackoverflow.com/a/30004834/1533054">3</a>, &hellip;). But as of Ecto <code>v2</code> and Phoenix <code>v1.1</code>, you
-can pass <code>--binary-id</code> when creating a new Phoenix project to
-automatically use UUIDs (or other binary IDs when using different
-databases and adapters).</p>
+           <p>A common pattern in Rails applications with Image Attachments is to create a
+separate model for the Image and use it in Polymorphic relationships with
+other models. Since more often than not an object has more than one image
+attached with a default one, the classic way of storing a <code>default_image_id</code>
+on the parent model can quickly result in code duplication and spaghetti
+through out the rails application.</p>
+
+<p>A better solution is to specify a <code>default</code> boolean on the Image model itself
+and use partial indexes for proper scoping.</p>
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/postgres-uuids-phoenix-ecto/">Continue →</a>
+              <a class="continue_link" href="/blog/polymorphic-paperclip-attachments-partial-index/">Continue →</a>
            </p>
         </div>
      </article>
@@ -116,6 +116,15 @@ databases and adapters).</p>
 
         <ul class="article_list">
           
+             
+          
+             
+
+                <li><a href="/blog/postgres-uuids-phoenix-ecto/">
+                  Using UUIDs With Postgres in Phoenix and Ecto
+                   →
+                </a></li>
+
              
           
              
@@ -158,15 +167,6 @@ databases and adapters).</p>
 
                 <li><a href="/blog/sql-vs-nosql-mongodb-is-web-scale/">
                   SQL vs NoSQL: MongoDB Is Web Scale!
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/what-i-learned-from-the-gnu-grep/">
-                  What I Learned From the GNU Grep
                    →
                 </a></li>
 
