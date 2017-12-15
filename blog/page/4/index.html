@@ -14,7 +14,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Github Trending Repos API Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches Trending Repositories from &hellip;">
+  <meta name="description" content="Freshly Pressed Android: Create Tables in SQLite Beautifully I started Android Development a while back and this is the first time I&rsquo;ve had to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Github Trending Repos API Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches Trending Repositories from &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Android: Create Tables in SQLite Beautifully I started Android Development a while back and this is the first time I&rsquo;ve had to &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me/blog/page/4">
@@ -84,17 +84,46 @@
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/github-trending-repos-api/">
-            Github Trending Repos API
+           <a href="/blog/android-create-tables-in-sqlite-beautifully/">
+            Android: Create Tables in SQLite Beautifully
            </a>
         </h2>
         <div class="post_content">
-           <p>Well, it&rsquo;s not really an API. It&rsquo;s a nifty little gem that fetches <a href="https://github.com/sheharyarn/github-trending">Trending Repositories from Github</a>. I needed to get a list of Top Github Repos each week for a project. I tried going with the <a href="https://developer.github.com/">Official Github API</a> but there was no support for Trending Projects. I also tried getting data from Unofficial RSS Feeds (<a href="http://github-trends.oscardelben.com/">1</a>, <a href="http://github-trends.ryotarai.info/">2</a>), but they weren&rsquo;t working for some reason as well.</p>
+           <p>I started Android Development a while back and this is the first time I&rsquo;ve had to use <code>SQLite</code>. Coming from a Rails and Mongo background, you can imagine my horror when I had to create models (read &lsquo;tables&rsquo;) like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">SQLiteDatabase</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// SQL statement to create book table</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">CREATE_BOOK_TABLE</span> <span class="o">=</span> <span class="s">&quot;CREATE TABLE books ( &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;title TEXT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;author TEXT, &quot;</span> <span class="o">+</span>
+</span><span class='line'>            <span class="s">&quot;sales INTEGER )&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// create books table</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="n">CREATE_BOOK_TABLE</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/github-trending-repos-api/">Continue →</a>
+              <a class="continue_link" href="/blog/android-create-tables-in-sqlite-beautifully/">Continue →</a>
            </p>
         </div>
      </article>
@@ -108,6 +137,15 @@
 
         <ul class="article_list">
           
+             
+          
+             
+
+                <li><a href="/blog/github-trending-repos-api/">
+                  Github Trending Repos API
+                   →
+                </a></li>
+
              
           
              
@@ -150,15 +188,6 @@
 
                 <li><a href="/blog/regular-mongo-backups-using-cron/">
                   Regular Mongo Backups Using Cron
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/the-eventual-outcome-of-existence/">
-                  The Eventual Outcome of Existence
                    →
                 </a></li>
 

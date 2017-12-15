@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Learning, | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/learning/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2018-02-14T01:25:42-05:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using LibSVM in Java]]></title>
+    <link href="https://sheharyar.me/blog/using-libsvm-in-java/"/>
+    <updated>2017-10-15T23:28:39-04:00</updated>
+    <id>https://sheharyar.me/blog/using-libsvm-in-java</id>
+    <content type="html"><![CDATA[<p>For the past couple of months, I&rsquo;ve been trying to get my feet wet with machine learning
+and started work on implementing a Behavioral Authentication mechanism for Android devices
+using <a href="https://medium.com/machine-learning-101/chapter-2-svm-support-vector-machine-theory-f0812effc72">Support Vector Machines</a> (more on that later in another blog post). SVM
+is a relatively popular classifier which seemed appropriate for a beginner like me, and
+everything did go well until I had to implement the R prototype in Java.</p>
+
+<!-- more -->
+
+
+<p>I went with One-Class SVM for modelling purposes, and the obvious choice was the <code>libsvm</code>
+<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">library by Chih-Jen Lin</a>, but there&rsquo;s virtually no documentation for the Java
+version either on their <a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">homepage</a> or <a href="https://github.com/cjlin1/libsvm/">Github</a>, simply referencing
+their C documentation for Java implementations. So after digging through all of their Java
+examples, I had a basic version of my port ready, but it gave wildly different results
+compared to the R version.</p>
+
+<p>Turns out you need to scale and normalize all data values between <code>0</code> and <code>1</code>, at least for
+<code>OC-SVM</code>. These are the <code>double</code> values using which you construct the <code>svm_node</code> 2D Array
+<code>x</code> in the <code>svm_problem</code> object. Without doing this, the classifier just goes bat-shit
+crazy and just spits out random values. I imagine the R version of the library does that
+automatically the for given data. Other than that, you also don&rsquo;t need to have an extra
+<code>svm_node</code> object with an index of <code>-1</code> at the end of the <code>x[]</code> arrays to denote the end
+of the vector (like the C version).</p>
+
+<p>For running the One-Class classifier, everything else was pretty much same as the C code
+or the available <a href="https://github.com/cjlin1/libsvm/blob/master/java/svm_toy.java">Java examples</a>, but I would usually use some sort of helper
+function to build the node arrays. For example, for building 2D points on a plane, I used
+something like this:</p>
+
+<p>```java
+public static svm_node[] buildPoint(double x, double y) {</p>
+
+<pre><code>svm_node[] point = new svm_node[2];
+
+// x
+point[0] = new svm_node();
+point[0].index = 1;
+point[0].value = x;
+
+// y
+point[1] = new svm_node();
+point[1].index = 2;
+point[1].value = y;
+
+return point;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Combine many of these together and you get the 2D array <code>svm_node[][]</code> we need for the
+SVM problem. Building the model is pretty straight-forward (use your own gamma &amp; nu values
+depending on your data):</p>
+
+<p>```java
+public static svm_model buildModel(svm_node[][] nodes) {</p>
+
+<pre><code>// Build Parameters
+svm_parameter param = new svm_parameter();
+param.svm_type    = svm_parameter.ONE_CLASS;
+param.kernel_type = svm_parameter.RBF;
+param.gamma       = 0.802;
+param.nu          = 0.1608;
+param.cache_size  = 100;
+
+// Build Problem
+svm_problem problem = new svm_problem();
+problem.x = nodes;
+problem.l = nodes.length;
+problem.y = prepareY(nodes.length);
+
+// Build Model
+return svm.svm_train(problem, param);
+</code></pre>
+
+<p>}</p>
+
+<p>private static double[] prepareY(int size) {</p>
+
+<pre><code>double[] y = new double[size];
+
+for (int i=0; i &lt; size; i++)
+    y[i] = 1;
+
+return y;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>For classificiation, there&rsquo;s the <code>svm.svm_predict(model, nodes)</code> function that returns
+either a <code>-1</code> or <code>+1</code> for one-class, but there&rsquo;s another method available:
+<code>svm.svm_predict_values(m, n, v)</code> that can give you a prediction confidence score used
+to return the positive or negative one. For <code>RBF</code>, this score means the distance from
+the center of the elliptical hyperplane drawn during modelling. Getting this &ldquo;score&rdquo; is
+a bit different since this function itself also returns either a <code>-1</code> or <code>+1</code>. You have
+to pass a 2-element array as the third argument to this function. After calling it, the
+first value of the array will contain the score:</p>
+
+<p>```java
+public static double predict(svm_model model, svm_node[] nodes) {</p>
+
+<pre><code>double[] scores = new double[2];
+double result = svm.svm_predict_values(model, nodes, values);
+
+return scores[0];
+</code></pre>
+
+<p>}
+```</p>
+
+<p>I really hope someone writes a better version/wrapper of LibSVM in Java, or improves the
+documentation so beginners like me can avoid wasting hours over implementation issues.</p>
+]]></content>
+  </entry>
+  
+</feed>
