@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Learning, | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/learning/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-02-14T01:25:42-05:00</updated>
+  <updated>2018-02-14T01:35:49-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Using LibSVM in Java]]></title>
     <link href="https://sheharyar.me/blog/using-libsvm-in-java/"/>
-    <updated>2017-10-15T23:28:39-04:00</updated>
+    <updated>2017-12-15T12:28:39-05:00</updated>
     <id>https://sheharyar.me/blog/using-libsvm-in-java</id>
     <content type="html"><![CDATA[<p>For the past couple of months, I&rsquo;ve been trying to get my feet wet with machine learning
 and started work on implementing a Behavioral Authentication mechanism for Android devices
