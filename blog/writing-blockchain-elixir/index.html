@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Writing a Simple Blockchain in Elixir - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="Jan 17th, 2018 Writing a Simple Blockchain in Elixir With all the hype about Bitcoin and other cryptocurrencies in recent years, I wanted to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Writing a Simple Blockchain in Elixir - Sheharyar Naseer" />
+  <meta property="og:description" content="Jan 17th, 2018 Writing a Simple Blockchain in Elixir With all the hype about Bitcoin and other cryptocurrencies in recent years, I wanted to &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/writing-blockchain-elixir">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/writing-blockchain-elixir/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-17T20:13:49-05:00" pubdate data-updated="true">Jan 17<span>th</span>, 2018</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Writing a Simple Blockchain in Elixir
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>With all the hype about Bitcoin and other cryptocurrencies in recent years, I wanted to understand
+their underlying technology, i.e. Blockchain, better. So of course, what better way to learn than
+write my own. After reading up a bit on the internals of Bitcoin, the basic structure of blockchains
+and related data structures such as Merkle Trees, I decided to write a very simple version in Elixir.</p>
+
+<!-- more -->
+
+
+<p>I went with Elixir for a couple of reasons:</p>
+
+<ol>
+<li> To get better at it</li>
+<li> See how Erlang&rsquo;s distributed model could help me with replication</li>
+<li> I just love the damn language too much</li>
+</ol>
+
+
+<p>The original blockchain I wrote is a bit complicated since I end up adding too many features (I wanted
+to experiment with node synchronization, RPC calls, cryptographic validations using Ecto, and file
+storage as an application). So for the purposes of this article, we are going to write a blockchain
+that simply stores some text in each block (but you can check out the <a href="https://github.com/sheharyarn/dbfs/">actual project here</a>).</p>
+
+<h2>The Basics</h2>
+
+<p>In the simplest of terms, a blockchain is basically a list of &ldquo;blocks&rdquo; where each block object/struct
+stores a cryptographic hash of the previous block. A blockchain is valid only if the hash of each block in
+the chain matches the stored hash in the next one. Cryptographically, this means that if the tiniest bit
+of data changes in any block, the hashes of all consequent blocks would change drastically and as a result
+invalidate the blockchain. So, a blockchain must always be append-only, i.e. no previous data can be
+changed or removed.</p>
+
+<h2>Structure</h2>
+
+<p>Each block in the chain must store a couple of items; such as the data being stored and the timestamp it
+was created on. We also need to store the has of the previous block, and for good measure let&rsquo;s store the
+hash of the current block as well. Although we should also use Public-Key Cryptography and store the
+signature of the author (which can be verified later), we&rsquo;re going to ignore that part and focus on
+understanding the basics (maybe we can do that in another blog post in the future). Our struct should look
+something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="p">%</span><span class="nc">Block</span><span class="p">{</span>
+</span><span class='line'>  <span class="ss">data</span><span class="p">:</span> <span class="n">some_text</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">timestamp</span><span class="p">:</span> <span class="n">naive_datetime</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="n">hash_of_the_previous_block</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="n">hash_of_the_current_block</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, let&rsquo;s create a Block module, with two methods; <code>new/2</code> that takes the data that&rsquo;s going to go in the
+block along with the hash of the previous block, and a <code>zero/0</code> method that builds the first &ldquo;zero&rdquo; block
+in a blockchain:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Block</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">defstruct</span> <span class="p">[</span><span class="ss">:data</span><span class="p">,</span> <span class="ss">:timestamp</span><span class="p">,</span> <span class="ss">:prev_hash</span><span class="p">,</span> <span class="ss">:hash</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Build a new block for given data and previous hash&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">new</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prev_hash</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">%</span><span class="nc">Block</span><span class="p">{</span>
+</span><span class='line'>      <span class="ss">data</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">prev_hash</span><span class="p">:</span> <span class="n">prev_hash</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">timestamp</span><span class="p">:</span> <span class="nc">NaiveDateTime</span><span class="p">.</span><span class="n">utc_now</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Build the initial block of the chain&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">zero</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">%</span><span class="nc">Block</span><span class="p">{</span>
+</span><span class='line'>      <span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;ZERO_DATA&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;ZERO_HASH&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">timestamp</span><span class="p">:</span> <span class="nc">NaiveDateTime</span><span class="p">.</span><span class="n">utc_now</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Cryptography</h2>
+
+<p>Since blockchains involve a lot of cryptography, it&rsquo;s better to have a separate module responsible for it
+and provide a uniform interface (so we can change the implementation in the future if we want without
+breaking the functionality). We also need to encode our data in some format before we hash it. You can go
+with anything you want, but we&rsquo;re going to use JSON. Start by adding the <code>poison</code> dependency in your
+<code>mix.exs</code> file:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="p">{</span><span class="ss">:poison</span><span class="p">,</span> <span class="s2">&quot;~&gt; 3.1&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then create a <code>Crypto</code> module with the helper hashing functions. We&rsquo;ll use the built in SHA256 hashing
+in Erlang&rsquo;s <code>:crypto</code> module:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Crypto</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Specify which fields to hash in a block</span>
+</span><span class='line'>  <span class="na">@hash_fields</span> <span class="p">[</span><span class="ss">:data</span><span class="p">,</span> <span class="ss">:timestamp</span><span class="p">,</span> <span class="ss">:prev_hash</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Calculate hash of block&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">hash</span><span class="p">(%{}</span> <span class="p">=</span> <span class="n">block</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">block</span>
+</span><span class='line'>    <span class="o">|&gt;</span> <span class="nc">Map</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="na">@hash_fields</span><span class="p">)</span>
+</span><span class='line'>    <span class="o">|&gt;</span> <span class="nc">Poison</span><span class="p">.</span><span class="n">encode!</span>
+</span><span class='line'>    <span class="o">|&gt;</span> <span class="n">sha256</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Calculate and put the hash in the block&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">put_hash</span><span class="p">(%{}</span> <span class="p">=</span> <span class="n">block</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">%{</span> <span class="n">block</span> <span class="p">|</span> <span class="ss">hash</span><span class="p">:</span> <span class="n">hash</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Calculate SHA256 for a binary string</span>
+</span><span class='line'>  <span class="kd">defp</span> <span class="n">sha256</span><span class="p">(</span><span class="n">binary</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="ss">:crypto</span><span class="p">.</span><span class="n">hash</span><span class="p">(</span><span class="ss">:sha256</span><span class="p">,</span> <span class="n">binary</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nc">Base</span><span class="p">.</span><span class="n">encode16</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We were very careful to only encode only the main 3 fields here (without the <code>hash</code> field of the block)
+using the <code>Map.take/2</code> function, and then calculate their SHA256. We also added a helper method <code>put_hash/1</code>
+to directly put the hash in it. If we were using public-key cryptography and storing the author&rsquo;s signature
+in the blocks as well, we would have created <code>sign/1</code> and <code>verify/1</code> methods for that purpose, using the
+<a href="https://github.com/anoskov/rsa-ex/">RsaEx</a> library or Erlang&rsquo;s built-in <a href="http://erlang.org/doc/man/public_key.html">:public_key</a> module.</p>
+
+<p>We&rsquo;ll also add a <code>valid?</code> method in our <code>Block</code> module to check if the hash of block is valid, and matches
+the previous block&rsquo;s hash. When only the block itself is given, it calculates the hash of the block and
+compares it with the stored value. But when the previous block is also given, it compares the value of the
+previous block&rsquo;s hash to the one stored in the <code>prev_hash</code> field:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Block</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Existing stuff...</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Check if a block is valid&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">valid?</span><span class="p">(%</span><span class="nc">Block</span><span class="p">{}</span> <span class="p">=</span> <span class="n">block</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">Crypto</span><span class="p">.</span><span class="n">hash</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="o">==</span> <span class="n">block</span><span class="p">.</span><span class="n">hash</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">valid?</span><span class="p">(%</span><span class="nc">Block</span><span class="p">{}</span> <span class="p">=</span> <span class="n">block</span><span class="p">,</span> <span class="p">%</span><span class="nc">Block</span><span class="p">{}</span> <span class="p">=</span> <span class="n">prev_block</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">block</span><span class="p">.</span><span class="n">prev_hash</span> <span class="o">==</span> <span class="n">prev_block</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">valid?</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Bringing it Together</h2>
+
+<p>Finally, let&rsquo;s build the Blockchain module that contains all blocks in order and provides a neat interface
+to insert new blocks and calculate their hashes. Ideally, the blockchain should be stored on the disk
+(using a database, for example) and the module providing a quick interface to it. Even if we decide to not
+persist the chain on the disk, we can use GenServers or Mnesia tables to maintain the state. But again,
+for the purposes of this post, we won&rsquo;t manage the state and just interact with it as a list.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Blockchain</span> <span class="k">do</span>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Create a new blockchain with a zero block&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">new</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">[</span> <span class="nc">Crypto</span><span class="p">.</span><span class="n">put_hash</span><span class="p">(</span><span class="nc">Block</span><span class="p">.</span><span class="n">zero</span><span class="p">)</span> <span class="p">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Insert given data as a new block in the blockchain&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">insert</span><span class="p">(</span><span class="n">blockchain</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="ow">when</span> <span class="n">is_list</span><span class="p">(</span><span class="n">blockchain</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">hash</span><span class="p">:</span> <span class="n">prev</span><span class="p">}</span> <span class="p">=</span> <span class="n">hd</span><span class="p">(</span><span class="n">blockchain</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">block</span> <span class="p">=</span>
+</span><span class='line'>      <span class="n">data</span>
+</span><span class='line'>      <span class="o">|&gt;</span> <span class="nc">Block</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="n">prev</span><span class="p">)</span>
+</span><span class='line'>      <span class="o">|&gt;</span> <span class="nc">Crypto</span><span class="p">.</span><span class="n">put_hash</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span> <span class="n">block</span> <span class="p">|</span> <span class="n">blockchain</span> <span class="p">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Validate the complete blockchain&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">valid?</span><span class="p">(</span><span class="n">blockchain</span><span class="p">)</span> <span class="ow">when</span> <span class="n">is_list</span><span class="p">(</span><span class="n">blockchain</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">zero</span> <span class="p">=</span> <span class="nc">Enum</span><span class="p">.</span><span class="n">reduce_while</span><span class="p">(</span><span class="n">blockchain</span><span class="p">,</span> <span class="no">nil</span><span class="p">,</span> <span class="k">fn</span> <span class="n">prev</span><span class="p">,</span> <span class="n">current</span> <span class="p">-&gt;</span>
+</span><span class='line'>      <span class="k">cond</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">current</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">-&gt;</span>
+</span><span class='line'>          <span class="p">{</span><span class="ss">:cont</span><span class="p">,</span> <span class="n">prev</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nc">Block</span><span class="p">.</span><span class="n">valid?</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span> <span class="p">-&gt;</span>
+</span><span class='line'>          <span class="p">{</span><span class="ss">:cont</span><span class="p">,</span> <span class="n">prev</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="no">true</span> <span class="p">-&gt;</span>
+</span><span class='line'>          <span class="p">{</span><span class="ss">:halt</span><span class="p">,</span> <span class="no">false</span><span class="p">}</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="n">zero</span><span class="p">,</span> <span class="ss">do</span><span class="p">:</span> <span class="nc">Block</span><span class="p">.</span><span class="n">valid?</span><span class="p">(</span><span class="n">zero</span><span class="p">),</span> <span class="ss">else</span><span class="p">:</span> <span class="no">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>new/0</code> method returns a new blockchain, with a zero block as its only contents. The <code>insert/2</code> method
+creates a new block for the given data, hashes it and inserts it into the blockchain, returning the updated
+state. Finally, the most interesting method here, <code>valid?/1</code>, goes through the entire blockchain in reverse
+order (most recent block to the oldest one) using <code>Enum.reduce_while/3</code>, validating blocks in pairs. If at
+any point the internal <code>Block.valid?</code> returns false, the entire method does too.</p>
+
+<h2>Running it</h2>
+
+<p>We don&rsquo;t have fancy blockchain network running right now, so we&rsquo;ll simply jump in <code>iex</code> and test it out
+there:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="c1"># Create a new Blockchain</span>
+</span><span class='line'><span class="n">iex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">chain</span> <span class="p">=</span> <span class="nc">Blockchain</span><span class="p">.</span><span class="n">new</span>
+</span><span class='line'><span class="p">[%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;ZERO_DATA&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;BDC59FEE8F9239579CB4A29828F5F19B081EF3D34A99331E898B22CDDA7922F0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;ZERO_HASH&quot;</span><span class="p">,</span> <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:25:25.936002]</span><span class="p">}]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Insert new data as a block</span>
+</span><span class='line'><span class="n">iex</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">chain</span> <span class="p">=</span> <span class="nc">Blockchain</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="s2">&quot;MESSAGE 1&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">[%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;MESSAGE 1&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;A14F863D347E37B54DD68BB12251A74FE06EA0623DC40856EBC81942B63001FE&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;BDC59FEE8F9239579CB4A29828F5F19B081EF3D34A99331E898B22CDDA7922F0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:26:40.121790]</span><span class="p">},</span>
+</span><span class='line'> <span class="p">%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;ZERO_DATA&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;BDC59FEE8F9239579CB4A29828F5F19B081EF3D34A99331E898B22CDDA7922F0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;ZERO_HASH&quot;</span><span class="p">,</span> <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:25:25.936002]</span><span class="p">}]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Insert a few more blocks</span>
+</span><span class='line'><span class="n">iex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">chain</span> <span class="p">=</span> <span class="n">chain</span> <span class="o">|&gt;</span> <span class="nc">Blockchain</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;MESSAGE 2&quot;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="nc">Blockchain</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="s2">&quot;MESSAGE 3&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">[%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;MESSAGE 3&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;3708929579029151347B9C588E79EDEEF4E9911579AF9CF5BD2D4437B0FFBEDF&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;FA609D2A255FD56B90D5F10108B804DF4BF42CA257CDECC291698783DDC74CB0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:27:07.874248]</span><span class="p">},</span>
+</span><span class='line'> <span class="p">%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;MESSAGE 2&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;FA609D2A255FD56B90D5F10108B804DF4BF42CA257CDECC291698783DDC74CB0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;A14F863D347E37B54DD68BB12251A74FE06EA0623DC40856EBC81942B63001FE&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:27:07.874129]</span><span class="p">},</span>
+</span><span class='line'> <span class="p">%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;MESSAGE 1&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;A14F863D347E37B54DD68BB12251A74FE06EA0623DC40856EBC81942B63001FE&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;BDC59FEE8F9239579CB4A29828F5F19B081EF3D34A99331E898B22CDDA7922F0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:26:40.121790]</span><span class="p">},</span>
+</span><span class='line'> <span class="p">%</span><span class="nc">Block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="s2">&quot;ZERO_DATA&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">hash</span><span class="p">:</span> <span class="s2">&quot;BDC59FEE8F9239579CB4A29828F5F19B081EF3D34A99331E898B22CDDA7922F0&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">prev_hash</span><span class="p">:</span> <span class="s2">&quot;ZERO_HASH&quot;</span><span class="p">,</span> <span class="ss">timestamp</span><span class="p">:</span> <span class="sx">~N[2018-01-14 10:25:25.936002]</span><span class="p">}]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Validate the Blockchain</span>
+</span><span class='line'><span class="n">iex</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">&gt;</span> <span class="nc">Blockchain</span><span class="p">.</span><span class="n">valid?</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span>
+</span><span class='line'><span class="no">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Concluding Notes</h2>
+
+<p>That&rsquo;s it for our simple blockchain. I hope that gave you a somewhat basic idea of how to
+write a blockchain. Of course there&rsquo;s a lot more we can do, such as:</p>
+
+<ul>
+<li>Use some kind of data store to maintain state</li>
+<li>Or better yet, use Ecto (with or without a database) to take advantage of its changesets
+and <a href="https://github.com/sheharyarn/dbfs/blob/9233941c7c3ddc41676762789bc8aa0599ba369f/lib/dbfs/block/block.ex#L33-L39">validations</a></li>
+<li>Employ Public-Key Cryptography and <a href="https://github.com/sheharyarn/dbfs/blob/9233941c7c3ddc41676762789bc8aa0599ba369f/lib/dbfs/crypto.ex#L23-L36">sign blocks</a> before hashing them</li>
+<li>Implement a <a href="https://github.com/sheharyarn/dbfs/blob/9233941c7c3ddc41676762789bc8aa0599ba369f/lib/dbfs/json.ex#L23-L53">custom encoding scheme</a> in a certain order to always guarantee
+the same hash for a given map (For example, <a href="https://github.com/devinus/poison/issues/21">Maps in Elixir are unordered</a>
+and the hash generated would almost never be the same as one generated in another language
+for the same values)</li>
+</ul>
+
+
+<p>With the powerful Erlang Virtual Machine, we can also do some fancy stuff:</p>
+
+<ul>
+<li>Have a distributed network of nodes running the blockchain</li>
+<li>Maintaining Blockchain state in Mnesia across many nodes</li>
+<li>Broadcast new blocks to the entire network</li>
+<li>Perform state consensus and implement conflict resolution</li>
+</ul>
+
+
+<p>Here are some other blockchain &amp; elixir related resources and projects:</p>
+
+<ul>
+<li><a href="https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54#.dttbm9afr5">Blog Post: Blockchain in 200 lines of code</a></li>
+<li><a href="https://elixirforum.com/t/the-blockchain-distributed-ledger-technology/451">ElixirForum: Blockchain Discussion</a></li>
+<li><a href="https://github.com/eduardonunesp/ex_chain">Github: ExChain</a> &ndash; A simple blockchain implementation in ELixir</li>
+<li><a href="https://github.com/robinmonjo/coincoin">Github: CoinCoin</a> &ndash; Amazing cryptocurrency proof-of-concept in Elixir by @robinmonjo</li>
+<li><a href="http://www.petecorey.com/blog/2017/09/18/exploring-the-bitcoin-blockchain-with-elixir-and-phoenix/">Blog Post: Exploring Bitcoin Blockchain with Phoenix</a></li>
+</ul>
+
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/blockchain/'>blockchain</a>, <a class='category' href='/blog/categories/elixir/'>elixir,</a>, <a class='category' href='/blog/categories/phoenix/'>phoenix,</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Using LibSVM in Java" href="/blog/using-libsvm-in-java/">
+        ← Using LibSVM in Java
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/">Ruby</a>,
+    <a href="http://elixir-lang.org/">Elixir</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>.
+ </div>
+</footer>
+
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+
