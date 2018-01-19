@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Blockchain | Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/blog/categories/blockchain/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-02-14T06:22:14-05:00</updated>
+  <updated>2018-02-15T04:48:09-05:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -301,8 +301,8 @@ true
 
 <h2>Concluding Notes</h2>
 
-<p>That&rsquo;s it for our simple blockchain. I hope that gave you a somewhat basic idea of how to
-write a blockchain. Of course there&rsquo;s a lot more we can do, such as:</p>
+<p>That&rsquo;s it for our simple blockchain. I hope that gave you a somewhat basic idea of how a
+blockchain works. Of course there&rsquo;s a lot more we can do, such as:</p>
 
 <ul>
 <li>Use some kind of data store to maintain state</li>
