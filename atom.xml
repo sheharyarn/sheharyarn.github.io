@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-02-15T04:59:32-05:00</updated>
+  <updated>2018-07-19T16:21:31-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Memoization in Elixir (Using FastGlobal)]]></title>
+    <link href="https://sheharyar.me/blog/simple-elixir-memoization-fastglobal/"/>
+    <updated>2018-03-09T15:34:28-05:00</updated>
+    <id>https://sheharyar.me/blog/simple-elixir-memoization-fastglobal</id>
+    <content type="html"><![CDATA[<p>Elixir is a functional language, where modules can&rsquo;t have &ldquo;state&rdquo;. State can only be wrapped
+in processes, and this seems a bit weird to people coming from an OOP background and can be
+a bit of hassle when all you need to do is quickly memoize something in your code.</p>
+
+<!-- more -->
+
+
+<p>If you don&rsquo;t need something fancy, you could write up a simple module that handles it for
+you.  I&rsquo;ve done that here using <a href="https://github.com/discordapp/fastglobal"><code>FastGlobal</code></a>, but you could just as easily
+use <code>ETS</code> if you don&rsquo;t want any external dependencies. If you want something much more
+powerful, I highly recommend you check out the <a href="https://github.com/melpon/memoize"><code>memoize</code></a> package.</p>
+
+<p>First add it to your dependencies:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'>  <span class="kd">defp</span> <span class="n">deps</span> <span class="k">do</span>
+</span><span class='line'>    <span class="p">[{</span><span class="ss">:fastglobal</span><span class="p">,</span> <span class="s2">&quot;~&gt; 1.0&quot;</span><span class="p">}]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and add this module:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Memoize</span> <span class="k">do</span>
+</span><span class='line'>  <span class="na">@moduledoc</span> <span class="sh">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sh">  Simple memoization helper built on top of FastGlobal.</span>
+</span><span class='line'><span class="sh">  &quot;&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="sh">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sh">  If previously saved value exists, return that else</span>
+</span><span class='line'><span class="sh">  perform memoization for given key and function.</span>
+</span><span class='line'><span class="sh">  &quot;&quot;&quot;</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">fun</span><span class="p">)</span> <span class="ow">when</span> <span class="n">is_atom</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">get!</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="no">nil</span> <span class="p">-&gt;</span>
+</span><span class='line'>        <span class="n">value</span> <span class="p">=</span> <span class="n">fun</span><span class="p">.()</span>
+</span><span class='line'>        <span class="n">put!</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">value</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">result</span> <span class="p">-&gt;</span>
+</span><span class='line'>        <span class="n">result</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Force get value&quot;</span>
+</span><span class='line'>  <span class="kd">defdelegate</span> <span class="n">get!</span><span class="p">(</span><span class="n">key</span><span class="p">),</span>        <span class="ss">to</span><span class="p">:</span> <span class="nc">FastGlobal</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:get</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@doc</span> <span class="s2">&quot;Force put value&quot;</span>
+</span><span class='line'>  <span class="kd">defdelegate</span> <span class="n">put!</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="ss">to</span><span class="p">:</span> <span class="nc">FastGlobal</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:put</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To use it simply call the <code>Memoize.run</code> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">def</span> <span class="n">my_method</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nc">Memoize</span><span class="p">.</span><span class="n">run</span> <span class="ss">:my_method</span><span class="p">,</span> <span class="k">fn</span> <span class="p">-&gt;</span>
+</span><span class='line'>    <span class="c1"># return something</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Find updates to this on <a href="https://git.io/fNcBb">Github</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Writing a Simple Blockchain in Elixir]]></title>
@@ -2344,81 +2458,6 @@ Start by cloning the script on your machine:</p>
 <li><a href="http://www.theirishpenguin.com/2011/01/20/push-and-pull-data-between-your-local-mongodb-and-heroku-or-mongohq.html">Push and pull data between your local MongoDB and Heroku or MongoHQ</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Quickly Search for Files in Unix Terminal]]></title>
-    <link href="https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal/"/>
-    <updated>2015-01-29T19:38:42-05:00</updated>
-    <id>https://sheharyar.me/blog/quickly-search-for-files-in-unix-terminal</id>
-    <content type="html"><![CDATA[<p><code>find</code> is a powerful command-line utility but most of the time I just really need to search for matching files
-and directories in the current directory. I also usually end up <code>grep</code>-ing the output and using wildcards around
-the argument.</p>
-
-<p>So why not just simplify the whole thing?</p>
-
-<!-- more -->
-
-
-<p>Creating a simple function that does that for us would be the way to go, so this should do the job:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    find . -iname <span class="s2">&quot;*$1*&quot;</span> -d <span class="p">|</span> sed <span class="s1">&#39;s/^..//&#39;</span> <span class="p">|</span> grep -i --color <span class="s2">&quot;$1&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let me explain what this does. <code>find</code> does a case-insensitive <code>-iname</code> search in the current directory <code>.</code> of all the files
-and folders matching the provided string <code>"*$1*"</code> and also looks in sub-directories <code>-d</code>. Then <code>sed</code> deletes the first
-two characters of each line (they are <code>./</code>) to clean up the results. <code>grep -i</code> is then used to highlight the string in the results.</p>
-
-<p>You can use it like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>search vim
-</span><span class='line'>Vim/.vimrc
-</span><span class='line'>Vim/vundles.vim
-</span><span class='line'>Vim
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can now add this function to your <code>.bash_profile</code> or better yet, your <a href="https://github.com/sheharyarn/dotfiles/blob/master/Zsh/functions.sh#L15-L27">.dotfiles</a> so it always gets loaded in to your shell session. I&rsquo;ve modified this function a bit more to accept multiple arguments:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>search<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$# </span>-eq <span class="m">0</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">then</span>
-</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;no arguments provided&quot;</span>
-</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;usage: search string [string2 string3 ...]&quot;</span>
-</span><span class='line'>        <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>        <span class="k">for</span> i in <span class="s2">&quot;$@&quot;</span><span class="p">;</span> <span class="k">do</span>
-</span><span class='line'>            find . -iname <span class="s2">&quot;*$i*&quot;</span> -d <span class="p">|</span> sed <span class="s1">&#39;s/^..//&#39;</span> <span class="p">|</span> grep -i --color <span class="s2">&quot;$i&quot;</span>
-</span><span class='line'>            <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>        <span class="k">done</span>
-</span><span class='line'>    <span class="k">fi</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now go! Be Free!</p>
 ]]></content>
   </entry>
   

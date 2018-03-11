@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Architecture | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/architecture/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2018-07-19T16:21:31-04:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Memoization in Elixir (Using FastGlobal)]]></title>
+    <link href="https://sheharyar.me/blog/simple-elixir-memoization-fastglobal/"/>
+    <updated>2018-03-09T15:34:28-05:00</updated>
+    <id>https://sheharyar.me/blog/simple-elixir-memoization-fastglobal</id>
+    <content type="html"><![CDATA[<p>Elixir is a functional language, where modules can&rsquo;t have &ldquo;state&rdquo;. State can only be wrapped
+in processes, and this seems a bit weird to people coming from an OOP background and can be
+a bit of hassle when all you need to do is quickly memoize something in your code.</p>
+
+<!-- more -->
+
+
+<p>If you don&rsquo;t need something fancy, you could write up a simple module that handles it for
+you.  I&rsquo;ve done that here using <a href="https://github.com/discordapp/fastglobal"><code>FastGlobal</code></a>, but you could just as easily
+use <code>ETS</code> if you don&rsquo;t want any external dependencies. If you want something much more
+powerful, I highly recommend you check out the <a href="https://github.com/melpon/memoize"><code>memoize</code></a> package.</p>
+
+<p>First add it to your dependencies:</p>
+
+<p>```elixir
+  defp deps do</p>
+
+<pre><code>[{:fastglobal, "~&gt; 1.0"}]
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>and add this module:</p>
+
+<p>```elixir
+defmodule Memoize do
+  @moduledoc &ldquo;&rdquo;&ldquo;
+  Simple memoization helper built on top of FastGlobal.
+  &rdquo;&ldquo;&rdquo;</p>
+
+<p>  @doc &ldquo;&rdquo;&ldquo;
+  If previously saved value exists, return that else
+  perform memoization for given key and function.
+  &rdquo;&ldquo;&rdquo;
+  def run(key, fun) when is_atom(key) do</p>
+
+<pre><code>case get!(key) do
+  nil -&gt;
+    value = fun.()
+    put!(key, value)
+    value
+
+  result -&gt;
+    result
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  @doc &ldquo;Force get value&rdquo;
+  defdelegate get!(key),        to: FastGlobal, as: :get</p>
+
+<p>  @doc &ldquo;Force put value&rdquo;
+  defdelegate put!(key, value), to: FastGlobal, as: :put</p>
+
+<p>end
+```</p>
+
+<p>To use it simply call the <code>Memoize.run</code> method:</p>
+
+<p>```elixir
+def my_method do
+  Memoize.run :my_method, fn &ndash;></p>
+
+<pre><code># return something
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Find updates to this on <a href="https://git.io/fNcBb">Github</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>
