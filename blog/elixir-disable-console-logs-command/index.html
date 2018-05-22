@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+    var host = "sheharyar.me";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+  </script> 
+  <title>Disable Console Logs Temporarily in Elixir - Sheharyar Naseer</title>
+  <meta name="author" content="Sheharyar Naseer">
+
+  
+  <meta name="description" content="May 21st, 2018 Disable Console Logs Temporarily in Elixir Sometimes you want to disable the Elixir logger temporarily, usually when you want to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
+  <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
+  <meta property="og:title" content="Disable Console Logs Temporarily in Elixir - Sheharyar Naseer" />
+  <meta property="og:description" content="May 21st, 2018 Disable Console Logs Temporarily in Elixir Sometimes you want to disable the Elixir logger temporarily, usually when you want to &hellip;" />
+
+  
+  <link rel="canonical" href="https://sheharyar.me/blog/elixir-disable-console-logs-command">
+  <!-- <link rel="canonical" href="https://sheharyar.me/blog/elixir-disable-console-logs-command/"> -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sheharyar Naseer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47788797-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+<body>
+   <section id="river">
+	  <header id="header">
+	<div class="header_lead">
+		<figure class="logo">
+			<a href="/">Sheharyar Naseer</a>
+		</figure>
+		<h3 id="website_title">
+			<a href="/">Sheharyar Naseer</a>
+		</h3>
+		<h3 id="header_social">
+			<a target="_blank" href="https://twitter.com/sheharyarn"><i class="icon-twitter"></i></a>
+			<a target="_blank" href="https://pk.linkedin.com/in/sheharyarnaseer/"><i class="icon-linkedin"></i></a>
+			<a target="_blank" href="https://github.com/sheharyarn"><i class="icon-github"></i></a>
+		</h3>
+	</div>
+</header>
+
+      <section id="article_section">
+    <article id="article" class="post">
+    <div id="post_info">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-05-21T22:19:48-04:00" pubdate data-updated="true">May 21<span>st</span>, 2018</time>
+    </div>
+
+    
+      <h2 class="post_title">
+        <a href="">
+          Disable Console Logs Temporarily in Elixir
+        </a>
+      </h2>
+    
+
+    <div class="post_content">
+      <p>Sometimes you want to disable the Elixir logger temporarily, usually when you want to suppress some
+annoying logs printed to the console when calling a certain function. And more often than not, it&rsquo;s
+when you&rsquo;re running your 200+ test suite and don&rsquo;t want anything to interrupt that beautiful green
+line. Well, <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.LogCapture</code></a> already does that for you. But what if you want
+something similar outside your tests, in your regular application?</p>
+
+<!-- more -->
+
+
+<p>Sure, you could just change your <code>Logger</code> config to <a href="https://stackoverflow.com/a/43004422/1533054">set a different logging level</a> but
+that will affect your entire application, and won&rsquo;t just suppress the logs for a specific call. This
+was the case for me when I got really annoyed by the logger messages when stopping <code>:mnesia</code>, and
+just wanted to disable them for this specific function call.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">iex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="ss">:mnesia</span><span class="p">.</span><span class="n">stop</span>
+</span><span class='line'><span class="mo">02</span><span class="err">:</span><span class="mi">49</span><span class="err">:</span><span class="mo">03</span><span class="p">.</span><span class="mo">06</span><span class="mi">9</span> <span class="p">[</span><span class="n">info</span><span class="p">]</span>  <span class="nc">Application</span> <span class="n">mnesia</span> <span class="ss">exited</span><span class="p">:</span> <span class="ss">:stopped</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I was looking for something like <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.CaptureLog</code></a> that could suppress the log
+for only the given function call. For context, this is how it works:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">test</span> <span class="s2">&quot;something being logged&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">logs</span> <span class="p">=</span> <span class="nc">ExUnit.CaptureLog</span><span class="p">.</span><span class="n">capture_log</span><span class="p">(</span><span class="k">fn</span> <span class="p">-&gt;</span>
+</span><span class='line'>    <span class="nc">Logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello!&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Assert something with `logs`</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After looking a bit into <code>Logger</code>, I found <code>add_backend/1</code> &amp; <code>remove_backend/1</code>, and learned that
+<code>:console</code> is the &ldquo;Logger Backend&rdquo; responsible for printing to the console. So, quickly came up
+with a simple helper that can do what I want:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">LogSuppressor</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">suppress</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">Logger</span><span class="p">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">fun</span><span class="p">.()</span>
+</span><span class='line'>    <span class="nc">Logger</span><span class="p">.</span><span class="n">add_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It disables logging to the console, calls the function and then enables it back again. But wait,
+there are a few problems with this. For starters, it doesn&rsquo;t return back the result of the function.
+Secondly, it doesn&rsquo;t check if the console backend was initially enabled, and might enable it in
+certain environments where we previously disabled it (<code>:prod</code> for example). There&rsquo;s one more
+problem, this might cause race conditions for certain logs, but that&rsquo;s not that big of a problem
+in development, and productions logs are usually written to a file anyways.</p>
+
+<p>After a few changes, this is how it looks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">LogSuppressor</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">suppress</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">backend</span> <span class="p">=</span> <span class="nc">Logger</span><span class="p">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">result</span> <span class="p">=</span> <span class="n">fun</span><span class="p">.()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">case</span> <span class="n">backend</span> <span class="k">do</span>
+</span><span class='line'>      <span class="ss">:ok</span>         <span class="p">-&gt;</span> <span class="nc">Logger</span><span class="p">.</span><span class="n">add_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span><span class="ss">:error</span><span class="p">,</span> <span class="bp">_</span><span class="p">}</span> <span class="p">-&gt;</span> <span class="no">nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">result</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can finally stop <code>mnesia</code> without getting that stupid message.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="nc">LogSuppressor</span><span class="p">.</span><span class="n">suppress</span><span class="p">(</span><span class="k">fn</span> <span class="p">-&gt;</span>
+</span><span class='line'>  <span class="nc">Application</span><span class="p">.</span><span class="n">stop</span><span class="p">(</span><span class="ss">:mnesia</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+    </div>
+  </article>
+
+
+<!--   <p class="meta">
+    
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elixir/'>elixir,</a>, <a class='category' href='/blog/categories/logger/'>logger</a>
+  
+</span>
+
+
+  </p> -->
+  
+  <div id="other_posts">
+    <div class="separator"></div>
+    
+    
+      <a id="previous_post" title="Previous Post: Simple Memoization in Elixir (using FastGlobal)" href="/blog/simple-elixir-memoization-fastglobal/">
+        ← Simple Memoization in Elixir (using FastGlobal)
+      </a>
+    
+
+    
+
+  </div>
+</section>
+
+
+
+	  <footer id="footer">
+ <div class="separator"></div>
+ <div id="footer_info">
+    My name is <a href="/">Sheharyar Naseer</a> and I code beautiful apps.
+    <br/>
+    I like
+    <a href="https://www.ruby-lang.org/">Ruby</a>,
+    <a href="http://elixir-lang.org/">Elixir</a>,
+    <a href="http://heroku.com">Heroku</a>,
+    <a href="http://github.com/sheharyarn">Github</a>,
+    <a href="http://www.adobe.com/products/photoshopfamily.html">Photoshop</a> &amp;
+    <a href="http://www.apple.com/macbookair/">Airs</a>.
+ </div>
+</footer>
+
+	  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+    </section>
+</body>
+</html>
+

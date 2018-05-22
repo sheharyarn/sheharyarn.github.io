@@ -14,7 +14,7 @@
   <meta name="author" content="Sheharyar Naseer">
 
   
-  <meta name="description" content="Freshly Pressed Simple Memoization in Elixir (Using FastGlobal) Elixir is a functional language, where modules can&rsquo;t have &ldquo;state&rdquo &hellip;">
+  <meta name="description" content="Freshly Pressed Disable Console Logs Temporarily in Elixir Sometimes you want to disable the Elixir logger temporarily, usually when you want to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@
   <link rel="image_src" href="https://sheharyar.me/logo_small.png" />
   <meta property="og:image" content="https://sheharyar.me/logo_small.png" />
   <meta property="og:title" content="Sheharyar Naseer" />
-  <meta property="og:description" content="Freshly Pressed Simple Memoization in Elixir (Using FastGlobal) Elixir is a functional language, where modules can&rsquo;t have &ldquo;state&rdquo &hellip;" />
+  <meta property="og:description" content="Freshly Pressed Disable Console Logs Temporarily in Elixir Sometimes you want to disable the Elixir logger temporarily, usually when you want to &hellip;" />
 
   
   <link rel="canonical" href="https://sheharyar.me">
@@ -84,19 +84,21 @@
      
      <article class="post">
         <h2 class="post_title">
-           <a href="/blog/simple-elixir-memoization-fastglobal/">
-            Simple Memoization in Elixir (Using FastGlobal)
+           <a href="/blog/elixir-disable-console-logs-command/">
+            Disable Console Logs Temporarily in Elixir
            </a>
         </h2>
         <div class="post_content">
-           <p>Elixir is a functional language, where modules can&rsquo;t have &ldquo;state&rdquo;. State can only be wrapped
-in processes, and this seems a bit weird to people coming from an OOP background and can be
-a bit of hassle when all you need to do is quickly memoize something in your code.</p>
+           <p>Sometimes you want to disable the Elixir logger temporarily, usually when you want to suppress some
+annoying logs printed to the console when calling a certain function. And more often than not, it&rsquo;s
+when you&rsquo;re running your 200+ test suite and don&rsquo;t want anything to interrupt that beautiful green
+line. Well, <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.LogCapture</code></a> already does that for you. But what if you want
+something similar outside your tests, in your regular application?</p>
 
 
            
            <p class="continue">
-              <a class="continue_link" href="/blog/simple-elixir-memoization-fastglobal/">Continue →</a>
+              <a class="continue_link" href="/blog/elixir-disable-console-logs-command/">Continue →</a>
            </p>
         </div>
      </article>
@@ -110,6 +112,15 @@ a bit of hassle when all you need to do is quickly memoize something in your cod
 
         <ul class="article_list">
           
+             
+          
+             
+
+                <li><a href="/blog/simple-elixir-memoization-fastglobal/">
+                  Simple Memoization in Elixir (Using FastGlobal)
+                   →
+                </a></li>
+
              
           
              
@@ -152,15 +163,6 @@ a bit of hassle when all you need to do is quickly memoize something in your cod
 
                 <li><a href="/blog/elixir-job-processing-with-que/">
                   Background Job Processing in Elixir With Que
-                   →
-                </a></li>
-
-             
-          
-             
-
-                <li><a href="/blog/crossing-25k-reputation-stackoverflow/">
-                  Crossing 25k Reputation on StackOverflow
                    →
                 </a></li>
 

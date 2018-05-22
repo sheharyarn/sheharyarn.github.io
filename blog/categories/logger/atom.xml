@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Logger | Sheharyar Naseer]]></title>
+  <link href="https://sheharyar.me/blog/categories/logger/atom.xml" rel="self"/>
+  <link href="https://sheharyar.me/"/>
+  <updated>2018-07-29T03:09:16-04:00</updated>
+  <id>https://sheharyar.me/</id>
+  <author>
+    <name><![CDATA[Sheharyar Naseer]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Disable Console Logs Temporarily in Elixir]]></title>
+    <link href="https://sheharyar.me/blog/elixir-disable-console-logs-command/"/>
+    <updated>2018-05-21T22:19:48-04:00</updated>
+    <id>https://sheharyar.me/blog/elixir-disable-console-logs-command</id>
+    <content type="html"><![CDATA[<p>Sometimes you want to disable the Elixir logger temporarily, usually when you want to suppress some
+annoying logs printed to the console when calling a certain function. And more often than not, it&rsquo;s
+when you&rsquo;re running your 200+ test suite and don&rsquo;t want anything to interrupt that beautiful green
+line. Well, <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.LogCapture</code></a> already does that for you. But what if you want
+something similar outside your tests, in your regular application?</p>
+
+<!-- more -->
+
+
+<p>Sure, you could just change your <code>Logger</code> config to <a href="https://stackoverflow.com/a/43004422/1533054">set a different logging level</a> but
+that will affect your entire application, and won&rsquo;t just suppress the logs for a specific call. This
+was the case for me when I got really annoyed by the logger messages when stopping <code>:mnesia</code>, and
+just wanted to disable them for this specific function call.</p>
+
+<p><code>elixir
+iex(1)&gt; :mnesia.stop
+02:49:03.069 [info]  Application mnesia exited: :stopped
+</code></p>
+
+<p>I was looking for something like <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.CaptureLog</code></a> that could suppress the log
+for only the given function call. For context, this is how it works:</p>
+
+<p>```elixir
+test &ldquo;something being logged&rdquo; do
+  logs = ExUnit.CaptureLog.capture_log(fn &ndash;></p>
+
+<pre><code>Logger.info("Hello!")
+</code></pre>
+
+<p>  end)</p>
+
+<p>  # Assert something with <code>logs</code>
+end
+```</p>
+
+<p>After looking a bit into <code>Logger</code>, I found <code>add_backend/1</code> &amp; <code>remove_backend/1</code>, and learned that
+<code>:console</code> is the &ldquo;Logger Backend&rdquo; responsible for printing to the console. So, quickly came up
+with a simple helper that can do what I want:</p>
+
+<p>```elixir
+defmodule LogSuppressor do
+  def suppress(fun) do</p>
+
+<pre><code>Logger.remove_backend(:console)
+fun.()
+Logger.add_backend(:console)
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>It disables logging to the console, calls the function and then enables it back again. But wait,
+there are a few problems with this. For starters, it doesn&rsquo;t return back the result of the function.
+Secondly, it doesn&rsquo;t check if the console backend was initially enabled, and might enable it in
+certain environments where we previously disabled it (<code>:prod</code> for example). There&rsquo;s one more
+problem, this might cause race conditions for certain logs, but that&rsquo;s not that big of a problem
+in development, and productions logs are usually written to a file anyways.</p>
+
+<p>After a few changes, this is how it looks:</p>
+
+<p>```elixir
+defmodule LogSuppressor do
+  def suppress(fun) do</p>
+
+<pre><code>backend = Logger.remove_backend(:console)
+result = fun.()
+
+case backend do
+  :ok         -&gt; Logger.add_backend(:console)
+  {:error, _} -&gt; nil
+end
+
+result
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Now I can finally stop <code>mnesia</code> without getting that stupid message.</p>
+
+<p><code>elixir
+LogSuppressor.suppress(fn -&gt;
+  Application.stop(:mnesia)
+end)
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

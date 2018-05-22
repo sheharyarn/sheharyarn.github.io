@@ -4,7 +4,7 @@
   <title><![CDATA[Sheharyar Naseer]]></title>
   <link href="https://sheharyar.me/atom.xml" rel="self"/>
   <link href="https://sheharyar.me/"/>
-  <updated>2018-07-19T16:21:31-04:00</updated>
+  <updated>2018-07-29T03:09:16-04:00</updated>
   <id>https://sheharyar.me/</id>
   <author>
     <name><![CDATA[Sheharyar Naseer]]></name>
@@ -12,6 +12,126 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Disable Console Logs Temporarily in Elixir]]></title>
+    <link href="https://sheharyar.me/blog/elixir-disable-console-logs-command/"/>
+    <updated>2018-05-21T22:19:48-04:00</updated>
+    <id>https://sheharyar.me/blog/elixir-disable-console-logs-command</id>
+    <content type="html"><![CDATA[<p>Sometimes you want to disable the Elixir logger temporarily, usually when you want to suppress some
+annoying logs printed to the console when calling a certain function. And more often than not, it&rsquo;s
+when you&rsquo;re running your 200+ test suite and don&rsquo;t want anything to interrupt that beautiful green
+line. Well, <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.LogCapture</code></a> already does that for you. But what if you want
+something similar outside your tests, in your regular application?</p>
+
+<!-- more -->
+
+
+<p>Sure, you could just change your <code>Logger</code> config to <a href="https://stackoverflow.com/a/43004422/1533054">set a different logging level</a> but
+that will affect your entire application, and won&rsquo;t just suppress the logs for a specific call. This
+was the case for me when I got really annoyed by the logger messages when stopping <code>:mnesia</code>, and
+just wanted to disable them for this specific function call.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">iex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="ss">:mnesia</span><span class="p">.</span><span class="n">stop</span>
+</span><span class='line'><span class="mo">02</span><span class="err">:</span><span class="mi">49</span><span class="err">:</span><span class="mo">03</span><span class="p">.</span><span class="mo">06</span><span class="mi">9</span> <span class="p">[</span><span class="n">info</span><span class="p">]</span>  <span class="nc">Application</span> <span class="n">mnesia</span> <span class="ss">exited</span><span class="p">:</span> <span class="ss">:stopped</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I was looking for something like <a href="https://hexdocs.pm/ex_unit/ExUnit.CaptureLog.html"><code>ExUnit.CaptureLog</code></a> that could suppress the log
+for only the given function call. For context, this is how it works:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">test</span> <span class="s2">&quot;something being logged&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">logs</span> <span class="p">=</span> <span class="nc">ExUnit.CaptureLog</span><span class="p">.</span><span class="n">capture_log</span><span class="p">(</span><span class="k">fn</span> <span class="p">-&gt;</span>
+</span><span class='line'>    <span class="nc">Logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello!&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># Assert something with `logs`</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After looking a bit into <code>Logger</code>, I found <code>add_backend/1</code> &amp; <code>remove_backend/1</code>, and learned that
+<code>:console</code> is the &ldquo;Logger Backend&rdquo; responsible for printing to the console. So, quickly came up
+with a simple helper that can do what I want:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">LogSuppressor</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">suppress</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">Logger</span><span class="p">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">fun</span><span class="p">.()</span>
+</span><span class='line'>    <span class="nc">Logger</span><span class="p">.</span><span class="n">add_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It disables logging to the console, calls the function and then enables it back again. But wait,
+there are a few problems with this. For starters, it doesn&rsquo;t return back the result of the function.
+Secondly, it doesn&rsquo;t check if the console backend was initially enabled, and might enable it in
+certain environments where we previously disabled it (<code>:prod</code> for example). There&rsquo;s one more
+problem, this might cause race conditions for certain logs, but that&rsquo;s not that big of a problem
+in development, and productions logs are usually written to a file anyways.</p>
+
+<p>After a few changes, this is how it looks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">LogSuppressor</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">suppress</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">backend</span> <span class="p">=</span> <span class="nc">Logger</span><span class="p">.</span><span class="n">remove_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">result</span> <span class="p">=</span> <span class="n">fun</span><span class="p">.()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">case</span> <span class="n">backend</span> <span class="k">do</span>
+</span><span class='line'>      <span class="ss">:ok</span>         <span class="p">-&gt;</span> <span class="nc">Logger</span><span class="p">.</span><span class="n">add_backend</span><span class="p">(</span><span class="ss">:console</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span><span class="ss">:error</span><span class="p">,</span> <span class="bp">_</span><span class="p">}</span> <span class="p">-&gt;</span> <span class="no">nil</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">result</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can finally stop <code>mnesia</code> without getting that stupid message.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="nc">LogSuppressor</span><span class="p">.</span><span class="n">suppress</span><span class="p">(</span><span class="k">fn</span> <span class="p">-&gt;</span>
+</span><span class='line'>  <span class="nc">Application</span><span class="p">.</span><span class="n">stop</span><span class="p">(</span><span class="ss">:mnesia</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Simple Memoization in Elixir (Using FastGlobal)]]></title>
@@ -2357,107 +2477,6 @@ so that you can perform actions using nice Rake Tasks and invoke the commands fr
 
 <p>There&rsquo;s still <a href="https://github.com/sheharyarn/mongo-sync-ruby#todo">much to do</a> but for now it should work perfectly with your Rails Projects.
 <a href="http://twitter.com/sheharyarn">Find me on twitter</a> if you have something to add.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sync MongoDB Data Between Development and Production Databases]]></title>
-    <link href="https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku/"/>
-    <updated>2015-02-14T20:50:44-05:00</updated>
-    <id>https://sheharyar.me/blog/sync-mongodb-local-and-production-heroku</id>
-    <content type="html"><![CDATA[<p>For a recent project of mine, I had to constantly copy my local MongoDB Database to and from my Production Heroku Database.
-Running <code>mongodump</code> and <code>mongorestore</code> again and again with complicated flags to support remote urls quickly became a hassle.
-I had previously used <a href="https://github.com/pedro/heroku-mongo-sync">heroku-mongo-sync</a>, but it is now deprecated in favor of
-<a href="https://github.com/marcofognog/heroku-mongo-sync">marcofognog&rsquo;s fork</a>. Sadly, neither of them worked for me.</p>
-
-<p>So I decided to write my own. Meet <a href="https://github.com/sheharyarn/mongo-sync"><strong>mongo-sync</strong></a>.</p>
-
-<!-- more -->
-
-
-<p><a href="https://github.com/sheharyarn/mongo-sync"><img src="https://i.imgur.com/hg6hwLk.gif" alt="mongo-sync demo gif" /></a></p>
-
-<p>It&rsquo;s a simple shell script that allows you to sync your local and remote MongoDB databases, using two commands; <code>push</code> and <code>pull</code>.
-Start by cloning the script on your machine:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://github.com/sheharyarn/mongo-sync.git
-</span><span class='line'><span class="nb">cd </span>mongo-sync
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Edit the provided <code>config.yml</code> with your db details:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">local</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;local_db_name&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">remote</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_db_name&#39;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="s">&#39;some.remoteurl.com&#39;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">27017</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">access</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_user&#39;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="s">&#39;remote_mongo_pass&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># For Heroku MongoDB URLs, here&#39;s the legend:</span>
-</span><span class='line'><span class="c1"># mongodb://username:password@hosturl.com:port/db_name</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, you can start syncing your databases:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>./mongo-sync push       <span class="c"># Push DB to Remote</span>
-</span><span class='line'>./mongo-sync pull       <span class="c"># Pull DB to Local</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;m planning to convert it into a Ruby Gem and a Heroku Plugin as well.</p>
-
-<h1>Github: <a href="https://github.com/sheharyarn/mongo-sync">sheharyarn / mongo-sync</a></h1>
-
-<br/>
-
-
-<br/>
-
-
-<h3>Notes</h3>
-
-<ul>
-<li>The <code>push</code> and <code>pull</code> commands overwrite the target DB</li>
-<li>If you include this script into your project, it&rsquo;s a good idea to add <code>config.yml</code> to your <code>.gitignore</code></li>
-</ul>
-
-
-<br/>
-
-
-<h3>Further Reading</h3>
-
-<ul>
-<li><a href="http://docs.mongodb.org/manual/reference/program/mongodump/#bin.mongodump">mongodump</a></li>
-<li><a href="http://docs.mongodb.org/manual/reference/program/mongorestore/#bin.mongorestore">mongorestore</a></li>
-<li><a href="http://www.theirishpenguin.com/2011/01/20/push-and-pull-data-between-your-local-mongodb-and-heroku-or-mongohq.html">Push and pull data between your local MongoDB and Heroku or MongoHQ</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
